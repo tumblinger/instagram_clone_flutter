@@ -1,16 +1,21 @@
-# instagram_clone
+# Instagram Clone
 
-instaclone
+A Flutter-based Instagram clone app, created for learning purposes.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- User Registration / Authentication (Firebase)
+- Upload and View Posts
+- Likes and Comments
+- User Profile
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter
+- Firebase (Auth, Firestore, Storage)
+- Provider (State Management)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+
+
+
