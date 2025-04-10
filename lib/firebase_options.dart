@@ -50,16 +50,16 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAQWTbr30hOIpOunURdddIEnVTtsL7BE5Y',
-    appId: '1:931938830252:android:3b261dd0445adf65cb5c09',
+    apiKey: '*********************',
+    appId: '1:931938830252:android:3b***********',
     messagingSenderId: '931938830252',
     projectId: 'instagram-clone-4a2fc',
     storageBucket: 'instagram-clone-4a2fc.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCoC-Yw59KtTzuOUmKQVKLLtcNS-52J5GY',
-    appId: '1:931938830252:ios:e84edf0f7951b973cb5c09',
+    apiKey: 'A*********************',
+    appId: '1:931938830252:ios:e***************',
     messagingSenderId: '931938830252',
     projectId: 'instagram-clone-4a2fc',
     storageBucket: 'instagram-clone-4a2fc.firebasestorage.app',
