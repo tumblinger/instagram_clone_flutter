@@ -30,7 +30,7 @@ class AuthService{
       User ? firebaseUser = userCredential.user;
       return AuthServiceResponse(data: firebaseUser);
     } on FirebaseAuthException catch(e){
-      print(e);
+      // print(e);
       final loginErrorMessage = _handleFirebaseAuthException(e);
       return AuthServiceResponse(errorMessage: loginErrorMessage);
     } catch(e) {
@@ -52,7 +52,24 @@ class AuthService{
       case 'too-many-requests':
         return 'Too many attempts. Wait one minute';
       default:
-        return 'Error: ${_genericErrorMessage}';
+        return 'Error: $_genericErrorMessage';
+    }
+  }
+
+  Future<void> updateAuthCurrentUser(String ? displayName, String ? photoURL) async {
+    if(displayName == null && photoURL == null) return;
+
+    try{
+      User? firebaseUser = _auth.currentUser;
+      if(displayName != null){
+        await firebaseUser?.updateDisplayName(displayName);
+      }
+      if(photoURL != null){
+        await firebaseUser?.updatePhotoURL(photoURL);
+      }
+      return;
+    } catch(e) {
+      return;
     }
   }
 

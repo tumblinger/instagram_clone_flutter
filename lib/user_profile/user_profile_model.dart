@@ -11,8 +11,8 @@ class UserProfileModel {
   final String ? firstName;
   final Gender ? gender;
   final int ? phoneNumber;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  // final DateTime createdAt;
+  // final DateTime updatedAt;
 
   UserProfileModel({
     required this.uid,
@@ -24,16 +24,16 @@ class UserProfileModel {
     this.firstName,
     this.gender,
     this.phoneNumber,
-    required this.createdAt,
-    required this.updatedAt,
+    // required this.createdAt,
+    // required this.updatedAt,
   });
   factory UserProfileModel.fromFirebaseUser(User firebaseUser){
     return UserProfileModel(
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
-        avatar: '',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        userName: '');
+        avatar: firebaseUser.photoURL!,
+        // createdAt: DateTime.now(),
+        // updatedAt: DateTime.now(),
+        userName: firebaseUser.displayName!);
   }
 }
