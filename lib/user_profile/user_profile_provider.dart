@@ -46,8 +46,8 @@ class MyAuthProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  //Если регистрация успешна, т.е. firebaseUser не равен null, то возвращаем метод
-  // Если регистрация неуспешна, возвращаем false:
+  //If registration is successful / firebaseUser is NOT null, return the method.
+  //If registration is NOT successful return false:
   Future<AuthServiceResponse<UserProfileModel>> signupWithEmailAndPassword(String password) async {
     final authServiceResponse = await _authService.signupWithEmailAndPassword(
         _email, password);
@@ -58,8 +58,7 @@ class MyAuthProvider extends ChangeNotifier{
       String defaultUserName = _userProfileService.userIDGenerator();
       String avatarName = firebaseUser.email!.substring(0,3);
       String randomAvatar = 'https://ui-avatars.com/api/?background=random&name=$avatarName';
-      await _authService.updateAuthCurrentUser(defaultUserName, randomAvatar);
-      
+      User? updatedFirebaseUser = await _authService.updateAuthCurrentUser(defaultUserName, randomAvatar);
       setHasSignedUpBefore();
       _userProfile = UserProfileModel.fromFirebaseUser(firebaseUser);
       return AuthServiceResponse(data: _userProfile);
