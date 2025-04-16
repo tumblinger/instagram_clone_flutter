@@ -2,10 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:instagram_clone/auth/auth_service.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
+import 'package:instagram_clone/user_profile/user_profile_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyAuthProvider extends ChangeNotifier{
   final AuthService _authService = AuthService();
+  final UserProfileService _userProfileService = UserProfileService();
+
   UserProfileModel ? _userProfile;
   late SharedPreferences _sharedPreferences;
   String hasSignedUpBeforeStatusKey = 'has-signed-up-before';
@@ -52,6 +55,11 @@ class MyAuthProvider extends ChangeNotifier{
     User? firebaseUser = authServiceResponse.data;
 
     if(firebaseUser != null){
+      String defaultUserName = _userProfileService.userIDGenerator();
+      String avatarName = firebaseUser.email!.substring(0,3);
+      String randomAvatar = 'https://ui-avatars.com/api/?background=random&name=$avatarName';
+      await _authService.updateAuthCurrentUser(defaultUserName, randomAvatar);
+      
       setHasSignedUpBefore();
       _userProfile = UserProfileModel.fromFirebaseUser(firebaseUser);
       return AuthServiceResponse(data: _userProfile);

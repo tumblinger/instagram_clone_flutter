@@ -3,8 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final String _genericErrorMessage = 'An unexpected error occurred';
-  Stream<User?> get firebaseUser => _auth.authStateChanges();
+  User? get currentFirebaseUser => _auth.currentUser;
 
+  Stream<User?> get firebaseUser => _auth.authStateChanges();
   Future<AuthServiceResponse<User>> signupWithEmailAndPassword(String email, String password) async {
     try {
       final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -56,20 +57,22 @@ class AuthService{
     }
   }
 
-  Future<void> updateAuthCurrentUser(String ? displayName, String ? photoURL) async {
-    if(displayName == null && photoURL == null) return;
+  Future<User?> updateAuthCurrentUser(String ? displayName, String ? photoURL) async {
+    User? firebaseUser = _auth.currentUser;
+
+    if(displayName == null && photoURL == null) return firebaseUser;
 
     try{
-      User? firebaseUser = _auth.currentUser;
       if(displayName != null){
         await firebaseUser?.updateDisplayName(displayName);
       }
       if(photoURL != null){
         await firebaseUser?.updatePhotoURL(photoURL);
       }
-      return;
+      await firebaseUser?.reload();
+      return firebaseUser;
     } catch(e) {
-      return;
+      return firebaseUser;
     }
   }
 
