@@ -11,8 +11,8 @@ class UserProfileModel {
   final String ? firstName;
   final Gender ? gender;
   final int ? phoneNumber;
-  // final DateTime createdAt;
-  // final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   UserProfileModel({
     required this.uid,
@@ -24,16 +24,62 @@ class UserProfileModel {
     this.firstName,
     this.gender,
     this.phoneNumber,
-    // required this.createdAt,
-    // required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
+
   factory UserProfileModel.fromFirebaseUser(User firebaseUser){
     return UserProfileModel(
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
         avatar: firebaseUser.photoURL!,
-        // createdAt: DateTime.now(),
-        // updatedAt: DateTime.now(),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
         userName: firebaseUser.displayName!);
+  }
+
+  UserProfileModel copyWith({
+    String? email,
+    String? avatar,
+    String? userName,
+    String? bio,
+    String? website,
+    String? firstName,
+    Gender? gender,
+    int? phoneNumber,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+}) {
+    return UserProfileModel(
+      uid: this.uid,
+      email: email ?? this.email,
+      avatar: avatar ?? this.avatar,
+      userName: userName ?? this.userName,
+      bio: bio ?? this.bio,
+      website: website ?? this.website,
+      firstName: firstName ?? this.firstName,
+      gender: gender ?? this.gender,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+
+    );
+  }
+
+  Map<String, dynamic> toMap(){
+    return{
+      'uid': uid,
+      'email': email,
+      'avatar': avatar,
+      'userName': userName,
+      'bio': bio,
+      'website': website,
+      'firstName': firstName,
+      'gender': gender?.name,
+      'phoneNumber': phoneNumber,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+
+    };
   }
 }
