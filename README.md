@@ -34,6 +34,7 @@ This project helped me connect backend logic with UI, write reusable code, and m
 ---
 
 🔜 Coming Soon
+
 Profile editing
 
 Post saving feature
