@@ -33,7 +33,7 @@ This project helped me connect backend logic with UI, write reusable code, and m
 
 ---
 
-🔜 Coming Soon
+## 🔜 Coming Soon
 
 Profile editing
 
@@ -52,3 +52,6 @@ Coming soon: short video or GIF demo of the app in action.
 
 ```bash
 git clone https://github.com/yourusername/instaclone.git
+
+✍️ Author
+Made by Valentina with 💙 — guided by curiosity and love for mobile development.
