@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_clone/home/media.dart';
 
 class Posts {
@@ -22,4 +23,22 @@ class Posts {
     required this.createdAt,
     required this.updatedAt,
 });
+
+  factory Posts.fromFirestore(DocumentSnapshot firestorePostDoc, DocumentSnapshot firestoreUserProfileDoc){
+
+    Map<String, dynamic> firestorePostData = firestorePostDoc.data() as Map<String, dynamic>;
+    Map<String, dynamic> firestoreUserProfileData = firestoreUserProfileDoc.data() as Map<String, dynamic>;
+
+    return Posts(
+        userName: firestoreUserProfileData['userName'],
+        avatar: firestoreUserProfileData['avatar'],
+        media: firestorePostData['media'],
+        caption: firestorePostData['caption'],
+        likes: firestorePostData['likes'],
+        shares: firestorePostData['shares'],
+        comments: firestorePostData['comments'],
+        createdAt: firestorePostData['createdAt'],
+        updatedAt: firestorePostData['updatedAt']
+    );
+  }
 }
