@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import  'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 
 class UserProfileModel {
@@ -33,11 +34,12 @@ class UserProfileModel {
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
         avatar: firebaseUser.photoURL!,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        // createdAt: DateTime.now(),
+        // updatedAt: DateTime.now(),
         userName: firebaseUser.displayName!);
   }
 
+  //method to update the specific fields:
   UserProfileModel copyWith({
     String? email,
     String? avatar,
@@ -62,7 +64,6 @@ class UserProfileModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-
     );
   }
 
@@ -72,13 +73,18 @@ class UserProfileModel {
       'email': email,
       'avatar': avatar,
       'userName': userName,
-      'bio': bio,
-      'website': website,
-      'firstName': firstName,
-      'gender': gender?.name,
+      'bio': bio ?? '',
+      'website': website ?? '',
+      'firstName': firstName ?? '',
+      'gender': gender?.toString(),
       'phoneNumber': phoneNumber,
-      'createdAt': createdAt?.toIso8601String(),
-      'updatedAt': updatedAt?.toIso8601String(),
+      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
+      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+      // 'createdAt': createdAt?.toIso8601String(),
+      // 'updatedAt': updatedAt?.toIso8601String(),
+    };
+  }
+}
 
     };
   }
