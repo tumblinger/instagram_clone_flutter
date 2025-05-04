@@ -1,0 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram_clone/home/posts.dart';
+
+class PostsService {
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
+  Stream<List<Posts>> getPosts(){
+    return
+        _firebaseFirestore
+        .collection('posts')
+        .orderBy('createdAt', descending: true)
+        .snapshots().asyncMap(
+                (snapshot) async {
+          List<Posts> posts = [];
+          for(QueryDocumentSnapshot<Map<String, dynamic>> firestorePostDoc in snapshot.docs){
+
+            DocumentReference userRef = firestorePostDoc['createdby'];
+            DocumentSnapshot firestoreUserProfileDoc = await userRef.get();
+
+            print(firestoreUserProfileDoc.data());
+            print(firestorePostDoc.data());
+          }
+          return posts;
+    });
+  }
+}
