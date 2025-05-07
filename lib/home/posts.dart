@@ -29,16 +29,20 @@ class Posts {
     Map<String, dynamic> firestorePostData = firestorePostDoc.data() as Map<String, dynamic>;
     Map<String, dynamic> firestoreUserProfileData = firestoreUserProfileDoc.data() as Map<String, dynamic>;
 
+    List<Media> media = (firestorePostData['media'] as List)
+        .map((media) => Media.fromMap(media as Map<String, dynamic>))
+        .toList();
+
     return Posts(
         userName: firestoreUserProfileData['userName'],
         avatar: firestoreUserProfileData['avatar'],
-        media: firestorePostData['media'],
+        media: media,
         caption: firestorePostData['caption'],
         likes: firestorePostData['likes'],
         shares: firestorePostData['shares'],
         comments: firestorePostData['comments'],
-        createdAt: firestorePostData['createdAt'],
-        updatedAt: firestorePostData['updatedAt']
+        createdAt: (firestorePostData['createdAt'] as Timestamp).toDate(),
+        updatedAt: (firestorePostData['updatedAt'] as Timestamp).toDate(),
     );
   }
 }
