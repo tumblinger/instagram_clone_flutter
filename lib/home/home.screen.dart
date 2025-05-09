@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/home/media.dart';
 import 'package:instagram_clone/home/posts.dart';
 import 'package:instagram_clone/home/posts_service.dart';
 
@@ -36,17 +37,51 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (context, index){
                       Posts post = posts[index];
 
-                      return Column(
-                        children: [
-                          Text(post.userName),
-                          Text(post.caption),
-                          Text(post.likes.toString()),
-                        ],
+                      return Card(
+                        elevation: 0.0,
+                        color: Colors.transparent,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(post.avatar),
+                              ),
+                              textColor: Colors.black,
+                              title: Text(post.userName),
+                              titleTextStyle: const TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold),
+                              titleAlignment: ListTileTitleAlignment.center,
+                              subtitle: const Text("Suggested for you"),
+                              subtitleTextStyle: const TextStyle(fontSize: 10.0),
+                              trailing: const Icon(Icons.more_vert),
+                            ),
+
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 300.0,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                  itemCount: post.media.length,
+                                  itemBuilder: (context, index){
+                                    MediaTypes mediaTypes = post.media[index].type;
+                                    String mediaValue = post.media[index].value;
+
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: mediaTypes == MediaTypes.image ? Image.network(mediaValue, fit: BoxFit.cover,) : const Text('Video'),
+                                    );
+                                  }),
+                            )
+                          ],
+                        ),
                       );
 
                     });
               })
       ),
+
     );
   }
 }
+
