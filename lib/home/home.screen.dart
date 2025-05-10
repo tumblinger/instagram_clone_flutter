@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:instagram_clone/home/media.dart';
 import 'package:instagram_clone/home/posts.dart';
 import 'package:instagram_clone/home/posts_service.dart';
+
+import '../app_constants.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,6 +14,9 @@ class HomeScreen extends StatelessWidget {
     final PostsService postsService = PostsService();
 
     return Scaffold(
+      appBar: AppBar(
+        leading: SvgPicture.asset("assets/app-logos/instagram-clone-logo-dark.svg", semanticsLabel: 'Text logo',),
+      ),
       body: SafeArea(
           child: StreamBuilder<List<Posts>>(
               stream: postsService.getPosts(),
@@ -34,17 +40,21 @@ class HomeScreen extends StatelessWidget {
 
                 return ListView.builder(
                   itemCount: posts.length,
-                    itemBuilder: (context, index){
+                  itemBuilder: (context, index){
                       Posts post = posts[index];
 
                       return Card(
                         elevation: 0.0,
-                        color: Colors.transparent,
+                        // color: Colors.transparent,
+                        color: Colors.amberAccent,
                         child: Column(
                           children: [
                             ListTile(
                               leading: CircleAvatar(
                                 backgroundImage: NetworkImage(post.avatar),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: AppConstants.defaultAppPadding
                               ),
                               textColor: Colors.black,
                               title: Text(post.userName),
