@@ -23,14 +23,14 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
           return Builder(
               builder: (BuildContext context){
                 if(media.type == MediaTypes.image){
-                  return Image.network(media.value)
+                  return Image.network(media.value);
                 } else {
-                  return VideoPlayer(controller)
+                  return VideoPlayer(_videoControllers[index]!);
                 }
               }
 
-          )
-        }),
+          );
+        }).toList(),
         options: options);
   }
 }
