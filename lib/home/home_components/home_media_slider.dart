@@ -31,6 +31,9 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
 
           );
         }).toList(),
-        options: options);
+        options: CarouselOptions(
+          height: 520
+        ));
   }
 }
+
