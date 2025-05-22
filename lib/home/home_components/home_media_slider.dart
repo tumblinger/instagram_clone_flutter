@@ -14,6 +14,20 @@ class HomeMediaSlider extends StatefulWidget {
 
 class _HomeMediaSliderState extends State<HomeMediaSlider> {
   late List<VideoPlayerController?> _videoControllers;
+
+  void _initializeVideoController(){
+    _videoControllers = widget.mediaList.map((media){
+      if(media.type == MediaTypes.video){
+        final controller = VideoPlayerController.networkUrl(Uri.parse(media.value))
+            ..initialize().then((_){
+              setState(() {});
+            });
+        return controller;
+      }
+      return null;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
@@ -36,4 +50,3 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
         ));
   }
 }
-
