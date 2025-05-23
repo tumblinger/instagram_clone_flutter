@@ -15,6 +15,12 @@ class HomeMediaSlider extends StatefulWidget {
 class _HomeMediaSliderState extends State<HomeMediaSlider> {
   late List<VideoPlayerController?> _videoControllers;
 
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideoController();
+  }
+
   void _initializeVideoController(){
     _videoControllers = widget.mediaList.map((media){
       if(media.type == MediaTypes.video){
@@ -50,3 +56,4 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
         ));
   }
 }
+
