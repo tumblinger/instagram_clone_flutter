@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instagram_clone/home/media.dart';
-import 'package:instagram_clone/home/posts.dart';
-import 'package:instagram_clone/home/posts_service.dart';
+import 'package:instagram_clone/create_post/posts.dart';
+import 'package:instagram_clone/create_post/posts_service.dart';
+import 'package:instagram_clone/home/home_components/home_post_details_card.dart';
 
 import '../app_constants.dart';
 import '../components/app_bottom_navigation_bar.dart';
+import 'home_components/home_media_slider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -81,22 +82,8 @@ class HomeScreen extends StatelessWidget {
                               trailing: const Icon(Icons.more_vert),
                             ),
 
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 300.0,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                  itemCount: post.media.length,
-                                  itemBuilder: (context, index){
-                                    MediaTypes mediaTypes = post.media[index].type;
-                                    String mediaValue = post.media[index].value;
-
-                                    return SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: mediaTypes == MediaTypes.image ? Image.network(mediaValue, fit: BoxFit.cover,) : const Text('Video'),
-                                    );
-                                  }),
-                            )
+                            HomeMediaSlider(mediaList: post.media),
+                            HomePostDetailsCard(post: post)
                           ],
                         ),
                       );
@@ -109,4 +96,5 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
 
