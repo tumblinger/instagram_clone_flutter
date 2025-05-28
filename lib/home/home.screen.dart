@@ -64,25 +64,40 @@ class HomeScreen extends StatelessWidget {
                         // color: Colors.amberAccent,
                         child: Column(
                           children: [
-                            ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(post.avatar),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: 0.0, horizontal: AppConstants.defaultAppPadding
-                              ),
-                              textColor: Colors.black,
-                              title: Text(post.userName),
-                              titleTextStyle: const TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.bold),
-                              titleAlignment: ListTileTitleAlignment.center,
-                              subtitle: const Text("Suggested for you"),
-                              subtitleTextStyle: const TextStyle(fontSize: 10.0),
-                              trailing: const Icon(Icons.more_vert),
-                            ),
+                            Stack(
+                              children: [Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                  Row(children: [
+                                    SizedBox(
+                                      width: 28.0,
+                                      child: CircleAvatar(
+                                          backgroundImage: NetworkImage(post.avatar)),
+                                    ),
 
-                            HomeMediaSlider(mediaList: post.media),
+                                    SizedBox(width: 12.0),
+
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                      Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+                                      const Text('Suggested for you', style: TextStyle(fontSize: 10.0),)
+                                    ],)
+                                  ],),
+                                  Row(children: [
+                                    InkWell(
+                                      customBorder: RoundedRectangleBorder(side: BorderSide(color: Colors.black)),
+                                        child: Text('Follow')),
+                                    SizedBox(width: 12.0),
+                                    Icon(Icons.more_horiz)
+                                  ],)
+                                ],),
+                              ),
+                                HomeMediaSlider(mediaList: post.media),
+                              ]),
+
                             HomePostDetailsCard(post: post)
                           ],
                         ),
@@ -96,5 +111,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
 
 
