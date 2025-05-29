@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/create_post/posts.dart';
+import 'package:intl/intl.dart';
+
+import '../../util/numbers.dart';
 
 class HomePostDetailsCard extends StatelessWidget {
   final Posts post;
@@ -10,6 +13,7 @@ class HomePostDetailsCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
          Row(
            mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,7 +29,25 @@ class HomePostDetailsCard extends StatelessWidget {
              ),
              Icon(Icons.bookmark_border_outlined)
            ],
-         )
+         ),
+
+          SizedBox(height: 12.0),
+
+          Text.rich(
+              style: TextStyle(fontSize: 12.0),
+              TextSpan(children: [
+                TextSpan(
+                  text: '${post.userName} ',
+                  style: TextStyle(fontWeight: FontWeight.bold)
+            ),
+                TextSpan(text: post.caption)
+          ])
+          ),
+
+          Text(
+              DateFormat('MMM dd yyyy').format(post.createdAt),
+              style: TextStyle(fontSize: 10.0, color: Colors.grey)
+          )
         ],
       ),
     );
@@ -41,7 +63,7 @@ class HomePostDetailsStatistic extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(children: [
       Icon(icon),
-      Text('$statValue'),
+      Text(shortNumber(statValue), style: TextStyle(fontSize: 10.0),),
     ],);
   }
 }
