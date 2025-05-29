@@ -61,41 +61,44 @@ class HomeScreen extends StatelessWidget {
                       return Card(
                         elevation: 0.0,
                         color: Colors.transparent,
-                        // color: Colors.amberAccent,
                         child: Column(
                           children: [
                             Stack(
-                              children: [Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                  Row(children: [
-                                    SizedBox(
-                                      width: 28.0,
-                                      child: CircleAvatar(
-                                          backgroundImage: NetworkImage(post.avatar)),
-                                    ),
+                              children: [
+                                HomeMediaSlider(mediaList: post.media),
+                                Container(
+                                  color: Colors.black12,
+                                  child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                    Row(children: [
+                                      SizedBox(
+                                        width: 28.0,
+                                        child: CircleAvatar(
+                                            backgroundImage: NetworkImage(post.avatar)),
+                                      ),
 
-                                    SizedBox(width: 12.0),
+                                      SizedBox(width: 12.0),
 
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                      Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
-                                      const Text('Suggested for you', style: TextStyle(fontSize: 10.0),)
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                        Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white)),
+                                        const Text('Suggested for you', style: TextStyle(fontSize: 10.0, color: Colors.white))
+                                      ],)
+                                    ],),
+                                    Row(children: [
+                                      InkWell(
+                                        customBorder: RoundedRectangleBorder(side: BorderSide(color: Colors.black)),
+                                          child: Text('Follow', style: TextStyle(color: Colors.white),)),
+                                      SizedBox(width: 12.0),
+                                      Icon(Icons.more_horiz, color: Colors.white,)
                                     ],)
                                   ],),
-                                  Row(children: [
-                                    InkWell(
-                                      customBorder: RoundedRectangleBorder(side: BorderSide(color: Colors.black)),
-                                        child: Text('Follow')),
-                                    SizedBox(width: 12.0),
-                                    Icon(Icons.more_horiz)
-                                  ],)
-                                ],),
-                              ),
-                                HomeMediaSlider(mediaList: post.media),
+                                                                ),
+                                ),
                               ]),
 
                             HomePostDetailsCard(post: post)
@@ -111,6 +114,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
 
 
 
