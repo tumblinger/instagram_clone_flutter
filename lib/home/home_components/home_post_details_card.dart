@@ -57,14 +57,18 @@ class HomePostDetailsCard extends StatelessWidget {
 class HomePostDetailsStatistic extends StatelessWidget {
   final IconData icon;
   final int statValue;
-  const HomePostDetailsStatistic({super.key, required this.icon, required this.statValue});
+  final VoidCallback? onTap;
+
+  const HomePostDetailsStatistic({super.key, required this.icon, required this.statValue, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Icon(icon),
-      Text(shortNumber(statValue), style: TextStyle(fontSize: 10.0),),
-    ],);
+    return InkWell(
+      onTap: onTap,
+      child: Row(children: [
+          Icon(icon),
+          Text(shortNumber(statValue), style: TextStyle(fontSize: 10.0),),
+      ],),
+    );
   }
 }
-
