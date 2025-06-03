@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_clone/home/media.dart';
 
 class Posts {
+  final String id;
   final String userName;
   final String avatar;
   final List <Media> media;
@@ -13,6 +14,7 @@ class Posts {
   final DateTime updatedAt;
 
   Posts ({
+    required this.id,
     required this.userName,
     required this.avatar,
     required this.media,
@@ -34,6 +36,7 @@ class Posts {
         .toList();
 
     return Posts(
+        id: firestorePostDoc.id,
         userName: firestoreUserProfileData['userName'],
         avatar: firestoreUserProfileData['avatar'],
         media: media,
