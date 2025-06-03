@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.only(left: AppConstants.defaultAppPadding),
           child: SvgPicture.asset("assets/app-logos/instagram-clone-logo-dark.svg", semanticsLabel: 'Text logo',),
         ),
-          leadingWidth: 120.0,
+          leadingWidth: 100.0,
           actions: [
           IconButton(
             padding: EdgeInsets.only(right: AppConstants.defaultAppPadding),
@@ -101,7 +101,7 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ]),
 
-                            HomePostDetailsCard(post: post)
+                            HomePostDetailsCard(post: post, postService: postsService)
                           ],
                         ),
                       );
