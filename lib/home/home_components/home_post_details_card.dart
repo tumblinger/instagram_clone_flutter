@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:intl/intl.dart';
 
+import '../../create_post/posts_service.dart';
 import '../../util/numbers.dart';
 
 class HomePostDetailsCard extends StatelessWidget {
   final Posts post;
-  const HomePostDetailsCard({super.key, required this.post});
+  final PostsService postService;
+  const HomePostDetailsCard({super.key, required this.post, required this.postService});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,9 @@ class HomePostDetailsCard extends StatelessWidget {
            children: [
              Row(
                children: [
-                 HomePostDetailsStatistic(icon: Icons.favorite_outline, statValue: post.likes),
+                 HomePostDetailsStatistic(icon: Icons.favorite_outline, statValue: post.likes, onTap: (){
+                   postService.updatePost(post.id, {'likes': post.likes + 1});
+                 },),
                  const SizedBox(width: 12.0),
                  HomePostDetailsStatistic(icon: Icons.chat_bubble_outline, statValue: post.comments),
                  const SizedBox(width: 12.0),
@@ -67,8 +71,9 @@ class HomePostDetailsStatistic extends StatelessWidget {
       onTap: onTap,
       child: Row(children: [
           Icon(icon),
-          Text(shortNumber(statValue), style: TextStyle(fontSize: 10.0),),
+          Text(shortNumber(statValue), style: TextStyle(fontSize: 10.0)),
       ],),
     );
   }
 }
+
