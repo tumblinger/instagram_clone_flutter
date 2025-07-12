@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/create_post/post_comments/comment.bottom_sheet.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:intl/intl.dart';
 
@@ -22,13 +23,15 @@ class HomePostDetailsCard extends StatelessWidget {
            children: [
              Row(
                children: [
-                 HomePostDetailsStatistic(icon: Icons.favorite_outline, statValue: post.likes, onTap: (){
-                   postService.updatePost(post.id, {'likes': post.likes + 1});
-                 },),
+                 HomePostDetailsStatistic(icon: Icons.favorite_outline, statValue: post.likes, onTap: () => postService.incrementLikes(post.id)),
                  const SizedBox(width: 12.0),
-                 HomePostDetailsStatistic(icon: Icons.chat_bubble_outline, statValue: post.comments),
+                 HomePostDetailsStatistic(icon: Icons.chat_bubble_outline, statValue: post.comments, onTap: () => {
+                   showModalBottomSheet(
+                       context: context,
+                       builder: (context) => CommentBottomSheet())
+                 }),
                  const SizedBox(width: 12.0),
-                 HomePostDetailsStatistic(icon: Icons.send_outlined, statValue: post.shares),
+                 HomePostDetailsStatistic(icon: Icons.send_outlined, statValue: post.shares, onTap: () => postService.incrementShares(post.id)),
                ],
              ),
              Icon(Icons.bookmark_border_outlined)
