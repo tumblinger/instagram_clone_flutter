@@ -6,8 +6,15 @@ class CommentBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height*0.75,
-      color: Colors.redAccent,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 8),
+          Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 8)
+        ],
+      ),
     );
   }
 }
-
