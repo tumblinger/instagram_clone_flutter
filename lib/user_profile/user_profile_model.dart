@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 
-//Этот импорт нужен в методе toMap(), где используется Timestamp:
-// Тип Timestamp — это класс из Cloud Firestore, а не из стандартного Dart. Он нужен для правильного сохранения времени в формате, который понимает Firestore.
 import  'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProfileModel {
