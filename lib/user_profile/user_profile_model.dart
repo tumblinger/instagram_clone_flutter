@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import  'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
+
+//Этот импорт нужен в методе toMap(), где используется Timestamp:
+// Тип Timestamp — это класс из Cloud Firestore, а не из стандартного Dart. Он нужен для правильного сохранения времени в формате, который понимает Firestore.
+import  'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProfileModel {
   final String uid;
@@ -67,6 +70,24 @@ class UserProfileModel {
     );
   }
 
+  factory UserProfileModel.fromFirestore( DocumentSnapshot firestoreUserProfileDoc){
+    Map<String, dynamic> firestoreUserProfileData = firestoreUserProfileDoc.data() as Map<String, dynamic>;
+
+    return UserProfileModel(
+        uid: firestoreUserProfileDoc.id,
+        email: firestoreUserProfileData['email'],
+        avatar: firestoreUserProfileData['avatar'],
+        userName: firestoreUserProfileData['userName'],
+        bio: firestoreUserProfileData['bio'] ?? '',
+        website: firestoreUserProfileData['website'] ?? '',
+        firstName: firestoreUserProfileData['firstName'] ?? '',
+        gender: firestoreUserProfileData['gender'],
+        phoneNumber: firestoreUserProfileData['phoneNumber'],
+        createdAt: (firestoreUserProfileData['createdAt'] as Timestamp).toDate(),
+        updatedAt: (firestoreUserProfileData['updatedAt'] as Timestamp).toDate(),
+    );
+  }
+
   Map<String, dynamic> toMap(){
     return{
       'uid': uid,
@@ -82,10 +103,6 @@ class UserProfileModel {
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
       // 'createdAt': createdAt?.toIso8601String(),
       // 'updatedAt': updatedAt?.toIso8601String(),
-    };
-  }
-}
-
     };
   }
 }
