@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../user_profile/user_profile_provider.dart';
@@ -12,34 +11,57 @@ class CommentBottomSheet extends StatefulWidget {
 }
 
 class _CommentBottomSheetState extends State<CommentBottomSheet> {
+  final TextEditingController _commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final userProfile = context.watch<MyAuthProvider>().userProfile;
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!! userProfile: $userProfile');
-    return Container(
+
+      return Container(
       height: MediaQuery.of(context).size.height*0.75,
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 8),
-          Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: 8),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Row(children: [
+              if(userProfile?.avatar != null)
+                CircleAvatar(
+                    backgroundImage: NetworkImage(userProfile!.avatar),),
+                SizedBox(width: 10,),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 8),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black54),
+                        borderRadius: BorderRadius.circular(100)
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _commentController,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              hintText: 'Add a comment...',
+                              border: InputBorder.none
+                              ),
+                              ),
+                        ),
+                        IconButton(onPressed: (){}, icon: Icon(Icons.send))
+                      ],
+                    ),
+                  ),
+                )
 
-          Row(children: [
+            ],)
 
-            if(userProfile?.avatar != null)
-              SizedBox(
-                width: 28.0,
-                child: CircleAvatar(
-                    backgroundImage: NetworkImage(userProfile!.avatar)),
-              ),
-
-
-          ],)
-
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
