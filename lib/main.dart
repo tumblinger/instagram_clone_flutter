@@ -9,6 +9,8 @@ import 'package:instagram_clone/app_theme_data.dart';
 import 'package:provider/provider.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 
+import 'auth/auth_screens/login_screen.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
@@ -31,11 +33,21 @@ class InstagramClone extends StatelessWidget{
         darkTheme: AppThemeData().dark(),
         themeMode: ThemeMode.light,
         routes: AppRoutes.getRoutes(),
-        home: AppRoutes.entryScreen,
+        home: Consumer<MyAuthProvider>(
+          builder: (context, authProvider, _) {
+            if (authProvider.userProfile != null) {
+              return AppRoutes.entryScreen;
+            } else {
+              return LoginScreen();
+            }
+          },
+        ),
         ),
     );
   }
 }
+
+
 
 
 
