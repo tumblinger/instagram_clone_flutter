@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram_clone/home/media.dart';
 
 class Comment {
   final String id;
@@ -30,10 +29,10 @@ class Comment {
     return Comment(
       id: firestoreCommentDoc.id,
       userName: firestoreUserProfileData['userName'],
-      postId: '',
-      userId: '',
+      postId: firestoreCommentData['postId'],
+      userId: firestoreUserProfileData['userId'],
       avatar: firestoreUserProfileData['avatar'],
-      text: '',
+      text: firestoreCommentData['text'],
       createdAt: (firestoreCommentData['createdAt'] as Timestamp).toDate(),
       updatedAt: (firestoreCommentData['updatedAt'] as Timestamp).toDate(),
     );
