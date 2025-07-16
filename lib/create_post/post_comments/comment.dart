@@ -22,20 +22,20 @@ class Comment {
     required this.updatedAt,
   });
 
-  factory Comment.fromFirestore(DocumentSnapshot firestorePostDoc, DocumentSnapshot firestoreUserProfileDoc){
+  factory Comment.fromFirestore(DocumentSnapshot firestoreCommentDoc, DocumentSnapshot firestoreUserProfileDoc){
 
-    Map<String, dynamic> firestorePostData = firestorePostDoc.data() as Map<String, dynamic>;
+    Map<String, dynamic> firestoreCommentData = firestoreCommentDoc.data() as Map<String, dynamic>;
     Map<String, dynamic> firestoreUserProfileData = firestoreUserProfileDoc.data() as Map<String, dynamic>;
 
     return Comment(
-      id: firestorePostDoc.id,
+      id: firestoreCommentDoc.id,
       userName: firestoreUserProfileData['userName'],
       postId: '',
       userId: '',
       avatar: firestoreUserProfileData['avatar'],
       text: '',
-      createdAt: (firestorePostData['createdAt'] as Timestamp).toDate(),
-      updatedAt: (firestorePostData['updatedAt'] as Timestamp).toDate(),
+      createdAt: (firestoreCommentData['createdAt'] as Timestamp).toDate(),
+      updatedAt: (firestoreCommentData['updatedAt'] as Timestamp).toDate(),
     );
   }
 }
