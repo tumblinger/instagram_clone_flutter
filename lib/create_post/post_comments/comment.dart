@@ -27,10 +27,6 @@ class Comment {
     Map<String, dynamic> firestorePostData = firestorePostDoc.data() as Map<String, dynamic>;
     Map<String, dynamic> firestoreUserProfileData = firestoreUserProfileDoc.data() as Map<String, dynamic>;
 
-    List<Media> media = (firestorePostData['media'] as List)
-        .map((media) => Media.fromMap(media as Map<String, dynamic>))
-        .toList();
-
     return Comment(
       id: firestorePostDoc.id,
       userName: firestoreUserProfileData['userName'],
