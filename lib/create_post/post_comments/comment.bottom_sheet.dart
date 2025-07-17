@@ -12,12 +12,21 @@ class CommentBottomSheet extends StatefulWidget {
 
 class _CommentBottomSheetState extends State<CommentBottomSheet> {
   final TextEditingController _commentController = TextEditingController();
+  final isSubmitting = false;
+
+  Future<void> _submitComment(String userId) async{
+    String comment = _commentController.text.trim();
+    if(comment.isEmpty) {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProfile = context.watch<MyAuthProvider>().userProfile;
 
-      return Container(
-      height: MediaQuery.of(context).size.height*0.75,
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.75,
       width: MediaQuery.of(context).size.width,
       child: Padding(
         padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 20),
