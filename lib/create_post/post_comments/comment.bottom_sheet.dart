@@ -12,13 +12,20 @@ class CommentBottomSheet extends StatefulWidget {
 
 class _CommentBottomSheetState extends State<CommentBottomSheet> {
   final TextEditingController _commentController = TextEditingController();
-  final isSubmitting = false;
+  bool isSubmitting = false;
+
+  @override
+  void dispose(){
+    super.dispose();
+    _commentController.dispose();
+  }
 
   Future<void> _submitComment(String userId) async{
     String comment = _commentController.text.trim();
-    if(comment.isEmpty) {
-      return;
-    }
+    if(comment.isEmpty) return;
+    setState(() {
+      isSubmitting = true;
+    });
   }
 
   @override
@@ -73,4 +80,5 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     );
   }
 }
+
 
