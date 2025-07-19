@@ -91,7 +91,13 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
                               ),
                               ),
                         ),
-                        IconButton(onPressed: (){}, icon: Icon(Icons.send))
+                        IconButton(onPressed: (){
+                          if(_isSubmitting) return;
+                          final userId = userProfile?.uid;
+                          if(userId == null) return;
+                          _submitComment(userId);
+                          
+                        }, icon: Icon(Icons.send))
                       ],
                     ),
                   ),
@@ -105,5 +111,6 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     );
   }
 }
+
 
 
