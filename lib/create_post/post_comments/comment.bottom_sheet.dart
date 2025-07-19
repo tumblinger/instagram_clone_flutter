@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../user_profile/user_profile_provider.dart';
 
 class CommentBottomSheet extends StatefulWidget {
-  final Posts posts; 
+  final Posts posts;
   const CommentBottomSheet({super.key, required this.posts});
 
   @override
@@ -34,7 +34,14 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
 
     try{
       await commentService.addComment(widget.posts.id, userId, comment);
+      
+      if(mounted){
+        _commentController.clear();
+      }
     } catch(error){
+      if(mounted){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error posting comment'),));
+      }
       print(error);
     }
   }
@@ -91,5 +98,6 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     );
   }
 }
+
 
 
