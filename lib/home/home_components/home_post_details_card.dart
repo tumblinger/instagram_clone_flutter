@@ -28,7 +28,8 @@ class HomePostDetailsCard extends StatelessWidget {
                  HomePostDetailsStatistic(icon: Icons.chat_bubble_outline, statValue: post.comments, onTap: () => {
                    showModalBottomSheet(
                        context: context,
-                       builder: (context) => CommentBottomSheet())
+                       isScrollControlled: true,
+                       builder: (context) => CommentBottomSheet(posts: post))
                  }),
                  const SizedBox(width: 12.0),
                  HomePostDetailsStatistic(icon: Icons.send_outlined, statValue: post.shares, onTap: () => postService.incrementShares(post.id)),
@@ -79,4 +80,5 @@ class HomePostDetailsStatistic extends StatelessWidget {
     );
   }
 }
+
 
