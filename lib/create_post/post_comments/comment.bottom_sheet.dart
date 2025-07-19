@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/create_post/post_comments/comment.service.dart';
+import 'package:instagram_clone/create_post/posts.dart';
 import 'package:provider/provider.dart';
 
 import '../../user_profile/user_profile_provider.dart';
 
 class CommentBottomSheet extends StatefulWidget {
-  const CommentBottomSheet({super.key});
+  final Posts posts; 
+  const CommentBottomSheet({super.key, required this.posts});
 
   @override
   State<CommentBottomSheet> createState() => _CommentBottomSheetState();
 }
 
 class _CommentBottomSheetState extends State<CommentBottomSheet> {
+  final CommentService commentService = CommentService();
   final TextEditingController _commentController = TextEditingController();
-  bool isSubmitting = false;
+  bool _isSubmitting = false;
 
   @override
   void dispose(){
@@ -23,9 +27,16 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
   Future<void> _submitComment(String userId) async{
     String comment = _commentController.text.trim();
     if(comment.isEmpty) return;
+
     setState(() {
-      isSubmitting = true;
+      _isSubmitting = true;
     });
+
+    try{
+      await commentService.addComment(widget.posts.id, userId, comment);
+    } catch(error){
+      print(error);
+    }
   }
 
   @override
