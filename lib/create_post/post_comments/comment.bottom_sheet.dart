@@ -34,15 +34,22 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
 
     try{
       await commentService.addComment(widget.posts.id, userId, comment);
-      
+
       if(mounted){
         _commentController.clear();
       }
     } catch(error){
       if(mounted){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error posting comment'),));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error while posting comment')));
       }
       print(error);
+    }
+    finally{
+      if(mounted){
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
@@ -98,6 +105,5 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     );
   }
 }
-
 
 
