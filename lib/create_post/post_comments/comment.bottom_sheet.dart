@@ -57,7 +57,7 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
   Widget build(BuildContext context) {
     final userProfile = context.watch<MyAuthProvider>().userProfile;
 
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.75,
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -96,7 +96,7 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
                           final userId = userProfile?.uid;
                           if(userId == null) return;
                           _submitComment(userId);
-                          
+
                         }, icon: Icon(Icons.send))
                       ],
                     ),
@@ -111,6 +111,5 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     );
   }
 }
-
 
 
