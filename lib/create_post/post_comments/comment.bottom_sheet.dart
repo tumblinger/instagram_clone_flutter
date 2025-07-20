@@ -4,6 +4,7 @@ import 'package:instagram_clone/create_post/posts.dart';
 import 'package:provider/provider.dart';
 
 import '../../user_profile/user_profile_provider.dart';
+import 'comment.dart';
 
 class CommentBottomSheet extends StatefulWidget {
   final Posts posts;
@@ -67,6 +68,24 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
           children: [
             const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
+
+        StreamBuilder<List<Comment>>(
+            stream: commentService.getPostComments(widget.posts.id),
+            builder: (context, snapshot) {
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              final comments = snapshot.data ?? [];
+              return ListView.builder(
+                itemCount: comments.length,
+                  itemBuilder: (context, index) {
+                    final comment = comments[index];
+                    return Text(comment.text);
+                  });
+            }),
+
             Row(children: [
               if(userProfile?.avatar != null)
                 CircleAvatar(
@@ -111,5 +130,6 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     );
   }
 }
+
 
 
