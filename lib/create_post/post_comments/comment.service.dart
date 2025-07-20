@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
-
 import 'comment.dart';
 
 class CommentService {
@@ -12,15 +11,17 @@ class CommentService {
       _firebaseFirestore
           .collection('comments')
           .orderBy('createdAt', descending: true)
-          .snapshots().asyncMap((snapshot) async {
+          .snapshots()
+          .asyncMap((snapshot) async {
         List<Comment> comments = [];
+        
         for(
-        QueryDocumentSnapshot<Map<String, dynamic>> firestorePostDoc in snapshot.docs)
+        QueryDocumentSnapshot<Map<String, dynamic>> firestoreCommentDoc in snapshot.docs)
         {
-          DocumentReference userProfileRef = firestorePostDoc['createdby'];
+          DocumentReference userProfileRef = firestoreCommentDoc['userId'];
           DocumentSnapshot firestoreUserProfileDoc = await userProfileRef.get();
 
-          comments.add(Comment.fromFirestore(firestorePostDoc, firestoreUserProfileDoc));
+          comments.add(Comment.fromFirestore(firestoreCommentDoc, firestoreUserProfileDoc));
 
         }
         return comments;
