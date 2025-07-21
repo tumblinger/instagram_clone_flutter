@@ -10,6 +10,7 @@ class Comment {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  //Constructor:
   Comment ({
     required this.id,
     required this.postId,
@@ -21,7 +22,9 @@ class Comment {
     required this.updatedAt,
   });
 
-  factory Comment.fromFirestore(DocumentSnapshot firestoreCommentDoc, DocumentSnapshot firestoreUserProfileDoc){
+  factory Comment.fromFirestore(
+      DocumentSnapshot firestoreCommentDoc,
+      DocumentSnapshot firestoreUserProfileDoc){
 
     Map<String, dynamic> firestoreCommentData = firestoreCommentDoc.data() as Map<String, dynamic>;
     Map<String, dynamic> firestoreUserProfileData = firestoreUserProfileDoc.data() as Map<String, dynamic>;
@@ -30,8 +33,8 @@ class Comment {
       id: firestoreCommentDoc.id,
       userName: firestoreUserProfileData['userName'],
       postId: firestoreCommentData['postId'],
-      userId: firestoreUserProfileData['userId'],
-      avatar: firestoreUserProfileData['avatar'],
+      userId: firestoreUserProfileDoc.id,
+      avatar: firestoreUserProfileData['userAvatar'],
       text: firestoreCommentData['text'],
       createdAt: (firestoreCommentData['createdAt'] as Timestamp).toDate(),
       updatedAt: (firestoreCommentData['updatedAt'] as Timestamp).toDate(),
