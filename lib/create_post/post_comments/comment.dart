@@ -34,7 +34,7 @@ class Comment {
       userName: firestoreUserProfileData['userName'],
       postId: firestoreCommentData['postId'],
       userId: firestoreUserProfileDoc.id,
-      avatar: firestoreUserProfileData['userAvatar'],
+      avatar: firestoreUserProfileData['avatar'],
       text: firestoreCommentData['text'],
       createdAt: (firestoreCommentData['createdAt'] as Timestamp).toDate(),
       updatedAt: (firestoreCommentData['updatedAt'] as Timestamp).toDate(),
