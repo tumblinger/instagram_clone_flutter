@@ -69,22 +69,30 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
             const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
 
-        StreamBuilder<List<Comment>>(
-            stream: commentService.getPostComments(widget.posts.id),
-            builder: (context, snapshot) {
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final comments = snapshot.data ?? [];
-              return ListView.builder(
-                itemCount: comments.length,
-                  itemBuilder: (context, index) {
-                    final comment = comments[index];
-                    return Text(comment.text);
-                  });
-            }),
+        Expanded(
+          child: StreamBuilder<List<Comment>>(
+              stream: commentService.getPostComments(widget.posts.id),
+              builder: (context, snapshot) {
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                final comments = snapshot.data ?? [];
+
+                return ListView.builder(
+                  itemCount: comments.length,
+                    itemBuilder: (context, index) {
+                      final comment = comments[index];
+                      return Row(children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(comment.avatar),
+                        ),
+                        Text(comment.text)
+                      ],);
+                    });
+              }),
+        ),
 
             Row(children: [
               if(userProfile?.avatar != null)
@@ -130,6 +138,3 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
     );
   }
 }
-
-
-
