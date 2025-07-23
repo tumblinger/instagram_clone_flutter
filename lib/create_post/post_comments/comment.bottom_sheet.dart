@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../user_profile/user_profile_provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:instagram_clone/create_post/post_comments/comment.service.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:provider/provider.dart';
-
-import '../../user_profile/user_profile_provider.dart';
 import 'comment.dart';
 
 class CommentBottomSheet extends StatefulWidget {
@@ -84,12 +84,23 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
                   itemCount: comments.length,
                     itemBuilder: (context, index) {
                       final comment = comments[index];
-                      return Row(children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(comment.avatar),
-                        ),
-                        Text(comment.text)
-                      ],);
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(children: [
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(comment.avatar),
+                          ),
+                          SizedBox(width: 8),
+                          Column( crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Text(timeago.format(comment.createdAt), style: TextStyle(color: Colors.grey[600], fontSize: 10),),
+                            Text(comment.text, style: TextStyle(fontSize: 12),),
+
+                          ],)
+
+                        ],),
+                      );
                     });
               }),
         ),
