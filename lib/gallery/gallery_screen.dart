@@ -46,13 +46,24 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       if(snapshot.connectionState == ConnectionState.waiting){
                         return Center(child: CircularProgressIndicator(),);
                       }
+                      //get Posts list from the stream (result - Posts):
                       List<Posts> posts = snapshot.data ?? [];
+                      //transform each Post into its media list (result - list of media lists):
                       List<List<Media>> allMediaList = posts.map((post) => post.media).toList();
+                      // unpack nested lists into plain list of media-files:
                       List<Media>allMedia = allMediaList.expand((media) => media).toList();
 
                       return GridView.builder(
-                          gridDelegate: gridDelegate,
-                          itemBuilder: itemBuilder);
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 1,
+                            crossAxisSpacing: 1
+                          ),
+                          itemCount: allMedia.length,
+                          itemBuilder: (context, index){
+                            Media media = allMedia[index];
+                            return Text('${media.type}');
+                          });
                     },
                   )
                 ],
