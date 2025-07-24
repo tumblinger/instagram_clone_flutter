@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/create_post/posts.dart';
+import 'package:instagram_clone/home/media.dart';
 import '../components/app_bottom_navigation_bar.dart';
+import '../create_post/posts_service.dart';
 
 class GalleryScreen extends StatefulWidget {
 
@@ -11,6 +14,7 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final PostsService postsService = PostsService();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,22 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         fillColor: Colors.black12
                       ),
                     ),
+                  ),
+
+                  StreamBuilder<List<Posts>>(
+                    stream: postsService.getPosts(),
+                    builder: (context, snapshot) {
+                      if(snapshot.connectionState == ConnectionState.waiting){
+                        return Center(child: CircularProgressIndicator(),);
+                      }
+                      List<Posts> posts = snapshot.data ?? [];
+                      List<List<Media>> allMediaList = posts.map((post) => post.media).toList();
+                      List<Media>allMedia = allMediaList.expand((media) => media).toList();
+
+                      return GridView.builder(
+                          gridDelegate: gridDelegate,
+                          itemBuilder: itemBuilder);
+                    },
                   )
                 ],
               )),
