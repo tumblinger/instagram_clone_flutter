@@ -44,6 +44,7 @@ class _GalleryMediaThumbnailState extends State<GalleryMediaThumbnail> {
     final mediaSize = screenWidth/3;
 
     return Stack(
+      alignment: AlignmentDirectional.topEnd,
       children:[
         SizedBox(
           width: mediaSize,
@@ -52,10 +53,11 @@ class _GalleryMediaThumbnailState extends State<GalleryMediaThumbnail> {
               ? Image.network(widget.media.value, fit: BoxFit.cover)
               : VideoPlayer(_videoController!),
         ),
-        if(widget.media.type == MediaTypes.image) 
-          const Icon(Icons.image),
-        if(widget.media.type == MediaTypes.video)
-          const Icon(Icons.video_collection)
+        Padding(padding: EdgeInsets.only(right: 8, top: 8),
+        child: widget.media.type == MediaTypes.image
+            ? const Icon(Icons.image)
+            : const Icon(Icons.video_collection),
+        ),
         
       ]
     );
