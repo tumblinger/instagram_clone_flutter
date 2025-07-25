@@ -31,6 +31,7 @@ class _GalleryMediaThumbnailState extends State<GalleryMediaThumbnail> {
       });
     }
   }
+  
   @override
   void dispose() {
     _videoController?.dispose();
@@ -42,12 +43,21 @@ class _GalleryMediaThumbnailState extends State<GalleryMediaThumbnail> {
     final screenWidth = MediaQuery.of(context).size.width;
     final mediaSize = screenWidth/3;
 
-    return SizedBox(
-      width: mediaSize,
-      height: mediaSize,
-      child: widget.media.type == MediaTypes.image
-          ? Image.network(widget.media.value, fit: BoxFit.cover)
-          : VideoPlayer(_videoController!),
+    return Stack(
+      children:[
+        SizedBox(
+          width: mediaSize,
+          height: mediaSize,
+          child: widget.media.type == MediaTypes.image
+              ? Image.network(widget.media.value, fit: BoxFit.cover)
+              : VideoPlayer(_videoController!),
+        ),
+        if(widget.media.type == MediaTypes.image) 
+          const Icon(Icons.image),
+        if(widget.media.type == MediaTypes.video)
+          const Icon(Icons.video_collection)
+        
+      ]
     );
   }
 }
