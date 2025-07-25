@@ -3,6 +3,7 @@ import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/home/media.dart';
 import '../components/app_bottom_navigation_bar.dart';
 import '../create_post/posts_service.dart';
+import 'gallery.media-thumbnail.dart';
 
 class GalleryScreen extends StatefulWidget {
 
@@ -63,7 +64,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                             itemCount: allMedia.length,
                             itemBuilder: (context, index){
                               Media media = allMedia[index];
-                              return Text('${media.type}');
+                              return GalleryMediaThumbnail(media: media,);
                             });
                       },
                     ),
