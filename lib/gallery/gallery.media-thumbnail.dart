@@ -55,8 +55,8 @@ class _GalleryMediaThumbnailState extends State<GalleryMediaThumbnail> {
         ),
         Padding(padding: EdgeInsets.only(right: 8, top: 8),
         child: widget.media.type == MediaTypes.image
-            ? const Icon(Icons.image)
-            : const Icon(Icons.video_collection),
+            ? const Icon(Icons.image, color: Colors.white, size: 16)
+            : const Icon(Icons.video_collection, color: Colors.white, size: 16),
         ),
         
       ]
