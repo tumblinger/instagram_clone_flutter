@@ -47,24 +47,28 @@ class UserProfileService {
       return false;
     }
   }
-  
+
   Future<List<UserProfileModel>> getUsersByUserNameSearch(String searchText) async {
     if(searchText.isEmpty) return [];
-    
+
     //make it case-insensitive:
     final lowerCaseSearchText = searchText.toLowerCase();
-    
+
     try{
       final querySnapshot = await _firebaseFirestore
           .collection('user-profiles')
           .orderBy('userName')
-          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText)
-          .where('userName', isLessThan: '${lowerCaseSearchText}z')
+          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText) //more than text
+          .where('userName', isLessThan: '${lowerCaseSearchText}z') // only what starts with text
           .get();
+      
+      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs;
+      List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList();
+      return userProfiles;
     }
     catch (error){
-      print(error);
+      return [];
     }
-  } 
+  }
 }
 
