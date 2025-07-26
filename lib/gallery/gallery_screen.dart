@@ -17,14 +17,14 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  final UserProfileService userProfileService = UserProfileService();
-  final TextEditingController _searchController = TextEditingController();
-  final PostsService postsService = PostsService();
+  final UserProfileService userProfileService = UserProfileService(); //service for queries to Firebase, for ex.: search users by name
+  final PostsService postsService = PostsService(); // service for posts
+  final TextEditingController _searchController = TextEditingController(); //get text & clean form
 
   List<UserProfileModel> _userProfiles = [];
   Timer? _debounceTimer;
 
-  Future<void> handleUserSearch(String searchText) async {
+  Future<void> _handleUserSearch(String searchText) async {
     if(searchText.isEmpty){
       setState(() {
         _userProfiles =[];
@@ -32,6 +32,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       return;
     }
     try{
+      //1 -get list of found users, 2-update screen according to found users:
       final userProfilesResult = await userProfileService.getUsersByUserNameSearch(searchText);
       setState(() {
         _userProfiles = userProfilesResult;
@@ -70,13 +71,29 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       onChanged: (searchText) {
                         _debounceTimer?.cancel();
                         _debounceTimer = Timer(const Duration(milliseconds: 500), (){
-                          handleUserSearch(searchText);
+                          _handleUserSearch(searchText);
                         });
                       },
 
                     ),
                   ),
 
+                  if(_searchController.text.isNotEmpty)
+                    Expanded(child: ListView.builder(
+                      itemCount: _userProfiles.length,
+                        itemBuilder: (context, index){
+                        final userProfile = _userProfiles[index];
+                        return Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(userProfile.avatar),
+                            ),
+                            Text(userProfile.userName)
+                          ],
+                        );
+                        })),
+
+                  if(_searchController.text.isEmpty)
                   Expanded(
                     child: StreamBuilder<List<Posts>>(
                       stream: postsService.getPosts(),
