@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/home/media.dart';
+import 'package:instagram_clone/user_profile/user_profile_model.dart';
+import 'package:instagram_clone/user_profile/user_profile_service.dart';
 import '../components/app_bottom_navigation_bar.dart';
 import '../create_post/posts_service.dart';
 import 'gallery.media-thumbnail.dart';
@@ -14,8 +17,32 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
+  final UserProfileService userProfileService = UserProfileService();
   final TextEditingController _searchController = TextEditingController();
   final PostsService postsService = PostsService();
+
+  List<UserProfileModel> _userProfiles = [];
+  Timer? _debounceTimer;
+
+  Future<void> handleUserSearch(String searchText) async {
+    if(searchText.isEmpty){
+      setState(() {
+        _userProfiles =[];
+      });
+      return;
+    }
+    try{
+      final userProfilesResult = await userProfileService.getUsersByUserNameSearch(searchText);
+      setState(() {
+        _userProfiles = userProfilesResult;
+      });
+    }
+    catch(error){
+      setState(() {
+        _userProfiles =[];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +65,15 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         filled: true,
                         fillColor: Colors.black12
                       ),
+
+                      // Timer:
                       onChanged: (searchText) {
                         _debounceTimer?.cancel();
                         _debounceTimer = Timer(const Duration(milliseconds: 500), (){
                           handleUserSearch(searchText);
                         });
                       },
+
                     ),
                   ),
 
