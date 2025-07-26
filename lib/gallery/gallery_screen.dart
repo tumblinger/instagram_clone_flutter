@@ -38,6 +38,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         filled: true,
                         fillColor: Colors.black12
                       ),
+                      onChanged: (searchText) {
+                        _debounceTimer?.cancel();
+                        _debounceTimer = Timer(const Duration(milliseconds: 500), (){
+                          handleUserSearch(searchText);
+                        });
+                      },
                     ),
                   ),
 
@@ -58,8 +64,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         return GridView.builder(
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
-                              mainAxisSpacing: 1,
-                              crossAxisSpacing: 1
+                              mainAxisSpacing: 2,
+                              crossAxisSpacing: 2
                             ),
                             itemCount: allMedia.length,
                             itemBuilder: (context, index){
