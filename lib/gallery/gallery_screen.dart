@@ -32,11 +32,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
       });
       return;
     }
-    
+
     setState(() {
       _isLoading = true;
     });
-    
+
     try{
       //1 -get list of found users, 2-update screen according to found users:
       final userProfilesResult = await userProfileService.getUsersByUserNameSearch(searchText);
@@ -86,8 +86,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
                     ),
                   ),
+                  
+                  if(_isLoading)
+                    CircularProgressIndicator(strokeWidth: 2),
 
-                  if(_searchController.text.isNotEmpty && _userProfiles.isEmpty)
+                  if(!_isLoading && _searchController.text.isNotEmpty && _userProfiles.isEmpty)
                     Text('User not found'),
 
 
