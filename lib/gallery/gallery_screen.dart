@@ -108,7 +108,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
                                   context, MaterialPageRoute(
                                   builder: (context) => UserPageScreen(
                                       currentScreenIndex: currentScreenIndex,
-                                  userProfile: userProfile,)
+                                      userId: userProfile.uid,
+                                      userName: userProfile.userName,
+                                  )
                               )),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
