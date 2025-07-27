@@ -24,9 +24,9 @@ class _UserPageScreenState extends State<UserPageScreen> {
   bool _isLoadingUserProfile = true;
   UserProfileModel? _userProfile;
 
-  @override
+   @override
   void initState() {
-    // TODO: implement initState
+    _getUserProfile();
     super.initState();
   }
 
