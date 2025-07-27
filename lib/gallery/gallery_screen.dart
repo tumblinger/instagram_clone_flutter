@@ -107,7 +107,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
                               onTap: () => Navigator.push(
                                   context, MaterialPageRoute(
                                   builder: (context) => UserPageScreen(
-                                      currentScreenIndex: currentScreenIndex)
+                                      currentScreenIndex: currentScreenIndex,
+                                  userProfile: userProfile,)
                               )),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
