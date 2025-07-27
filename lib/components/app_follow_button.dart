@@ -14,7 +14,7 @@ class AppFollowButton extends StatelessWidget {
           minimumSize: Size.zero
         ), 
         child: Text('Follow', 
-          style: TextStyle(color: Colors.white, fontSize: 1)
+          style: TextStyle(color: Colors.white, fontSize: 10)
         ));
   }
 }
