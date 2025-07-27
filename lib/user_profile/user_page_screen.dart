@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/components/app_bottom_navigation_bar.dart';
 import 'package:instagram_clone/components/app_follow_button.dart';
-import 'package:instagram_clone/user_profile/user_profile_model.dart';
 
 class UserPageScreen extends StatelessWidget {
   final int currentScreenIndex;
@@ -24,7 +23,7 @@ class UserPageScreen extends StatelessWidget {
         ),
         title: Text(userName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
-          AppFollowButton()
+          AppFollowButton(color: Colors.black)
         ],
       ),
       body: SafeArea(
