@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/home/media.dart';
+import 'package:instagram_clone/user_profile/user_page_screen.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_service.dart';
 import '../components/app_bottom_navigation_bar.dart';
@@ -20,6 +21,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   final UserProfileService userProfileService = UserProfileService(); //service for queries to Firebase, for ex.: search users by name
   final PostsService postsService = PostsService(); // service for posts
   final TextEditingController _searchController = TextEditingController(); //get text & clean form
+  final int currentScreenIndex = 1;
 
   List<UserProfileModel> _userProfiles = [];
   Timer? _debounceTimer;
@@ -86,7 +88,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
                     ),
                   ),
-                  
+
                   if(_isLoading)
                     CircularProgressIndicator(strokeWidth: 2),
 
@@ -100,20 +102,28 @@ class _GalleryScreenState extends State<GalleryScreen> {
                           itemCount: _userProfiles.length,
                           itemBuilder: (context, index){ //for each list's element
                             final userProfile = _userProfiles[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 32,
-                                    height: 32,
-                                    child: CircleAvatar(
-                                      backgroundImage: NetworkImage(userProfile.avatar),
+
+                            return InkWell(
+                              onTap: () => Navigator.push(
+                                  context, MaterialPageRoute(
+                                  builder: (context) => UserPageScreen(
+                                      currentScreenIndex: currentScreenIndex)
+                              )),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 32,
+                                      height: 32,
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(userProfile.avatar),
+                                      ),
                                     ),
-                                  ),
-                                SizedBox(width: 8),
-                                Text(userProfile.userName, style: TextStyle(fontSize: 12))
-                                ],
+                                  SizedBox(width: 8),
+                                  Text(userProfile.userName, style: TextStyle(fontSize: 12))
+                                  ],
+                                ),
                               ),
                             );
                         })),
@@ -149,7 +159,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                   )
                 ],
               )),
-        bottomNavigationBar:  const AppBottomNavigationBar(currentIndex: 1)
+        bottomNavigationBar:  AppBottomNavigationBar(currentIndex: currentScreenIndex)
     );
   }
 }
