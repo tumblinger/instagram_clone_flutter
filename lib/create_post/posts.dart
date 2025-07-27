@@ -3,6 +3,7 @@ import 'package:instagram_clone/home/media.dart';
 
 class Posts {
   final String id;
+  final String userId;
   final String userName;
   final String avatar;
   final List <Media> media;
@@ -15,6 +16,7 @@ class Posts {
 
   Posts ({
     required this.id,
+    required this.userId,
     required this.userName,
     required this.avatar,
     required this.media,
@@ -37,6 +39,7 @@ class Posts {
 
     return Posts(
         id: firestorePostDoc.id,
+        userId: firestoreUserProfileDoc.id,
         userName: firestoreUserProfileData['userName'],
         avatar: firestoreUserProfileData['avatar'],
         media: media,
