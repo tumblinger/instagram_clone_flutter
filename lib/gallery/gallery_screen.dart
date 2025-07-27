@@ -23,6 +23,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   List<UserProfileModel> _userProfiles = [];
   Timer? _debounceTimer;
+  bool _isLoading = false;
 
   Future<void> _handleUserSearch(String searchText) async {
     if(searchText.isEmpty){
@@ -31,17 +32,24 @@ class _GalleryScreenState extends State<GalleryScreen> {
       });
       return;
     }
+    
+    setState(() {
+      _isLoading = true;
+    });
+    
     try{
       //1 -get list of found users, 2-update screen according to found users:
       final userProfilesResult = await userProfileService.getUsersByUserNameSearch(searchText);
 
       setState(() {
         _userProfiles = userProfilesResult;
+        _isLoading = false;
       });
     }
     catch(error){
       setState(() {
         _userProfiles =[];
+        _isLoading = false;
       });
     }
   }
@@ -89,14 +97,22 @@ class _GalleryScreenState extends State<GalleryScreen> {
                           itemCount: _userProfiles.length,
                           itemBuilder: (context, index){ //for each list's element
                             final userProfile = _userProfiles[index];
-                            return Row(
-                              children: [
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(userProfile.avatar),
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 32,
+                                    height: 32,
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(userProfile.avatar),
+                                    ),
+                                  ),
+                                SizedBox(width: 8),
+                                Text(userProfile.userName, style: TextStyle(fontSize: 12))
+                                ],
                               ),
-                              Text(userProfile.userName)
-                              ],
-                        );
+                            );
                         })),
 
                   if(_searchController.text.isEmpty)
