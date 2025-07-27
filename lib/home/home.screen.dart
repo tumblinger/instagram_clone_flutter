@@ -7,6 +7,7 @@ import 'package:instagram_clone/home/home_components/home_post_details_card.dart
 
 import '../app_constants.dart';
 import '../components/app_bottom_navigation_bar.dart';
+import '../components/app_follow_button.dart';
 import 'home_components/home_media_slider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -90,14 +91,12 @@ class HomeScreen extends StatelessWidget {
                                       ],)
                                     ],),
                                     Row(children: [
-                                      InkWell(
-                                        customBorder: RoundedRectangleBorder(side: BorderSide(color: Colors.black)),
-                                          child: Text('Follow', style: TextStyle(color: Colors.white),)),
+                                      AppFollowButton(),                                      
                                       SizedBox(width: 12.0),
-                                      Icon(Icons.more_horiz, color: Colors.white,)
+                                      Icon(Icons.more_horiz, color: Colors.white)
                                     ],)
                                   ],),
-                                                                ),
+                                  ),
                                 ),
                               ]),
 
@@ -114,7 +113,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
-
 
