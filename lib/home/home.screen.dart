@@ -8,6 +8,7 @@ import 'package:instagram_clone/home/home_components/home_post_details_card.dart
 import '../app_constants.dart';
 import '../components/app_bottom_navigation_bar.dart';
 import '../components/app_follow_button.dart';
+import '../user_profile/user_page_screen.dart';
 import 'home_components/home_media_slider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PostsService postsService = PostsService();
+    final int currentScreenIndex = 0;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,24 +76,34 @@ class HomeScreen extends StatelessWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                    Row(children: [
-                                      SizedBox(
-                                        width: 28.0,
-                                        child: CircleAvatar(
-                                            backgroundImage: NetworkImage(post.avatar)),
-                                      ),
-
-                                      SizedBox(width: 12.0),
-
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                    InkWell(
+                                      onTap: () => Navigator.push(
+                                          context, MaterialPageRoute(
+                                          builder: (context) => UserPageScreen(
+                                            currentScreenIndex: currentScreenIndex,
+                                            userId: post.userId, 
+                                            userName: post.userName)
+                                      )),
+                                      child: Row(
                                         children: [
-                                        Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white)),
-                                        const Text('Suggested for you', style: TextStyle(fontSize: 10.0, color: Colors.white))
-                                      ],)
-                                    ],),
+                                        SizedBox(
+                                          width: 28.0,
+                                          child: CircleAvatar(
+                                              backgroundImage: NetworkImage(post.avatar)),
+                                        ),
+
+                                        SizedBox(width: 12.0),
+
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                          Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white)),
+                                          const Text('Suggested for you', style: TextStyle(fontSize: 10.0, color: Colors.white))
+                                        ],)
+                                      ],),
+                                    ),
                                     Row(children: [
-                                      AppFollowButton(),                                      
+                                      AppFollowButton(),
                                       SizedBox(width: 12.0),
                                       Icon(Icons.more_horiz, color: Colors.white)
                                     ],)
@@ -108,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                     });
               })
       ),
-        bottomNavigationBar:  AppBottomNavigationBar(currentIndex: 0)
+        bottomNavigationBar:  AppBottomNavigationBar(currentIndex: currentScreenIndex)
 
     );
   }
