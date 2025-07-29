@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 
+//Этот импорт нужен в методе toMap(), где используется Timestamp:
+// Тип Timestamp — это класс из Cloud Firestore, а не из стандартного Dart. Он нужен для правильного сохранения времени в формате, который понимает Firestore.
 import  'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProfileModel {
@@ -11,12 +13,16 @@ class UserProfileModel {
   final String ? bio;
   final String ? website;
   final String ? firstName;
+  final int ? totalPosts;
+  final int ? totalFollowers;
+  final int ? totalFollowing;
   final Gender ? gender;
   final int ? phoneNumber;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   UserProfileModel({
+
     required this.uid,
     required this.email,
     required this.avatar,
@@ -24,6 +30,9 @@ class UserProfileModel {
     this.bio,
     this.website,
     this.firstName,
+    this.totalPosts,
+    this.totalFollowers,
+    this.totalFollowing,
     this.gender,
     this.phoneNumber,
     this.createdAt,
@@ -35,8 +44,6 @@ class UserProfileModel {
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
         avatar: firebaseUser.photoURL!,
-        // createdAt: DateTime.now(),
-        // updatedAt: DateTime.now(),
         userName: firebaseUser.displayName!);
   }
 
@@ -48,19 +55,25 @@ class UserProfileModel {
     String? bio,
     String? website,
     String? firstName,
+    int ? totalPosts,
+    int ? totalFollowers,
+    int ? totalFollowing,
     Gender? gender,
     int? phoneNumber,
     DateTime? createdAt,
     DateTime? updatedAt,
 }) {
     return UserProfileModel(
-      uid: this.uid,
+      uid: uid,
       email: email ?? this.email,
       avatar: avatar ?? this.avatar,
       userName: userName ?? this.userName,
       bio: bio ?? this.bio,
       website: website ?? this.website,
       firstName: firstName ?? this.firstName,
+      totalPosts: totalPosts ?? this.totalPosts ?? 0,
+      totalFollowers: totalFollowers ?? this.totalFollowers ?? 0,
+      totalFollowing: totalFollowing ?? this.totalFollowing ?? 0,
       gender: gender ?? this.gender,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       createdAt: createdAt ?? this.createdAt,
@@ -78,11 +91,21 @@ class UserProfileModel {
         userName: firestoreUserProfileData['userName'],
         bio: firestoreUserProfileData['bio'] ?? '',
         website: firestoreUserProfileData['website'] ?? '',
+        totalPosts: firestoreUserProfileData['totalPosts'],
+        totalFollowers: firestoreUserProfileData['totalFollowers'],
+        totalFollowing: firestoreUserProfileData['totalFollowing'],
         firstName: firestoreUserProfileData['firstName'] ?? '',
         gender: firestoreUserProfileData['gender'],
         phoneNumber: firestoreUserProfileData['phoneNumber'],
-        createdAt: (firestoreUserProfileData['createdAt'] as Timestamp).toDate(),
-        updatedAt: (firestoreUserProfileData['updatedAt'] as Timestamp).toDate(),
+      createdAt: firestoreUserProfileData['createdAt'] is Timestamp
+          ? (firestoreUserProfileData['createdAt'] as Timestamp).toDate()
+          : null,
+
+      updatedAt: firestoreUserProfileData['updatedAt'] is Timestamp
+          ? (firestoreUserProfileData['updatedAt'] as Timestamp).toDate()
+          : null,
+        // createdAt: (firestoreUserProfileData['createdAt'] as Timestamp).toDate(),
+        // updatedAt: (firestoreUserProfileData['updatedAt'] as Timestamp).toDate(),
     );
   }
 
