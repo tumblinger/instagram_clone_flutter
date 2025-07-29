@@ -21,11 +21,11 @@ class UserPageScreen extends StatefulWidget {
 
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
-  bool _isLoadingUserProfile = true;
-  UserProfileModel? _userProfile;
+  bool _isLoadingUserProfile = true; 
+  UserProfileModel? _userProfile; 
 
-   @override
-  void initState() {
+  @override
+  void initState() { 
     _getUserProfile();
     super.initState();
   }
@@ -55,12 +55,23 @@ class _UserPageScreenState extends State<UserPageScreen> {
         ),
         title: Text(widget.userName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
-          AppFollowButton(color: Colors.black)
+          Padding(padding: EdgeInsets.only(right: 16),
+             child: AppFollowButton(color: Colors.black)),
+
         ],
       ),
       body: SafeArea(
-          child: Center(
-              child: Text('User Page Screen')
+          child: _isLoadingUserProfile ? CircularProgressIndicator(strokeWidth: 5) :
+          Column(
+             children: [
+               Row(children: [
+                 SizedBox(
+                   width: 28,
+                   height: 28,
+                   child: CircleAvatar(backgroundImage: NetworkImage(_userProfile!.avatar),),
+                 )
+               ],)
+             ],
           )),
       bottomNavigationBar: AppBottomNavigationBar(currentIndex: widget.currentScreenIndex),
     );
