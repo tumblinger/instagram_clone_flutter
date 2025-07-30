@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
-
-//Этот импорт нужен в методе toMap(), где используется Timestamp:
-// Тип Timestamp — это класс из Cloud Firestore, а не из стандартного Dart. Он нужен для правильного сохранения времени в формате, который понимает Firestore.
 import  'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProfileModel {
@@ -47,17 +44,16 @@ class UserProfileModel {
         userName: firebaseUser.displayName!);
   }
 
-  //method to update the specific fields:
-  UserProfileModel copyWith({
+   UserProfileModel copyWith({
     String? email,
     String? avatar,
     String? userName,
     String? bio,
     String? website,
     String? firstName,
-    int ? totalPosts,
-    int ? totalFollowers,
-    int ? totalFollowing,
+    int? totalPosts,
+    int? totalFollowers,
+    int? totalFollowing,
     Gender? gender,
     int? phoneNumber,
     DateTime? createdAt,
@@ -65,7 +61,7 @@ class UserProfileModel {
 }) {
     return UserProfileModel(
       uid: uid,
-      email: email ?? this.email,
+      email: email ?? this.email, 
       avatar: avatar ?? this.avatar,
       userName: userName ?? this.userName,
       bio: bio ?? this.bio,
@@ -117,16 +113,14 @@ class UserProfileModel {
       'userName': userName,
       'bio': bio ?? '',
       'website': website ?? '',
-      'totalPosts': totalPosts ?? '',
-      'totalFollowers': totalFollowers ?? '',
-      'totalFollowing': totalFollowing ?? '',
+      'totalPosts': totalPosts ?? 0,
+      'totalFollowers': totalFollowers ?? 0,
+      'totalFollowing': totalFollowing ?? 0,
       'firstName': firstName ?? '',
       'gender': gender?.toString(),
       'phoneNumber': phoneNumber,
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
-      // 'createdAt': createdAt?.toIso8601String(),
-      // 'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 }
