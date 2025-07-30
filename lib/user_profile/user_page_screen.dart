@@ -21,16 +21,16 @@ class UserPageScreen extends StatefulWidget {
 
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
-  bool _isLoadingUserProfile = true; 
-  UserProfileModel? _userProfile; 
+  bool _isLoadingUserProfile = true; //FLAG: while user's profile is loading...
+  UserProfileModel? _userProfile; // user's profile is loaded
 
   @override
-  void initState() { 
+  void initState() { //call it only once when the screen is loaded
     _getUserProfile();
     super.initState();
   }
 
-  Future<void> _getUserProfile() async{
+  Future<void> _getUserProfile() async{ 
     try{
       UserProfileModel? userProfile = await userProfileService.getUserProfile(widget.userId);
       if(userProfile != null){
@@ -41,7 +41,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
       }
     }
     catch(error){
-      rethrow;
+      rethrow; //throw the error one more time for debugging
     }
   }
 
@@ -61,19 +61,54 @@ class _UserPageScreenState extends State<UserPageScreen> {
         ],
       ),
       body: SafeArea(
-          child: _isLoadingUserProfile ? CircularProgressIndicator(strokeWidth: 5) :
+          child: _isLoadingUserProfile ? CircularProgressIndicator(strokeWidth: 2) :
           Column(
              children: [
-               Row(children: [
-                 SizedBox(
-                   width: 28,
-                   height: 28,
-                   child: CircleAvatar(backgroundImage: NetworkImage(_userProfile!.avatar),),
-                 )
-               ],)
+               if(_userProfile != null)
+               Padding(
+                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                   SizedBox(
+                     width: 60,
+                     height: 60,
+                     child: CircleAvatar(backgroundImage: NetworkImage(_userProfile!.avatar),),
+                   ),
+                   Expanded(
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         UserStatistics(value: _userProfile?.totalPosts ?? 0, label: 'Posts'),
+                         UserStatistics(value: _userProfile?.totalFollowers ?? 0, label: 'Followers'),
+                         UserStatistics(value: _userProfile?.totalFollowing ?? 0, label: 'Following'),
+                       ],
+                     ),
+                   )
+
+                 ],),
+               )
              ],
           )),
       bottomNavigationBar: AppBottomNavigationBar(currentIndex: widget.currentScreenIndex),
+    );
+  }
+}
+
+class UserStatistics extends StatelessWidget {
+  final int value;
+  final String label;
+  const UserStatistics({super.key, required this.value, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+            '$value',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Text(label, style: TextStyle(fontSize: 10),)
+      ],
     );
   }
 }
