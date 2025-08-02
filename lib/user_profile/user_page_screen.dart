@@ -22,7 +22,7 @@ class UserPageScreen extends StatefulWidget {
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
   bool _isLoadingUserProfile = true; 
-  UserProfileModel? _userProfile; 
+  UserProfileModel? _userProfile;
 
   @override
   void initState() { 
@@ -30,7 +30,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
     super.initState();
   }
 
-  Future<void> _getUserProfile() async{ 
+  Future<void> _getUserProfile() async{
     try{
       UserProfileModel? userProfile = await userProfileService.getUserProfile(widget.userId);
       if(userProfile != null){
@@ -61,51 +61,94 @@ class _UserPageScreenState extends State<UserPageScreen> {
         ],
       ),
       body: SafeArea(
-          child: _isLoadingUserProfile ? CircularProgressIndicator(strokeWidth: 2) :
+        child: Column(
+          children: [
+            if (_isLoadingUserProfile)
+              CircularProgressIndicator(strokeWidth: 2),
+            if(!_isLoadingUserProfile && _userProfile != null)
+
           Column(
              children: [
                if(_userProfile != null)
-               Padding(
-                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                 child: Column(
-                   children: [
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                       SizedBox(
-                         width: 60,
-                         height: 60,
-                         child: CircleAvatar(
-                           backgroundImage: NetworkImage(_userProfile!.avatar),),
-                       ),
-                        SizedBox(width: 50),
-                       Expanded(
-                         child: Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                           children: [
-                             UserStatistics(value: _userProfile!.totalPosts ?? 0, label: 'Posts'),
-                             UserStatistics(value: _userProfile!.totalFollowers ?? 0, label: 'Followers'),
-                             UserStatistics(value: _userProfile!.totalFollowing ?? 0, label: 'Following'),
-                           ],
-                         ),
-                       )
-
-                     ],),
-                     Column(
-                       children: [
-                         Text(_userProfile!.userName),
-                         Text(_userProfile!.bio ?? ''),
-                       ],
-                     )
-                   ],
+               UserPageHeader(userProfileModel: _userProfile!),
+               Container(
+                 decoration: BoxDecoration(
+                   border: Border(
+                     top: BorderSide(color: Colors.black12),
+                     bottom: BorderSide(color: Colors.black12)
+                   )
+                 ),
+                 child: Padding(
+                   padding: const EdgeInsets.symmetric(vertical: 8),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Icon(Icons.grid_on_outlined),
+                       SizedBox(width: 100),
+                       Icon(Icons.video_collection_outlined),
+                       SizedBox(width: 100),
+                       Icon(Icons.image_outlined)
+                     ],
+                   ),
                  ),
                )
              ],
-          )),
+          )
+          ])
+      ),
       bottomNavigationBar: AppBottomNavigationBar(currentIndex: widget.currentScreenIndex),
     );
   }
 }
+
+class UserPageHeader extends StatelessWidget {
+  final UserProfileModel userProfileModel;
+  const UserPageHeader({super.key, required this.userProfileModel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(userProfileModel.avatar),),
+              ),
+              SizedBox(width: 50),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    UserStatistics(value: userProfileModel.totalPosts ?? 0, label: 'Posts'),
+                    UserStatistics(value: userProfileModel.totalFollowers ?? 0, label: 'Followers'),
+                    UserStatistics(value: userProfileModel.totalFollowing ?? 0, label: 'Following'),
+                  ],
+                ),
+              )
+
+            ],),
+          SizedBox(height: 16),
+          Column(
+            children: [
+              Text(userProfileModel.userName, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+
+              if(userProfileModel.bio != null)
+                Text(userProfileModel.bio ?? '', style: TextStyle(fontSize: 12, color: Colors.black54)),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
 
 class UserStatistics extends StatelessWidget {
   final int value;
