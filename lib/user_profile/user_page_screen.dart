@@ -21,11 +21,11 @@ class UserPageScreen extends StatefulWidget {
 
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
-  bool _isLoadingUserProfile = true; //FLAG: while user's profile is loading...
-  UserProfileModel? _userProfile; // user's profile is loaded
+  bool _isLoadingUserProfile = true; 
+  UserProfileModel? _userProfile; 
 
   @override
-  void initState() { //call it only once when the screen is loaded
+  void initState() { 
     _getUserProfile();
     super.initState();
   }
@@ -41,7 +41,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
       }
     }
     catch(error){
-      rethrow; //throw the error one more time for debugging
+      rethrow; 
     }
   }
 
@@ -66,27 +66,39 @@ class _UserPageScreenState extends State<UserPageScreen> {
              children: [
                if(_userProfile != null)
                Padding(
-                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                 child: Column(
                    children: [
-                   SizedBox(
-                     width: 60,
-                     height: 60,
-                     child: CircleAvatar(backgroundImage: NetworkImage(_userProfile!.avatar),),
-                   ),
-                   Expanded(
-                     child: Row(
+                     Row(
                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
-                         UserStatistics(value: _userProfile?.totalPosts ?? 0, label: 'Posts'),
-                         UserStatistics(value: _userProfile?.totalFollowers ?? 0, label: 'Followers'),
-                         UserStatistics(value: _userProfile?.totalFollowing ?? 0, label: 'Following'),
-                       ],
-                     ),
-                   )
+                       SizedBox(
+                         width: 60,
+                         height: 60,
+                         child: CircleAvatar(
+                           backgroundImage: NetworkImage(_userProfile!.avatar),),
+                       ),
+                        SizedBox(width: 50),
+                       Expanded(
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                             UserStatistics(value: _userProfile!.totalPosts ?? 0, label: 'Posts'),
+                             UserStatistics(value: _userProfile!.totalFollowers ?? 0, label: 'Followers'),
+                             UserStatistics(value: _userProfile!.totalFollowing ?? 0, label: 'Following'),
+                           ],
+                         ),
+                       )
 
-                 ],),
+                     ],),
+                     Column(
+                       children: [
+                         Text(_userProfile!.userName),
+                         Text(_userProfile!.bio ?? ''),
+                       ],
+                     )
+                   ],
+                 ),
                )
              ],
           )),
