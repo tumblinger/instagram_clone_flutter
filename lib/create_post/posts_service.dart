@@ -16,32 +16,45 @@ class PostsService {
           {
             DocumentReference userProfileRef = firestorePostDoc['createdby'];
             DocumentSnapshot firestoreUserProfileDoc = await userProfileRef.get();
-
             posts.add(Posts.fromFirestore(firestorePostDoc, firestoreUserProfileDoc));
-
           }
           return posts;
     });
   }
 
   Stream<List<Posts>> getPostsByUserId(String userId){
-    final userRef = _firebaseFirestore.collection('user-profiles').doc(userId);
+    // final userRef = _firebaseFirestore.collection('user-profiles').doc(userId);
     return
       _firebaseFirestore
           .collection('posts')
-          .where('createdby', isEqualTo:userRef)
-          .orderBy('createdAt', descending: true)
-          .snapshots().asyncMap((snapshot) async {
+          // .orderBy('createdAt', descending: true)
+          .snapshots()   
+          .asyncMap((snapshot) async {
+            print('All posts count: ${snapshot.docs.length}');
+            for(var doc in snapshot.docs){
+              print('Post id: ${doc.id}, createdby: ${doc.data()['createdby']}');
+            }
         List<Posts> posts = [];
+        final filteredDocs = snapshot.docs.where((doc){
+          final createdby = doc.data()['createdby'];
+          if(createdby is DocumentReference){
+            return createdby.id == userId;
+          } else if (createdby is String){
+            return createdby == userId;
+          }
+          return false;
+        }).toList();
+        print('Filtered posts count: ${filteredDocs.length}');
 
-        for(
-        QueryDocumentSnapshot<Map<String, dynamic>> firestorePostDoc in snapshot.docs)
-        {
-          DocumentReference userProfileRef = firestorePostDoc['createdby'];
-          DocumentSnapshot firestoreUserProfileDoc = await userProfileRef.get();
-
-          posts.add(Posts.fromFirestore(firestorePostDoc, firestoreUserProfileDoc));
-
+        for(var doc in filteredDocs){
+          DocumentReference userProfileRef = doc['createdby'];
+          DocumentSnapshot userProfileDoc;
+          if(userProfileRef is DocumentReference) {
+            userProfileDoc = await userProfileRef.get();
+          } else {
+            userProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(userId).get();
+          }
+          posts.add(Posts.fromFirestore(doc, userProfileDoc));
         }
         return posts;
       });
