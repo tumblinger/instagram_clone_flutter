@@ -25,12 +25,15 @@ class PostsService {
   }
 
   Stream<List<Posts>> getPostsByUserId(String userId){
+    final userRef = _firebaseFirestore.collection('user-profiles').doc(userId);
     return
       _firebaseFirestore
           .collection('posts')
+          .where('createdby', isEqualTo:userRef)
           .orderBy('createdAt', descending: true)
           .snapshots().asyncMap((snapshot) async {
         List<Posts> posts = [];
+
         for(
         QueryDocumentSnapshot<Map<String, dynamic>> firestorePostDoc in snapshot.docs)
         {
