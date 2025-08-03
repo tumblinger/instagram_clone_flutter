@@ -27,17 +27,17 @@ class UserPageScreen extends StatefulWidget {
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
   final PostsService postsService = PostsService();
-  bool _isLoadingUserProfile = true; //FLAG: while user's profile is loading...
-  UserProfileModel? _userProfile; // user's profile is loaded
+  bool _isLoadingUserProfile = true;
+  UserProfileModel? _userProfile;
   UserPostMediaTab activeTab = UserPostMediaTab.all;
 
   @override
-  void initState() { //call it only once when the screen is loaded
+  void initState() {
     _getUserProfile();
     super.initState();
   }
 
-  Future<void> _getUserProfile() async{ //async function works in the background/фон.режим
+  Future<void> _getUserProfile() async{ 
     try{
       UserProfileModel? userProfile = await userProfileService.getUserProfile(widget.userId);
       if(userProfile != null){
@@ -48,7 +48,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
       }
     }
     catch(error){
-      rethrow; //throw the error one more time for debugging
+      rethrow; 
     }
   }
 
@@ -91,27 +91,38 @@ class _UserPageScreenState extends State<UserPageScreen> {
                      child: Row(
                        mainAxisAlignment: MainAxisAlignment.center,
                        children: [
-                         InkWell(
-                           onTap: (){
-                             setState(() {
-                               activeTab = UserPostMediaTab.all;
-                             });
-                           },
-                             child: Icon(Icons.grid_on_outlined)
-                         ),
+                         TabButton(
+                             icon: Icons.grid_on_outlined,
+                             onTap: (){
+                               setState(() {
+                                activeTab = UserPostMediaTab.all;
+                           });
+                         }),
                          SizedBox(width: 100),
-                         Icon(Icons.video_collection_outlined),
+                         TabButton(
+                             icon: Icons.video_collection_outlined,
+                             onTap: (){
+                               setState(() {
+                                 activeTab = UserPostMediaTab.video;
+                               });
+                             }),
                          SizedBox(width: 100),
-                         Icon(Icons.image_outlined)
+                         TabButton(
+                             icon: Icons.image_outlined,
+                             onTap: (){
+                               setState(() {
+                                 activeTab = UserPostMediaTab.image;
+                               });
+                             }),
                        ],
                      ),
                    ),
                  ),
 
                  Expanded(
-                   child: StreamBuilder<List<Posts>>( // слушает поток постов
-                     stream: postsService.getPostsByUserId(_userProfile!.uid), // возвращает живой поток данных
-                     builder: (context, snapshot) { //вызывается каждый оаз при поступлении нового состояния потока
+                   child: StreamBuilder<List<Posts>>( 
+                     stream: postsService.getPostsByUserId(_userProfile!.uid), 
+                     builder: (context, snapshot) { 
                        if(snapshot.connectionState == ConnectionState.waiting){
                          return Center(child: CircularProgressIndicator());
                        }
@@ -120,8 +131,8 @@ class _UserPageScreenState extends State<UserPageScreen> {
                            child: Text('No posts found'),
                          );
                        }
-                       final posts = snapshot.data!; //когда данные получены, сохраняем посты в переменную
-                       final allMedia = posts.expand((post) => post.media).toList(); //извлекаем все медиа-файлы из постов
+                       final posts = snapshot.data!; 
+                       final allMedia = posts.expand((post) => post.media).toList(); 
 
                        if(allMedia.isEmpty){
                          return Center(
@@ -129,7 +140,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
                          );
                        }
 
-                       return GridView.builder( // отображаем медиа-файлы в сетке
+                       return GridView.builder( 
                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                crossAxisCount: 3,
                                mainAxisSpacing: 2,
@@ -220,13 +231,12 @@ class UserStatistics extends StatelessWidget {
 }
 
 class TabButton extends StatelessWidget {
-  final UserPostMediaTab userPostMediaTab;
   final IconData icon;
   final VoidCallback onTap; // тип setState() - это void Function
+
   const TabButton({
-    super.key, 
-    required this.userPostMediaTab, 
-    required this.icon, 
+    super.key,
+    required this.icon,
     required this.onTap
   });
 
