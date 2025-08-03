@@ -27,17 +27,17 @@ class UserPageScreen extends StatefulWidget {
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
   final PostsService postsService = PostsService();
-  bool _isLoadingUserProfile = true;
+  bool _isLoadingUserProfile = true; 
   UserProfileModel? _userProfile;
   UserPostMediaTab activeTab = UserPostMediaTab.all;
 
   @override
-  void initState() {
+  void initState() { 
     _getUserProfile();
     super.initState();
   }
 
-  Future<void> _getUserProfile() async{ 
+  Future<void> _getUserProfile() async{
     try{
       UserProfileModel? userProfile = await userProfileService.getUserProfile(widget.userId);
       if(userProfile != null){
@@ -93,14 +93,16 @@ class _UserPageScreenState extends State<UserPageScreen> {
                        children: [
                          TabButton(
                              icon: Icons.grid_on_outlined,
+                             active: activeTab == UserPostMediaTab.all,
                              onTap: (){
                                setState(() {
-                                activeTab = UserPostMediaTab.all;
+                                activeTab = UserPostMediaTab.all; 
                            });
                          }),
                          SizedBox(width: 100),
                          TabButton(
                              icon: Icons.video_collection_outlined,
+                             active: activeTab == UserPostMediaTab.video,
                              onTap: (){
                                setState(() {
                                  activeTab = UserPostMediaTab.video;
@@ -109,6 +111,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
                          SizedBox(width: 100),
                          TabButton(
                              icon: Icons.image_outlined,
+                             active: activeTab == UserPostMediaTab.image,
                              onTap: (){
                                setState(() {
                                  activeTab = UserPostMediaTab.image;
@@ -120,7 +123,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
                  ),
 
                  Expanded(
-                   child: StreamBuilder<List<Posts>>( 
+                   child: StreamBuilder<List<Posts>>(
                      stream: postsService.getPostsByUserId(_userProfile!.uid), 
                      builder: (context, snapshot) { 
                        if(snapshot.connectionState == ConnectionState.waiting){
@@ -232,19 +235,21 @@ class UserStatistics extends StatelessWidget {
 
 class TabButton extends StatelessWidget {
   final IconData icon;
+  final bool active;
   final VoidCallback onTap; // тип setState() - это void Function
 
   const TabButton({
     super.key,
     required this.icon,
-    required this.onTap
+    required this.onTap, 
+    required this.active
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Icon(icon),
+      child: Icon(icon, color: active ? Colors.black : Colors.black26),
     );
   }
 }
