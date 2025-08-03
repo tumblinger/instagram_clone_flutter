@@ -28,8 +28,9 @@ class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
   final PostsService postsService = PostsService();
   bool _isLoadingUserProfile = true; 
-  UserProfileModel? _userProfile;
+  UserProfileModel? _userProfile; 
   UserPostMediaTab activeTab = UserPostMediaTab.all;
+  List<Media> tabMediaList = [];
 
   @override
   void initState() { 
@@ -48,7 +49,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
       }
     }
     catch(error){
-      rethrow; 
+      rethrow;
     }
   }
 
@@ -123,7 +124,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
                  ),
 
                  Expanded(
-                   child: StreamBuilder<List<Posts>>(
+                   child: StreamBuilder<List<Posts>>( 
                      stream: postsService.getPostsByUserId(_userProfile!.uid), 
                      builder: (context, snapshot) { 
                        if(snapshot.connectionState == ConnectionState.waiting){
@@ -143,16 +144,26 @@ class _UserPageScreenState extends State<UserPageScreen> {
                          );
                        }
 
+                       if(activeTab == UserPostMediaTab.all) {
+                         tabMediaList = allMedia;
+                       }
+                       if(activeTab == UserPostMediaTab.video) {
+                         tabMediaList = allMedia.where((media) => media.type == MediaTypes.video).toList();
+                       }
+                       if(activeTab == UserPostMediaTab.image) {
+                         tabMediaList = allMedia.where((media) => media.type == MediaTypes.image).toList();
+                       }
+
                        return GridView.builder( 
                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                crossAxisCount: 3,
                                mainAxisSpacing: 2,
                                crossAxisSpacing: 2
                            ),
-                           itemCount: allMedia.length,
+                           itemCount: tabMediaList.length,
                            itemBuilder: (context, index){
-                             Media media = allMedia[index];
-                             return GalleryMediaThumbnail(media: media,);
+                             Media media = tabMediaList[index];
+                             return GalleryMediaThumbnail(media: media);
                            });
                      },
                    ),
@@ -236,7 +247,7 @@ class UserStatistics extends StatelessWidget {
 class TabButton extends StatelessWidget {
   final IconData icon;
   final bool active;
-  final VoidCallback onTap; // тип setState() - это void Function
+  final VoidCallback onTap;
 
   const TabButton({
     super.key,
