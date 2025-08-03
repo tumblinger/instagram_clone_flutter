@@ -30,10 +30,6 @@ class PostsService {
           // .orderBy('createdAt', descending: true)
           .snapshots()   
           .asyncMap((snapshot) async {
-            print('All posts count: ${snapshot.docs.length}');
-            for(var doc in snapshot.docs){
-              print('Post id: ${doc.id}, createdby: ${doc.data()['createdby']}');
-            }
         List<Posts> posts = [];
         final filteredDocs = snapshot.docs.where((doc){
           final createdby = doc.data()['createdby'];
@@ -67,7 +63,6 @@ class PostsService {
       await _firebaseFirestore.collection('posts').doc(postId).update(dataToUpdate);
     }
     catch(error){
-      print('Error updating post: $error');
       return;
     }
   }
