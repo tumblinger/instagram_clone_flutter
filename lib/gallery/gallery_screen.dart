@@ -7,7 +7,7 @@ import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_service.dart';
 import '../components/app_bottom_navigation_bar.dart';
 import '../create_post/posts_service.dart';
-import 'gallery.media-thumbnail.dart';
+import '../components/gallery.media-thumbnail.dart';
 
 class GalleryScreen extends StatefulWidget {
 
@@ -18,9 +18,9 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  final UserProfileService userProfileService = UserProfileService(); //service for queries to Firebase, for ex.: search users by name
-  final PostsService postsService = PostsService(); // service for posts
-  final TextEditingController _searchController = TextEditingController(); //get text & clean form
+  final UserProfileService userProfileService = UserProfileService(); 
+  final PostsService postsService = PostsService(); 
+  final TextEditingController _searchController = TextEditingController(); 
   final int currentScreenIndex = 1;
 
   List<UserProfileModel> _userProfiles = [];
@@ -141,11 +141,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         }
                         //get Posts list from the stream (result - Posts):
                         List<Posts> posts = snapshot.data ?? [];
-                        //transform each Post into its media list (result - list of media lists):
-                        List<List<Media>> allMediaList = posts.map((post) => post.media).toList();
-                        // unpack nested lists into plain list of media-files:
-                        List<Media>allMedia = allMediaList.expand((media) => media).toList();
 
+                        List<UserPostMedia> allUserPostMedia = posts.asMap().entries.expand((postEntry) => postEntry.value.media.asMap().entries.map((mediaEntry) => UserPostMedia(
+                            userId: posts[postEntry.key].userId,
+                            media: mediaEntry.value)
+                        )).toList();
+                        
                         return GridView.builder(
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
@@ -155,7 +156,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                             itemCount: allMedia.length,
                             itemBuilder: (context, index){
                               Media media = allMedia[index];
-                              return GalleryMediaThumbnail(media: media,);
+                              return GalleryMediaThumbnail(currentScreenIndex:  currentScreenIndex, userPostMedia: userPostMedia);
                             });
                       },
                     ),
