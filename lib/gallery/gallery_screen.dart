@@ -146,16 +146,17 @@ class _GalleryScreenState extends State<GalleryScreen> {
                             userId: posts[postEntry.key].userId,
                             media: mediaEntry.value)
                         )).toList();
-                        
+
                         return GridView.builder(
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               mainAxisSpacing: 2,
                               crossAxisSpacing: 2
                             ),
-                            itemCount: allMedia.length,
+                            itemCount: allUserPostMedia.length,
                             itemBuilder: (context, index){
-                              Media media = allMedia[index];
+                              UserPostMedia userPostMedia = allUserPostMedia[index];
+                              
                               return GalleryMediaThumbnail(currentScreenIndex:  currentScreenIndex, userPostMedia: userPostMedia);
                             });
                       },
