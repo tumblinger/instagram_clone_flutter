@@ -140,13 +140,12 @@ class _UserPageScreenState extends State<UserPageScreen> {
                            userId: posts[postEntry.key].userId,
                            media: mediaEntry.value)
                        )).toList();
-                       // final allMedia = posts.expand((post) => post.media).toList(); 
-
-                       // if(allMedia.isEmpty){
-                       //   return Center(
-                       //     child: Text('No media found')
-                       //   );
-                       // }
+                      
+                         if(allUserPostMedia.isEmpty){
+                           return Center(
+                           child: Text('No media found')
+                         );
+                       }
 
                        if(activeTab == UserPostMediaTab.all) {
                          tabUserPostMediaList = allUserPostMedia;
