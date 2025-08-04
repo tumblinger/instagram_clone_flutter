@@ -1,6 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
+
+//Этот импорт нужен в методе toMap(), где используется Timestamp:
+// Тип Timestamp — это класс из Cloud Firestore, а не из стандартного Dart. Он нужен для правильного сохранения времени в формате, который понимает Firestore.
 import  'package:cloud_firestore/cloud_firestore.dart';
+
+import '../home/media.dart';
 
 class UserProfileModel {
   final String uid;
@@ -44,7 +49,8 @@ class UserProfileModel {
         userName: firebaseUser.displayName!);
   }
 
-   UserProfileModel copyWith({
+  //method to update the specific fields:
+  UserProfileModel copyWith({
     String? email,
     String? avatar,
     String? userName,
@@ -61,7 +67,7 @@ class UserProfileModel {
 }) {
     return UserProfileModel(
       uid: uid,
-      email: email ?? this.email, 
+      email: email ?? this.email, // ?? Значение не передано - используй текущее или 0
       avatar: avatar ?? this.avatar,
       userName: userName ?? this.userName,
       bio: bio ?? this.bio,
@@ -121,6 +127,18 @@ class UserProfileModel {
       'phoneNumber': phoneNumber,
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+      // 'createdAt': createdAt?.toIso8601String(),
+      // 'updatedAt': updatedAt?.toIso8601String(),
     };
   }
+}
+
+class UserPostMedia {
+  final String userId;
+  final Media media;
+
+  UserPostMedia({
+    required this.userId,
+    required this.media
+});
 }
