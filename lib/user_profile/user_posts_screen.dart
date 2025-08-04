@@ -16,7 +16,7 @@ class UserPostsScreen extends StatelessWidget {
     return Scaffold(
         body: SafeArea(
             child: StreamBuilder<List<Posts>>(
-                stream: postsService.getPosts(),
+                stream: postsService.getPostsByUserId(userId),
                 builder: (context, snapshot){
                   //waiting:
                   if(snapshot.connectionState == ConnectionState.waiting){
