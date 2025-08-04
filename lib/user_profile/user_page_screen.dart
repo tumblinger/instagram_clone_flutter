@@ -28,17 +28,16 @@ class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService();
   final PostsService postsService = PostsService();
   bool _isLoadingUserProfile = true; 
-  UserProfileModel? _userProfile; 
-  UserPostMediaTab activeTab = UserPostMediaTab.all;
-  List<Media> tabMediaList = [];
+  UserProfileModel? _userProfile;   UserPostMediaTab activeTab = UserPostMediaTab.all;
+  List<UserPostMedia> tabUserPostMediaList = [];
 
   @override
-  void initState() { 
+  void initState() {
     _getUserProfile();
     super.initState();
   }
 
-  Future<void> _getUserProfile() async{
+  Future<void> _getUserProfile() async{ 
     try{
       UserProfileModel? userProfile = await userProfileService.getUserProfile(widget.userId);
       if(userProfile != null){
@@ -49,7 +48,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
       }
     }
     catch(error){
-      rethrow;
+      rethrow; 
     }
   }
 
@@ -136,22 +135,27 @@ class _UserPageScreenState extends State<UserPageScreen> {
                          );
                        }
                        final posts = snapshot.data!; 
-                       final allMedia = posts.expand((post) => post.media).toList(); 
 
-                       if(allMedia.isEmpty){
-                         return Center(
-                           child: Text('No media found')
-                         );
-                       }
+                       List<UserPostMedia> allUserPostMedia = posts.asMap().entries.expand((postEntry) => postEntry.value.media.asMap().entries.map((mediaEntry) => UserPostMedia(
+                           userId: posts[postEntry.key].userId,
+                           media: mediaEntry.value)
+                       )).toList();
+                       // final allMedia = posts.expand((post) => post.media).toList(); 
+
+                       // if(allMedia.isEmpty){
+                       //   return Center(
+                       //     child: Text('No media found')
+                       //   );
+                       // }
 
                        if(activeTab == UserPostMediaTab.all) {
-                         tabMediaList = allMedia;
+                         tabUserPostMediaList = allUserPostMedia;
                        }
                        if(activeTab == UserPostMediaTab.video) {
-                         tabMediaList = allMedia.where((media) => media.type == MediaTypes.video).toList();
+                         tabUserPostMediaList = allUserPostMedia.where((userPostMedia) => userPostMedia.media.type == MediaTypes.video).toList();
                        }
                        if(activeTab == UserPostMediaTab.image) {
-                         tabMediaList = allMedia.where((media) => media.type == MediaTypes.image).toList();
+                         tabUserPostMediaList = allUserPostMedia.where((userPostMedia) => userPostMedia.media.type == MediaTypes.image).toList();
                        }
 
                        return GridView.builder( 
@@ -160,10 +164,10 @@ class _UserPageScreenState extends State<UserPageScreen> {
                                mainAxisSpacing: 2,
                                crossAxisSpacing: 2
                            ),
-                           itemCount: tabMediaList.length,
-                           itemBuilder: (context, index){
-                             Media media = tabMediaList[index];
-                             return GalleryMediaThumbnail(media: media);
+                           itemCount: tabUserPostMediaList.length, 
+                           itemBuilder: (context, index){ 
+                             UserPostMedia userPostMedia = tabUserPostMediaList[index];
+                             return GalleryMediaThumbnail( currentScreenIndex:  widget.currentScreenIndex, userPostMedia: userPostMedia,);
                            });
                      },
                    ),
@@ -247,7 +251,7 @@ class UserStatistics extends StatelessWidget {
 class TabButton extends StatelessWidget {
   final IconData icon;
   final bool active;
-  final VoidCallback onTap;
+  final VoidCallback onTap; 
 
   const TabButton({
     super.key,
