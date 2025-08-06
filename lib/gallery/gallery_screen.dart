@@ -145,7 +145,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         List<UserPostMedia> allUserPostMedia = posts.asMap().entries.expand((postEntry) => postEntry.value.media.asMap().entries.map((mediaEntry) => UserPostMedia(
                             userId: posts[postEntry.key].userId,
                             media: mediaEntry.value, 
-                            media: mediaEntry.value, mediaIndex: mediaEntry.key)
+                            mediaIndex: mediaEntry.key)
                         )).toList();
 
                         return GridView.builder(
