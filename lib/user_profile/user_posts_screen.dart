@@ -8,7 +8,10 @@ import '../create_post/posts.dart';
 class UserPostsScreen extends StatelessWidget {
   final String userId;
   final int currentScreenIndex;
-  UserPostsScreen({super.key, required this.userId, required this.currentScreenIndex});
+  final  int? currentMediaIndex;
+
+  UserPostsScreen({super.key, required this.userId, required this.currentScreenIndex, this.currentMediaIndex});
+
   final PostsService postsService = PostsService();
 
   @override
@@ -37,7 +40,8 @@ class UserPostsScreen extends StatelessWidget {
                   return PostListView(
                       posts: posts,
                       currentScreenIndex: currentScreenIndex,
-                      postsService: postsService
+                      postsService: postsService,
+                      currentMediaIndex: currentMediaIndex
                   );
                 })
         ),
