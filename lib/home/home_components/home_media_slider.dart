@@ -6,8 +6,9 @@ import 'package:video_player/video_player.dart';
 class HomeMediaSlider extends StatefulWidget {
   final List<Media> mediaList;
   final int? currentMediaIndex;
+  final int? currentPostIndex;
 
-  const HomeMediaSlider({super.key, required this.mediaList, this.currentMediaIndex});
+  const HomeMediaSlider({super.key, required this.mediaList, this.currentMediaIndex, this.currentPostIndex});
 
   @override
   State<HomeMediaSlider> createState() => _HomeMediaSliderState();
