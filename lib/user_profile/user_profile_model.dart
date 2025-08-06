@@ -136,8 +136,10 @@ class UserProfileModel {
 class UserPostMedia {
   final String userId;
   final Media media;
+  final int mediaIndex;
 
   UserPostMedia({
+    required this.mediaIndex, 
     required this.userId,
     required this.media
 });
