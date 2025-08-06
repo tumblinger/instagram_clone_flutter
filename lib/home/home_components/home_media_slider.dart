@@ -81,6 +81,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
             }).toList(), 
 
             options: CarouselOptions(
+              initialPage: _currentIndex,
               height: 520,
               aspectRatio: 1,
               viewportFraction: 1.0,
