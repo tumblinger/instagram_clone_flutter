@@ -10,13 +10,15 @@ import '../../user_profile/user_page_screen.dart';
 class PostListView extends StatelessWidget {
   final List<Posts> posts;
   final int currentScreenIndex;
+  final int? currentMediaIndex;
   final PostsService postsService;
 
-  const PostListView({ // Constructor
+  const PostListView({ 
     super.key,
     required this.posts,
     required this.currentScreenIndex,
-    required this.postsService
+    required this.postsService,
+    this.currentMediaIndex
   });
 
   @override
@@ -33,7 +35,7 @@ class PostListView extends StatelessWidget {
               children: [
                 Stack(
                     children: [
-                      HomeMediaSlider(mediaList: post.media),
+                      HomeMediaSlider(mediaList: post.media, currentMediaIndex: currentMediaIndex,),
                       Container(
                         color: Colors.black12,
                         child: Padding(
