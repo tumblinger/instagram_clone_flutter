@@ -5,8 +5,9 @@ import 'package:video_player/video_player.dart';
 
 class HomeMediaSlider extends StatefulWidget {
   final List<Media> mediaList;
+  final int? currentMediaIndex;
 
-  const HomeMediaSlider({super.key, required this.mediaList});
+  const HomeMediaSlider({super.key, required this.mediaList, this.currentMediaIndex});
 
   @override
   State<HomeMediaSlider> createState() => _HomeMediaSliderState();
@@ -19,6 +20,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.currentMediaIndex ?? 0;
     _initializeVideoController();
     _playCurrentVideo();
   }
@@ -26,7 +28,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
   @override
   void dispose() {
     for (final controller in _videoControllers) {
-      controller?.dispose(); // free the memory
+      controller?.dispose(); 
     }
     super.dispose();
   }
@@ -68,14 +70,14 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
               return Builder(
                   builder: (BuildContext context){
                     if(media.type == MediaTypes.image){
-                      return Image.network(media.value);
+                      return Image.network(media.value, fit: BoxFit.cover,);
                     } else {
                       return VideoPlayer(_videoControllers[index]!);
                     }
                   }
 
               );
-            }).toList(), // <-- Correct placement of toList()
+            }).toList(), 
 
             options: CarouselOptions(
               height: 520,
@@ -97,12 +99,12 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
             children:
             widget.mediaList.asMap().entries.map((entry){
               return Container(
-                width: 10.0,
-                height: 10.0,
+                width: 6.0,
+                height: 6.0,
                 margin: EdgeInsets.symmetric(horizontal: 3.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _currentIndex == entry.key ? Colors.blueAccent : Colors.blueGrey,
+                  color: _currentIndex == entry.key ? Colors.blueAccent : Colors.grey,
               ),);
             }).toList(),
           ),
@@ -110,4 +112,3 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
     ]);
   }
 }
-
