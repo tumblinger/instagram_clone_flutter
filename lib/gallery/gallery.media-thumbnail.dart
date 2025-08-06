@@ -11,7 +11,7 @@ class GalleryMediaThumbnail extends StatefulWidget {
   const GalleryMediaThumbnail({
     super.key,
     required this.currentScreenIndex,
-    required this.userPostMedia
+    required this.userPostMedia,
   });
 
   @override
@@ -57,6 +57,7 @@ class _GalleryMediaThumbnailState extends State<GalleryMediaThumbnail> {
           builder: (context) => UserPostsScreen(
               userId: widget.userPostMedia.userId,
               currentScreenIndex: widget.currentScreenIndex, 
+              currentMediaIndex: widget.userPostMedia.mediaIndex,
               )
       )),
       child: Stack(
