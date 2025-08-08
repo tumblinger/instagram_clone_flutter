@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/home/media.dart';
 import '../components/app_bottom_navigation_bar.dart';
 
@@ -10,6 +11,7 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
+  final ImagePicker picker = ImagePicker();
   List<Media> _mediaList = [];
 
   @override
