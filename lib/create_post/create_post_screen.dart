@@ -17,10 +17,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     if(_mediaList.isEmpty){
-      //open camera
+      _openMediaPicker();
     }
     super.initState();
   }
+  
+  Future<void> _openMediaPicker() async{
+    try{
+      final List<XFile> mediaFiles = await picker.pickMultipleMedia();
+      if(mediaFiles.isEmpty){ // user didn't give access
+        return;
+      }
+      print('MediaFiles: $mediaFiles');
+      
+    } catch (error){
+      print(error);
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
