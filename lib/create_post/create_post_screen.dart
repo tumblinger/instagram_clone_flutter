@@ -12,6 +12,8 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final ImagePicker picker = ImagePicker();
+  final TextEditingController _captionTextEditingController = TextEditingController();
+
   List<Media> _mediaList = [];
 
   @override
@@ -47,15 +49,27 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           child: Center(
               child: Column(
                 children: [
-                  InkWell(
-                    onTap: _openMediaPicker,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.width,
-                      color: Colors.white54,
-                      child: Center(
-                        child: Text('Add media'),
+                  Center(
+                    child: InkWell(
+                      onTap: _openMediaPicker,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width *0.7,
+                        height: MediaQuery.of(context).size.width*0.8,
+                        color: Colors.black12,
+                        child: Center(
+                          child: Text('Add media'),
+                        ),
                       ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextField(
+                    controller: _captionTextEditingController,
+                    decoration: InputDecoration(
+                      hintText: 'Add a caption',
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16
+                      )
                     ),
                   )
                 ],
