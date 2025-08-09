@@ -21,7 +21,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     }
     super.initState();
   }
-  
+
   Future<void> _openMediaPicker() async{
     try{
       final List<XFile> mediaFiles = await picker.pickMultipleMedia();
@@ -29,12 +29,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         return;
       }
       print('MediaFiles: $mediaFiles');
-      
+
     } catch (error){
       print(error);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +43,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         backgroundColor: Colors.white,
         title: const Text('New post', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ),
-      body: const SafeArea(
-          child: Center(child: Text("Create a post Screen"),)),
+      body: SafeArea(
+          child: Center(
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: _openMediaPicker,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.width,
+                      color: Colors.white54,
+                      child: Center(
+                        child: Text('Add media'),
+                      ),
+                    ),
+                  )
+                ],
+              ))),
         bottomNavigationBar:  const AppBottomNavigationBar(currentIndex: 2)
     );
   }
