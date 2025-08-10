@@ -18,7 +18,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   void initState() {
-    if(_mediaList.isEmpty){
+    if(_newPostMediaList.isEmpty){
       _openMediaPicker();
     }
     super.initState();
