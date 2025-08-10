@@ -58,7 +58,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
         return NewPostMedia(
             file: File(xFile.path),
-            mediaTypes: MediaTypes.image);
+             mediaTypes: fileMediaType);
       }).toList();
 
       print('MediaFiles: $mediaFiles');
