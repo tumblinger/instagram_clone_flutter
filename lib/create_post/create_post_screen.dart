@@ -14,7 +14,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final ImagePicker picker = ImagePicker();
   final TextEditingController _captionTextEditingController = TextEditingController();
 
-  List<NewPostMedia> _mediaList = [];
+  List<NewPostMedia> _newPostMediaList = [];
 
   @override
   void initState() {
