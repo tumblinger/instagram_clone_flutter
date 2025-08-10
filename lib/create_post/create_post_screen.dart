@@ -37,9 +37,25 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       }
       List<NewPostMedia?> _selectedPostMediaList = mediaFiles.map((xFile){
         String? mimeType = lookupMimeType(xFile.path);
-        if(mimeType == null) {
+        if(mimeType == null) { 
           return null;
         }
+        print('Mime type: $mimeType');
+
+        MediaTypes? fileMediaType;
+        bool isVideo = mimeType.startsWith('video/');
+        bool isImage = mimeType.startsWith('image/');
+
+        if(isVideo){
+          fileMediaType = MediaTypes.video;
+        }
+        if(isImage){
+          fileMediaType = MediaTypes.image;
+        }
+        if(fileMediaType == null){
+          return null;
+        }
+
         return NewPostMedia(
             file: File(xFile.path),
             mediaTypes: MediaTypes.image);
