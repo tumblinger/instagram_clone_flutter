@@ -32,15 +32,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     try{
       final List<XFile> mediaFiles = await picker.pickMultipleMedia();
 
-      if(mediaFiles.isEmpty){ // user didn't give access
+      if(mediaFiles.isEmpty){ 
         return;
       }
+
       List<NewPostMedia?> _selectedPostMediaList = mediaFiles.map((xFile){
         String? mimeType = lookupMimeType(xFile.path);
         if(mimeType == null) { 
           return null;
         }
-        print('Mime type: $mimeType');
 
         MediaTypes? fileMediaType;
         bool isVideo = mimeType.startsWith('video/');
@@ -58,10 +58,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
         return NewPostMedia(
             file: File(xFile.path),
-             mediaTypes: fileMediaType);
+            mediaTypes: fileMediaType);
       }).toList();
 
-      print('MediaFiles: $mediaFiles');
+      List<NewPostMedia> _nonNullSelectedPostMediaList = _selectedPostMediaList.whereType<NewPostMedia>().toList();
+
+      setState(() {
+        _newPostMediaList = _nonNullSelectedPostMediaList;
+      });
 
     } catch (error){
       print(error);
