@@ -26,6 +26,8 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
     _playCurrentVideo();
   }
 
+    bool mediaValueIsFileUrl(String value) => value.startsWith('file://');
+
   @override
   void dispose() {
     for (final controller in _videoControllers) {
