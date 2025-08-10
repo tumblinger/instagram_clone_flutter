@@ -6,6 +6,7 @@ import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/home/media.dart';
 import 'package:mime/mime.dart';
 import '../components/app_bottom_navigation_bar.dart';
+import '../home/home_components/home_media_slider.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -30,8 +31,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Future<void> _openMediaPicker() async{
     try{
-      final List<XFile> mediaFiles = await picker.pickMultipleMedia();
-
+      final List<XFile> mediaFiles = await picker.pickMultipleMedia(); 
       if(mediaFiles.isEmpty){ 
         return;
       }
@@ -61,10 +61,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             mediaTypes: fileMediaType);
       }).toList();
 
-      List<NewPostMedia> _nonNullSelectedPostMediaList = _selectedPostMediaList.whereType<NewPostMedia>().toList();
+      List<NewPostMedia> notNullSelectedPostMediaList = _selectedPostMediaList.whereType<NewPostMedia>().toList(); 
 
-      setState(() {
-        _newPostMediaList = _nonNullSelectedPostMediaList;
+      setState(() { 
+        _newPostMediaList = notNullSelectedPostMediaList;
       });
 
     } catch (error){
@@ -87,13 +87,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   Center(
                     child: InkWell(
                       onTap: _openMediaPicker,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width *0.7,
-                        height: MediaQuery.of(context).size.width*0.8,
-                        color: Colors.black12,
-                        child: Center(
-                          child: Text('Add media'),
-                        ),
+                      child: Column(
+                        children: [
+                          if(_newPostMediaList.isEmpty)
+                          Container(
+                            width: MediaQuery.of(context).size.width *0.7,
+                            height: MediaQuery.of(context).size.width*0.8,
+                            color: Colors.black12,
+                            child: Center(
+                              child: Text('Add media'),
+                            ),
+                          ),
+                          if(_newPostMediaList.isNotEmpty)
+                            HomeMediaSlider(
+                              mediaList: _newPostMediaList.map((newPostMedia) => Media(value: newPostMedia.file.path, type: newPostMedia.mediaTypes)).toList(),
+                            )],
                       ),
                     ),
                   ),
