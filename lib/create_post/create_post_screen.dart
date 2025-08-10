@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/home/media.dart';
+import 'package:mime/mime.dart';
 import '../components/app_bottom_navigation_bar.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -27,9 +31,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Future<void> _openMediaPicker() async{
     try{
       final List<XFile> mediaFiles = await picker.pickMultipleMedia();
+
       if(mediaFiles.isEmpty){ // user didn't give access
         return;
       }
+      List<NewPostMedia?> _selectedPostMediaList = mediaFiles.map((xFile){
+        String? mimeType = lookupMimeType(xFile.path);
+        if(mimeType == null) {
+          return null;
+        }
+        return NewPostMedia(
+            file: File(xFile.path),
+            mediaTypes: MediaTypes.image);
+      }).toList();
+
       print('MediaFiles: $mediaFiles');
 
     } catch (error){
