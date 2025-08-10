@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_clone/home/media.dart';
 
@@ -51,4 +52,13 @@ class Posts {
         updatedAt: (firestorePostData['updatedAt'] as Timestamp).toDate(),
     );
   }
+}
+
+class NewPostMedia {
+  final File file;
+  final MediaTypes mediaTypes;
+
+  NewPostMedia({
+    required this.file, required this.mediaTypes
+});
 }
