@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/home/media.dart';
@@ -26,12 +28,12 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
     _playCurrentVideo();
   }
 
-    bool mediaValueIsFileUrl(String value) => value.startsWith('file://');
+  bool mediaValueIsFileUrl(String value) => value.startsWith('file://');
 
   @override
   void dispose() {
     for (final controller in _videoControllers) {
-      controller?.dispose(); 
+      controller?.dispose();
     }
     super.dispose();
   }
@@ -74,14 +76,15 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
               return Builder(
                   builder: (BuildContext context){
                     if(media.type == MediaTypes.image){
-                      return Image.network(media.value, fit: BoxFit.cover,);
+                      return mediaValueIsFileUrl(media.value)
+                          ? Image.file(File(media.value), fit: BoxFit.cover)
+                          : Image.network(media.value, fit: BoxFit.cover);
                     } else {
                       return VideoPlayer(_videoControllers[index]!);
                     }
                   }
-
               );
-            }).toList(), 
+            }).toList(),
 
             options: CarouselOptions(
               initialPage: _currentIndex,
