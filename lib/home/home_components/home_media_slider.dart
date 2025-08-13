@@ -78,7 +78,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
                   builder: (BuildContext context){
                     if(media.type == MediaTypes.image){
                       return mediaValueIsFileUrl(media.value)
-                          ? Image.file(File(media.value), fit: BoxFit.cover)
+                          ? Image.file(localFile(media.value), fit: BoxFit.cover)
                           : Image.network(media.value, fit: BoxFit.cover);
                     } else {
                       return VideoPlayer(_videoControllers[index]!);
