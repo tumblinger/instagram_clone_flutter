@@ -29,6 +29,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
   }
 
   bool mediaValueIsFileUrl(String value) => value.startsWith('loc:');
+  File localFile(String value) => File(value.replaceFirst('loc:', ''));
 
   @override
   void dispose() {
