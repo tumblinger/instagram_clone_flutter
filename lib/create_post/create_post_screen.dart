@@ -100,7 +100,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           ),
                           if(_newPostMediaList.isNotEmpty)
                             HomeMediaSlider(
-                              mediaList: _newPostMediaList.map((newPostMedia) => Media(value: newPostMedia.file.path, type: newPostMedia.mediaTypes)).toList(),
+                              mediaList: _newPostMediaList.map((newPostMedia) => Media(value: 'loc: ${newPostMedia.file.path}', type: newPostMedia.mediaTypes)).toList(),
                             )],
                       ),
                     ),
