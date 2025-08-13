@@ -42,7 +42,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
   void _initializeVideoController(){
     _videoControllers = widget.mediaList.map((media){
       if(media.type == MediaTypes.video){
-        final videoPlayerController = mediaValueIsFileUrl(media.value) ? VideoPlayerController.file(File(media.value)):
+        final videoPlayerController = mediaValueIsFileUrl(media.value) ? VideoPlayerController.file(localFile(media.value)):
         VideoPlayerController.networkUrl(Uri.parse(media.value));
         final controller = videoPlayerController
             ..initialize().then((_){
