@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import '../../create_post/post_constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/home/media.dart';
@@ -28,8 +28,8 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
     _playCurrentVideo();
   }
 
-  bool mediaValueIsFileUrl(String value) => value.startsWith('loc:');
-  File localFile(String value) => File(value.replaceFirst('loc:', ''));
+  bool mediaValueIsFileUrl(String value) => value.startsWith(localFileIdentifier);
+  File localFile(String value) => File(value.replaceFirst(localFileIdentifier, ''));
 
   @override
   void dispose() {
