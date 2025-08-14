@@ -89,7 +89,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
 
             options: CarouselOptions(
               initialPage: _currentIndex,
-              height: 520,
+              height: MediaQuery.of(context).size.height * 0.6,
               aspectRatio: 1,
               viewportFraction: 1.0,
               enableInfiniteScroll: false,
