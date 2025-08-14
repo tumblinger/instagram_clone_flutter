@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:instagram_clone/create_post/post_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/create_post/posts.dart';
@@ -100,7 +100,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           ),
                           if(_newPostMediaList.isNotEmpty)
                             HomeMediaSlider(
-                              mediaList: _newPostMediaList.map((newPostMedia) => Media(value: 'loc: ${newPostMedia.file.path}', type: newPostMedia.mediaTypes)).toList(),
+                              mediaList: _newPostMediaList.map((newPostMedia) => Media(value: '$localFileIdentifier: ${newPostMedia.file.path}', type: newPostMedia.mediaTypes)).toList(),
                             )],
                       ),
                     ),
