@@ -62,3 +62,25 @@ class NewPostMedia {
     required this.file, required this.mediaTypes
 });
 }
+
+class CreatePost {
+  final DocumentReference createdBy;
+  final List<Media> media;
+  final String caption;
+  final int likes;
+  final int shares;
+  final int comments;
+  final DateTime createdAt;
+  final  DateTime updatedAt;
+
+  CreatePost({
+    required this.createdBy,
+    required this.media,
+    required this.caption,
+    required this.likes,
+    required this.shares,
+    required this.comments,
+    required this.createdAt,
+    required this.updatedAt,
+});
+}
