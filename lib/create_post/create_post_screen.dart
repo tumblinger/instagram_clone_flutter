@@ -89,24 +89,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   Center(
                     child: InkWell(
                       onTap: _openMediaPicker,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width *0.7,
-                            color: Colors.black12,
-                            child: _newPostMediaList.isEmpty
-                                ?
-                            Center(
-                              child: Text('Add media'),
-                            )
-                                :
-                            HomeMediaSlider(
-                              mediaList: _newPostMediaList.map((newPostMedia) => Media(
-                                  value: '$localFileIdentifier${newPostMedia.file.path}', 
-                                  type: newPostMedia.mediaTypes)
-                              ).toList(),
-                            )
-                          )],
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width *0.7,
+                        child: _newPostMediaList.isEmpty
+                            ?
+                        Container(
+                          color: Colors.black12,
+                          height: MediaQuery.of(context).size.height *0.5,
+                          child: Center(
+                            child: Text('Add media'),
+                          ),
+                        )
+                            :
+                        HomeMediaSlider(
+                          mediaList: _newPostMediaList.map((newPostMedia) => Media(
+                              value: '$localFileIdentifier${newPostMedia.file.path}', 
+                              type: newPostMedia.mediaTypes)
+                          ).toList(),
+                        )
                       ),
                     ),
                   ),
