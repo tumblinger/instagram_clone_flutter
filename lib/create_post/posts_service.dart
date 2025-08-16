@@ -23,14 +23,16 @@ class PostsService {
   }
 
   Stream<List<Posts>> getPostsByUserId(String userId){
-    // final userRef = _firebaseFirestore.collection('user-profiles').doc(userId);
     return
       _firebaseFirestore
           .collection('posts')
-          // .orderBy('createdAt', descending: true)
-          .snapshots()   
+          .snapshots() 
           .asyncMap((snapshot) async {
+            for(var doc in snapshot.docs){
+              print('Post id: ${doc.id}, createdby: ${doc.data()['createdby']}');
+            }
         List<Posts> posts = [];
+            //Filter the docs:
         final filteredDocs = snapshot.docs.where((doc){
           final createdby = doc.data()['createdby'];
           if(createdby is DocumentReference){
@@ -40,20 +42,37 @@ class PostsService {
           }
           return false;
         }).toList();
-        print('Filtered posts count: ${filteredDocs.length}');
+
+       
 
         for(var doc in filteredDocs){
           DocumentReference userProfileRef = doc['createdby'];
           DocumentSnapshot userProfileDoc;
+
           if(userProfileRef is DocumentReference) {
-            userProfileDoc = await userProfileRef.get();
-          } else {
+            userProfileDoc = await userProfileRef.get(); //call get() right away
+          } else { // if userProfileRef is String
+            // build the link/ref first and then call get():
             userProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(userId).get();
           }
           posts.add(Posts.fromFirestore(doc, userProfileDoc));
         }
         return posts;
       });
+  }
+
+  Future<void> createPost(String userId, List<NewPostMedia> newPostMedia, String caption) async {
+    final userRef = _firebaseFirestore.collection('user-profiles').doc(userId);
+    final postData = CreatePost(
+        createdBy: userRef,
+        media: newPostMedia,
+        caption: caption,
+        likes: 0,
+        shares: 0,
+        comments: 0,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now()
+    );
   }
 
   Future <void> updatePost(String postId, Map<String, dynamic> updateData) async{
@@ -63,6 +82,7 @@ class PostsService {
       await _firebaseFirestore.collection('posts').doc(postId).update(dataToUpdate);
     }
     catch(error){
+      print('Error updating post: $error');
       return;
     }
   }
