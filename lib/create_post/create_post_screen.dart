@@ -93,7 +93,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width *0.7,
-                            height: MediaQuery.of(context).size.width*0.8,
                             color: Colors.black12,
                             child: _newPostMediaList.isEmpty
                                 ?
