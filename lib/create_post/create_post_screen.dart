@@ -91,7 +91,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       onTap: _openMediaPicker,
                       child: Column(
                         children: [
-                          if(_newPostMediaList.isEmpty)
                           Container(
                             width: MediaQuery.of(context).size.width *0.7,
                             height: MediaQuery.of(context).size.width*0.8,
