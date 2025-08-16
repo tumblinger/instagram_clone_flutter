@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 
 class PostsService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   Stream<List<Posts>> getPosts(){
     return
@@ -43,8 +45,7 @@ class PostsService {
           return false;
         }).toList();
 
-       
-
+      
         for(var doc in filteredDocs){
           DocumentReference userProfileRef = doc['createdby'];
           DocumentSnapshot userProfileDoc;
@@ -59,6 +60,14 @@ class PostsService {
         }
         return posts;
       });
+  }
+
+  Future<void> uploadPostMedia(NewPostMedia newPostMedia) async {
+    try{
+
+    } catch(error) {
+      return null;
+    }
   }
 
   Future<void> createPost(String userId, List<NewPostMedia> newPostMedia, String caption) async {
