@@ -1,7 +1,8 @@
 import 'dart:io';
-import 'package:instagram_clone/create_post/post_constants.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/create_post/post_constants.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/home/media.dart';
 import 'package:mime/mime.dart';
@@ -32,6 +33,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Future<void> _openMediaPicker() async{
     try{
       final List<XFile> mediaFiles = await picker.pickMultipleMedia(); 
+
       if(mediaFiles.isEmpty){ 
         return;
       }
@@ -61,7 +63,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             mediaTypes: fileMediaType);
       }).toList();
 
-      List<NewPostMedia> notNullSelectedPostMediaList = _selectedPostMediaList.whereType<NewPostMedia>().toList(); 
+      List<NewPostMedia> notNullSelectedPostMediaList = _selectedPostMediaList.whereType<NewPostMedia>().toList();
 
       setState(() { 
         _newPostMediaList = notNullSelectedPostMediaList;
@@ -94,14 +96,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             width: MediaQuery.of(context).size.width *0.7,
                             height: MediaQuery.of(context).size.width*0.8,
                             color: Colors.black12,
-                            child: Center(
+                            child: _newPostMediaList.isEmpty
+                                ?
+                            Center(
                               child: Text('Add media'),
-                            ),
-                          ),
-                          if(_newPostMediaList.isNotEmpty)
+                            )
+                                :
                             HomeMediaSlider(
-                              mediaList: _newPostMediaList.map((newPostMedia) => Media(value: '$localFileIdentifier${newPostMedia.file.path}', type: newPostMedia.mediaTypes)).toList(),
-                            )],
+                              mediaList: _newPostMediaList.map((newPostMedia) => Media(
+                                  value: '$localFileIdentifier${newPostMedia.file.path}', 
+                                  type: newPostMedia.mediaTypes)
+                              ).toList(),
+                            )
+                          )],
                       ),
                     ),
                   ),
