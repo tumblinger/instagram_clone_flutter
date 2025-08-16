@@ -65,7 +65,7 @@ class NewPostMedia {
 
 class CreatePost {
   final DocumentReference createdBy;
-  final List<Media> media;
+  final List<NewPostMedia> media;
   final String caption;
   final int likes;
   final int shares;
