@@ -83,8 +83,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         title: const Text('New post', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ),
       body: SafeArea(
-          child: Center(
-              child: Column(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
                 children: [
                   Center(
                     child: InkWell(
@@ -110,19 +112,33 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: _captionTextEditingController,
-                    decoration: InputDecoration(
-                      hintText: 'Add a caption',
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16
-                      )
-                    ),
-                  )
                 ],
-              ))),
-        bottomNavigationBar:  const AppBottomNavigationBar(currentIndex: 2)
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: _captionTextEditingController,
+                decoration: InputDecoration(
+                  hintText: 'Add a caption',
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16
+                  )
+                ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                width: MediaQuery.of(context).size.width ,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.black12))
+                ),
+                child: FilledButton(
+                  onPressed: () => {},
+                  child: Text('Share'),
+                ),
+              )
+            ],
+          ),
+      ),
     );
   }
 }
