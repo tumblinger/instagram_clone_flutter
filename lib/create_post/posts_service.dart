@@ -67,7 +67,7 @@ class PostsService {
 
   Future<Media?> _uploadPostMedia(NewPostMedia newPostMedia) async {
     try{
-      final String newPostMediaFileExt = newPostMedia.file.path.split('.').last.toLowerCase(); 
+      final String newPostMediaFileExt = newPostMedia.file.path.split('.').last.toLowerCase();
       final String newPostMediaFileName = '${uuid.v4()}.$newPostMediaFileExt'; 
       final newPostMediaRef = _firebaseStorage.ref().child('post-media').child(newPostMediaFileName); 
       final TaskSnapshot newPostMediaUploadSnapshot = await newPostMediaRef.putFile(newPostMedia.file); 
@@ -84,14 +84,14 @@ class PostsService {
   }
 
   Future<void> createPost(String userId, String caption, List <NewPostMedia> newPostMediaList) async {
-    
+    // upload all medias to storage:
     final newMediaList = await Future.wait(
       newPostMediaList.map((newPostMedia) => _uploadPostMedia(newPostMedia))
     );
     final nonNullNewMediaList = newMediaList.whereType<Media>().toList();
     final userRef = _firebaseFirestore.collection('user-profiles').doc(userId); 
 
-    final postData = CreatePost( // создание объекта поста
+    final postData = CreatePost( 
         createdBy: userRef,
         media: nonNullNewMediaList,
         caption: caption,
@@ -101,6 +101,7 @@ class PostsService {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()
     );
+    await _firebaseFirestore.collection('posts').add(postData.toMap());
   }
 
   Future <void> updatePost(String postId, Map<String, dynamic> updateData) async{
