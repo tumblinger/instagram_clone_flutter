@@ -85,6 +85,12 @@ class CreatePost {
 });
   Map<String, dynamic> toMap() => {
     'createdby': createdBy,
-    'media': media
+    'media': media.map((mediaItem) =>(mediaItem.toMap())).toList(),
+    'caption': caption,
+    'likes': likes,
+    'shares': shares,
+    'comments': comments,
+    'createdAt': Timestamp.fromDate(createdAt),
+    'updatedAt': Timestamp.fromDate(updatedAt)
   };
 }
