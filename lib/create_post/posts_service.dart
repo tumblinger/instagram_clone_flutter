@@ -82,7 +82,7 @@ class PostsService {
     }
   }
 
-  Future<DocumentReference?> createPost(String userId, String caption, List <NewPostMedia> newPostMediaList) async {
+  Future<DocumentReference?> createPost({required String userId, required String caption, required List <NewPostMedia> newPostMediaList}) async {
     try{
       final newMediaList = await Future.wait(
           newPostMediaList.map((newPostMedia) => _uploadPostMedia(newPostMedia))
