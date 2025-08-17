@@ -24,4 +24,8 @@ class Media {
         throw ArgumentError('Unknown media type - $stringMediaType');
     }
   }
+   Map<String, dynamic> toMap() => {
+    'value': value,
+    'type': type == MediaTypes.image ? 'image' : 'video'
+  };
 }
