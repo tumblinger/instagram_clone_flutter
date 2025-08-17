@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instagram_clone/create_post/posts.dart';
+import 'package:instagram_clone/home/media.dart';
+import 'package:uuid/uuid.dart';
 
 class PostsService {
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance; // text
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance; //media
+
+  final uuid = Uuid();
 
   Stream<List<Posts>> getPosts(){
     return
@@ -29,7 +33,7 @@ class PostsService {
       _firebaseFirestore
           .collection('posts')
           .snapshots() 
-          .asyncMap((snapshot) async {
+          .asyncMap((snapshot) async { 
             for(var doc in snapshot.docs){
               print('Post id: ${doc.id}, createdby: ${doc.data()['createdby']}');
             }
@@ -45,7 +49,7 @@ class PostsService {
           return false;
         }).toList();
 
-      
+        
         for(var doc in filteredDocs){
           DocumentReference userProfileRef = doc['createdby'];
           DocumentSnapshot userProfileDoc;
@@ -62,8 +66,19 @@ class PostsService {
       });
   }
 
-  Future<void> uploadPostMedia(NewPostMedia newPostMedia) async {
+  Future<Media?> _uploadPostMedia(NewPostMedia newPostMedia) async {
     try{
+      final String newPostMediaFileExt = newPostMedia.file.path.split('.').last.toLowerCase();
+      final String newPostMediaFileName = '${uuid.v4()}.$newPostMediaFileExt'; 
+      final newPostMediaRef = _firebaseStorage.ref().child('post-media').child(newPostMediaFileName);
+
+      final TaskSnapshot newPostMediaUploadSnapshot = await newPostMediaRef.putFile(newPostMedia.file);
+      final String newPostMediaFileUrl = await newPostMediaUploadSnapshot.ref.getDownloadURL();
+
+      return Media(
+          value: newPostMediaFileUrl, 
+          type: newPostMedia.mediaTypes
+      );
 
     } catch(error) {
       return null;
