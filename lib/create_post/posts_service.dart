@@ -5,8 +5,8 @@ import 'package:instagram_clone/home/media.dart';
 import 'package:uuid/uuid.dart';
 
 class PostsService {
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance; // text
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance; //media
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance; 
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance; 
 
   final uuid = Uuid();
 
@@ -32,7 +32,7 @@ class PostsService {
     return
       _firebaseFirestore
           .collection('posts')
-          .snapshots() 
+          .snapshots()
           .asyncMap((snapshot) async { 
             for(var doc in snapshot.docs){
               print('Post id: ${doc.id}, createdby: ${doc.data()['createdby']}');
@@ -49,15 +49,14 @@ class PostsService {
           return false;
         }).toList();
 
-        
         for(var doc in filteredDocs){
           DocumentReference userProfileRef = doc['createdby'];
           DocumentSnapshot userProfileDoc;
 
           if(userProfileRef is DocumentReference) {
-            userProfileDoc = await userProfileRef.get(); //call get() right away
+            userProfileDoc = await userProfileRef.get(); 
           } else { // if userProfileRef is String
-            // build the link/ref first and then call get():
+           
             userProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(userId).get();
           }
           posts.add(Posts.fromFirestore(doc, userProfileDoc));
@@ -76,7 +75,7 @@ class PostsService {
       final String newPostMediaFileUrl = await newPostMediaUploadSnapshot.ref.getDownloadURL();
 
       return Media(
-          value: newPostMediaFileUrl, 
+          value: newPostMediaFileUrl,
           type: newPostMedia.mediaTypes
       );
 
@@ -85,11 +84,17 @@ class PostsService {
     }
   }
 
-  Future<void> createPost(String userId, List<NewPostMedia> newPostMedia, String caption) async {
+  Future<void> createPost(String userId, String caption, List <NewPostMedia> newPostMediaList) async {
+    
+    final List<Media?> newMediaList = await Future.wait(
+      newPostMediaList.map((newPostMedia) => _uploadPostMedia(newPostMedia))
+    );
+    final nonNullNewMediaList = newMediaList.whereType<Media>().toList();
     final userRef = _firebaseFirestore.collection('user-profiles').doc(userId);
+
     final postData = CreatePost(
         createdBy: userRef,
-        media: newPostMedia,
+        media: newPostMediaList,
         caption: caption,
         likes: 0,
         shares: 0,
