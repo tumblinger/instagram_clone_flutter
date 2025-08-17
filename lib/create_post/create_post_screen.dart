@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/create_post/post_constants.dart';
 import 'package:instagram_clone/create_post/posts.dart';
+import 'package:instagram_clone/create_post/posts_service.dart';
 import 'package:instagram_clone/home/media.dart';
 import 'package:mime/mime.dart';
 import '../components/app_bottom_navigation_bar.dart';
@@ -17,6 +19,7 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
+  final PostsService _postsService = PostsService();
   final ImagePicker picker = ImagePicker();
   final TextEditingController _captionTextEditingController = TextEditingController();
 
@@ -38,7 +41,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         return;
       }
 
-      List<NewPostMedia?> _selectedPostMediaList = mediaFiles.map((xFile){
+      List<NewPostMedia?> selectedPostMediaList = mediaFiles.map((xFile){
         String? mimeType = lookupMimeType(xFile.path);
         if(mimeType == null) { 
           return null;
@@ -63,7 +66,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             mediaTypes: fileMediaType);
       }).toList();
 
-      List<NewPostMedia> notNullSelectedPostMediaList = _selectedPostMediaList.whereType<NewPostMedia>().toList();
+      List<NewPostMedia> notNullSelectedPostMediaList = selectedPostMediaList.whereType<NewPostMedia>().toList();
 
       setState(() { 
         _newPostMediaList = notNullSelectedPostMediaList;
@@ -72,6 +75,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     } catch (error){
       print(error);
     }
+  }
+
+  Future<void> _createNewPost(String userId) async {
+    final caption = _captionTextEditingController.text;
+    DocumentReference? newPostDocRef = await _postsService.createPost(
+        userId: userId,
+        caption: caption,
+        newPostMediaList: _newPostMediaList
+    );
   }
 
   @override
