@@ -32,7 +32,7 @@ class PostsService {
     return
       _firebaseFirestore
           .collection('posts')
-          .snapshots()
+          .snapshots() 
           .asyncMap((snapshot) async { 
             for(var doc in snapshot.docs){
               print('Post id: ${doc.id}, createdby: ${doc.data()['createdby']}');
@@ -54,9 +54,9 @@ class PostsService {
           DocumentSnapshot userProfileDoc;
 
           if(userProfileRef is DocumentReference) {
-            userProfileDoc = await userProfileRef.get(); 
+            userProfileDoc = await userProfileRef.get(); //call get() right away
           } else { // if userProfileRef is String
-           
+            // build the link/ref first and then call get():
             userProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(userId).get();
           }
           posts.add(Posts.fromFirestore(doc, userProfileDoc));
@@ -67,12 +67,11 @@ class PostsService {
 
   Future<Media?> _uploadPostMedia(NewPostMedia newPostMedia) async {
     try{
-      final String newPostMediaFileExt = newPostMedia.file.path.split('.').last.toLowerCase();
+      final String newPostMediaFileExt = newPostMedia.file.path.split('.').last.toLowerCase(); 
       final String newPostMediaFileName = '${uuid.v4()}.$newPostMediaFileExt'; 
-      final newPostMediaRef = _firebaseStorage.ref().child('post-media').child(newPostMediaFileName);
-
-      final TaskSnapshot newPostMediaUploadSnapshot = await newPostMediaRef.putFile(newPostMedia.file);
-      final String newPostMediaFileUrl = await newPostMediaUploadSnapshot.ref.getDownloadURL();
+      final newPostMediaRef = _firebaseStorage.ref().child('post-media').child(newPostMediaFileName); 
+      final TaskSnapshot newPostMediaUploadSnapshot = await newPostMediaRef.putFile(newPostMedia.file); 
+      final String newPostMediaFileUrl = await newPostMediaUploadSnapshot.ref.getDownloadURL(); 
 
       return Media(
           value: newPostMediaFileUrl,
@@ -86,15 +85,15 @@ class PostsService {
 
   Future<void> createPost(String userId, String caption, List <NewPostMedia> newPostMediaList) async {
     
-    final List<Media?> newMediaList = await Future.wait(
+    final newMediaList = await Future.wait(
       newPostMediaList.map((newPostMedia) => _uploadPostMedia(newPostMedia))
     );
     final nonNullNewMediaList = newMediaList.whereType<Media>().toList();
-    final userRef = _firebaseFirestore.collection('user-profiles').doc(userId);
+    final userRef = _firebaseFirestore.collection('user-profiles').doc(userId); 
 
-    final postData = CreatePost(
+    final postData = CreatePost( // создание объекта поста
         createdBy: userRef,
-        media: newPostMediaList,
+        media: nonNullNewMediaList,
         caption: caption,
         likes: 0,
         shares: 0,
