@@ -83,6 +83,7 @@ class CreatePost {
     required this.createdAt,
     required this.updatedAt,
 });
+  
   Map<String, dynamic> toMap() => {
     'createdby': createdBy,
     'media': media.map((mediaItem) =>(mediaItem.toMap())).toList(),
