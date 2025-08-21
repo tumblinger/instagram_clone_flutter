@@ -23,6 +23,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController _captionTextEditingController = TextEditingController();
 
   List<NewPostMedia> _newPostMediaList = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -34,15 +35,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Future<void> _openMediaPicker() async{
     try{
-      final List<XFile> mediaFiles = await picker.pickMultipleMedia(); 
+      final List<XFile> mediaFiles = await picker.pickMultipleMedia();
 
-      if(mediaFiles.isEmpty){
+      if(mediaFiles.isEmpty){ 
         return;
       }
 
       List<NewPostMedia?> selectedPostMediaList = mediaFiles.map((xFile){
         String? mimeType = lookupMimeType(xFile.path);
-        if(mimeType == null) {
+        if(mimeType == null) { 
           return null;
         }
 
@@ -65,9 +66,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             mediaTypes: fileMediaType);
       }).toList();
 
-      List<NewPostMedia> notNullSelectedPostMediaList = selectedPostMediaList.whereType<NewPostMedia>().toList();
+      List<NewPostMedia> notNullSelectedPostMediaList = selectedPostMediaList.whereType<NewPostMedia>().toList(); 
 
-      setState(() {
+      setState(() { 
         _newPostMediaList = notNullSelectedPostMediaList;
       });
 
@@ -78,15 +79,28 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Future<void> _createNewPost(String userId) async {
     final caption = _captionTextEditingController.text; 
-    
+
     if(caption == null) return;
     if(_newPostMediaList.isEmpty) return;
-    
+
+    setState(() {
+      _isLoading = true;
+    });
+
     DocumentReference? newPostDocRef = await _postsService.createPost(
         userId: userId, 
         caption: caption,
         newPostMediaList: _newPostMediaList
     );
+    if(newPostDocRef == null){
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+    if(mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
