@@ -8,7 +8,6 @@ import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
 import 'package:instagram_clone/home/media.dart';
 import 'package:mime/mime.dart';
-import '../components/app_bottom_navigation_bar.dart';
 import '../home/home_components/home_media_slider.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -37,13 +36,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     try{
       final List<XFile> mediaFiles = await picker.pickMultipleMedia(); 
 
-      if(mediaFiles.isEmpty){ 
+      if(mediaFiles.isEmpty){
         return;
       }
 
       List<NewPostMedia?> selectedPostMediaList = mediaFiles.map((xFile){
         String? mimeType = lookupMimeType(xFile.path);
-        if(mimeType == null) { 
+        if(mimeType == null) {
           return null;
         }
 
@@ -68,7 +67,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
       List<NewPostMedia> notNullSelectedPostMediaList = selectedPostMediaList.whereType<NewPostMedia>().toList();
 
-      setState(() { 
+      setState(() {
         _newPostMediaList = notNullSelectedPostMediaList;
       });
 
@@ -78,9 +77,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Future<void> _createNewPost(String userId) async {
-    final caption = _captionTextEditingController.text;
+    final caption = _captionTextEditingController.text; 
+    
+    if(caption == null) return;
+    if(_newPostMediaList.isEmpty) return;
+    
     DocumentReference? newPostDocRef = await _postsService.createPost(
-        userId: userId,
+        userId: userId, 
         caption: caption,
         newPostMediaList: _newPostMediaList
     );
