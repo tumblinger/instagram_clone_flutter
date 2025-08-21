@@ -7,7 +7,9 @@ import 'package:instagram_clone/create_post/post_constants.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
 import 'package:instagram_clone/home/media.dart';
+import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 import 'package:mime/mime.dart';
+import 'package:provider/provider.dart';
 import '../home/home_components/home_media_slider.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -78,7 +80,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Future<void> _createNewPost(String userId) async {
-    final caption = _captionTextEditingController.text; 
+    final caption = _captionTextEditingController.text;
 
     if(caption == null) return;
     if(_newPostMediaList.isEmpty) return;
@@ -105,6 +107,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProfile = context.watch<MyAuthProvider>().userProfile;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -161,7 +164,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   border: Border(top: BorderSide(color: Colors.black12))
                 ),
                 child: FilledButton(
-                  onPressed: () => {},
+                  onPressed: () => {
+                    if(userProfile?.uid != null){
+                      _createNewPost(userProfile!.uid)
+                    }
+                  },
                   child: Text('Share'),
                 ),
               )
