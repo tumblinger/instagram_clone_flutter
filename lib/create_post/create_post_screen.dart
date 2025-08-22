@@ -37,7 +37,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Future<void> _openMediaPicker() async{
     try{
-      final List<XFile> mediaFiles = await picker.pickMultipleMedia();
+      final List<XFile> mediaFiles = await picker.pickMultipleMedia(); 
 
       if(mediaFiles.isEmpty){ 
         return;
@@ -68,9 +68,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             mediaTypes: fileMediaType);
       }).toList();
 
-      List<NewPostMedia> notNullSelectedPostMediaList = selectedPostMediaList.whereType<NewPostMedia>().toList(); 
+      List<NewPostMedia> notNullSelectedPostMediaList = selectedPostMediaList.whereType<NewPostMedia>().toList();
 
-      setState(() { 
+      setState(() { //обновляем состояние
         _newPostMediaList = notNullSelectedPostMediaList;
       });
 
@@ -80,7 +80,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Future<void> _createNewPost(String userId) async {
-    final caption = _captionTextEditingController.text;
+    final caption = _captionTextEditingController.text; 
 
     if(caption == null) return;
     if(_newPostMediaList.isEmpty) return;
@@ -163,7 +163,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 decoration: BoxDecoration(
                   border: Border(top: BorderSide(color: Colors.black12))
                 ),
-                child: FilledButton(
+                child: _isLoading
+                ? Center(child: CircularProgressIndicator(strokeWidth: 4))
+                : FilledButton(
                   onPressed: () => {
                     if(userProfile?.uid != null){
                       _createNewPost(userProfile!.uid)
