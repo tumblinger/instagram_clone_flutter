@@ -95,3 +95,12 @@ class CreatePost {
     'updatedAt': Timestamp.fromDate(updatedAt)
   };
 }
+
+class PostVideo {
+  final Posts posts;
+  final Media videoMedia;
+
+  PostVideo ({
+    required this.posts, required this.videoMedia
+});
+}
