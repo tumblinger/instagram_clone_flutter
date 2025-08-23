@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-
-import '../components/app_bottom_navigation_bar.dart';
+import 'package:instagram_clone/create_post/posts.dart';
 
 class ReelsScreen extends StatelessWidget {
-  const ReelsScreen({super.key});
+  final List<PostVideo> postVideos;
+  const ReelsScreen({super.key, required this.postVideos});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(child: Center(child: Text("Reels Screen"),)),
-        bottomNavigationBar:  AppBottomNavigationBar(currentIndex: 3)
-    );
+    return Scaffold(
+      body: SafeArea(
+          child: ListView.builder(
+              itemCount: postVideos.length,
+              itemBuilder: (context, index){
+                PostVideo postVideo = postVideos[index];
+               return Container();
+              }
+              )));
   }
 }
