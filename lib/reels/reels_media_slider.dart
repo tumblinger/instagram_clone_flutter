@@ -29,6 +29,7 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
     for(var videoMedia in widget.videoMediaList){
       final controller = VideoPlayerController.networkUrl(Uri.parse(videoMedia.value)); 
       await controller.initialize();
+      controller.setLooping(true);
       _videoControllers.add(controller);
     }
 
@@ -56,7 +57,7 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
   @override
   void dispose() {
     for (final controller in _videoControllers) {
-      controller?.dispose();
+      controller?.dispose(); 
     }
     super.dispose();
   }
@@ -64,23 +65,24 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
   @override
   Widget build(BuildContext context) {
     if(!_isInitialized || _videoControllers.length != widget.videoMediaList.length){
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
-    return Column(
+    return Stack(
+      alignment: AlignmentDirectional.bottomCenter,
         children: [
           CarouselSlider(
               items: widget.videoMediaList.asMap().entries.map((entry) {
                 int index = entry.key;
-                final controller = _videoControllers[index];
+                final controller = _videoControllers[index]!;
                 return AspectRatio(
-                    aspectRatio: controller!.value.aspectRatio,
+                    aspectRatio: controller.value.aspectRatio,
                     child: VideoPlayer(controller),
                 );
               }).toList(),
 
               options: CarouselOptions(
                   initialPage: _currentIndex,
-                  height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height * 0.95,
                   aspectRatio: 1,
                   viewportFraction: 1.0,
                   enableInfiniteScroll: false,
@@ -92,8 +94,9 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
                     _playCurrentVideo();
                   }
               )),
+          if(widget.videoMediaList.length >1)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.only(bottom: 24.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children:
@@ -104,7 +107,7 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
                   margin: EdgeInsets.symmetric(horizontal: 3.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _currentIndex == entry.key ? Colors.blueAccent : Colors.grey,
+                    color: _currentIndex == entry.key ? Colors.blueAccent : Colors.blueGrey,
                   ),);
               }).toList(),
             ),
