@@ -101,6 +101,7 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
                 _playCurrentVideo();
               }
             )),
+        if(widget.mediaList.length >1)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Row(
