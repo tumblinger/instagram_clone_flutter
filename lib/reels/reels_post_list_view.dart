@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/create_post/posts.dart';
+import 'package:instagram_clone/reels/reels_media_slider.dart';
 
 class ReelsPostListView extends StatelessWidget {
   final List<PostVideo> postVideos;
@@ -11,7 +12,7 @@ class ReelsPostListView extends StatelessWidget {
       itemCount: postVideos.length,
         itemBuilder: (context, index){
       PostVideo postVideo = postVideos[index];
-      return Container();
+      return ReelsMediaSlider(videoMediaList: postVideo.videoMedia);
     });
   }
 }
