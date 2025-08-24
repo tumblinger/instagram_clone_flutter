@@ -38,7 +38,8 @@ class ReelsScreen extends StatelessWidget {
                   );
                 }).toList();
 
-                return ReelsPostListView(postVideos: postVideos);
+                return ReelsPostListView(
+                    postVideos: postVideos.where((postVideos) => postVideos.videoMedia.isNotEmpty).toList());
               })
       ));
   }
