@@ -98,7 +98,7 @@ class CreatePost {
 
 class PostVideo {
   final Posts posts;
-  final Media videoMedia;
+   final List<Media> videoMedia;
 
   PostVideo ({
     required this.posts, required this.videoMedia
