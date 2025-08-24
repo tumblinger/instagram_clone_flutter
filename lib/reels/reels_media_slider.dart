@@ -8,42 +8,43 @@ class ReelsMediaSlider extends StatefulWidget {
 
   const ReelsMediaSlider({super.key, required this.videoMediaList, });
 
-  @override
+  @override 
   State<ReelsMediaSlider> createState() => _ReelsMediaSliderState();
 }
 
 class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
   int _currentIndex = 0;
   late List<VideoPlayerController?> _videoControllers;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
     _initializeVideoController();
-    _playCurrentVideo();
   }
 
-  @override
-  void dispose() {
-    for (final controller in _videoControllers) {
-      controller?.dispose(); 
+  Future<void> _initializeVideoController() async {
+    _videoControllers = [];
+
+    for(var videoMedia in widget.videoMediaList){
+      final controller = VideoPlayerController.networkUrl(Uri.parse(videoMedia.value)); 
+      await controller.initialize();
+      _videoControllers.add(controller);
     }
-    super.dispose();
-  }
 
-  void _initializeVideoController(){
-    _videoControllers = widget.videoMediaList.map((videoMedia){
-        final videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(videoMedia.value)); 
-        final controller = videoPlayerController
-          ..initialize().then((_){ 
-            setState(() {}); 
-          });
-        return controller;
-    }).toList();
+    if(mounted) {
+      setState(() {
+        _isInitialized = true;
+      });
+      _playCurrentVideo();
+    }
   }
 
   void _playCurrentVideo(){
-      _videoControllers[_currentIndex]?.play();
+    final controller = _videoControllers[_currentIndex];
+    if(controller != null && controller.value.isInitialized) {
+      controller.play();
+    }
   }
 
   void _pauseAllVideos(){
@@ -53,21 +54,33 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
   }
 
   @override
+  void dispose() {
+    for (final controller in _videoControllers) {
+      controller?.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if(!_isInitialized || _videoControllers.length != widget.videoMediaList.length){
+      return Center(child: CircularProgressIndicator());
+    }
     return Column(
         children: [
           CarouselSlider(
               items: widget.videoMediaList.asMap().entries.map((entry) {
                 int index = entry.key;
-                return Builder( 
-                    builder: (BuildContext context){
-                        return VideoPlayer(_videoControllers[index]!);
-                      });
+                final controller = _videoControllers[index];
+                return AspectRatio(
+                    aspectRatio: controller!.value.aspectRatio,
+                    child: VideoPlayer(controller),
+                );
               }).toList(),
 
               options: CarouselOptions(
                   initialPage: _currentIndex,
-                  height: MediaQuery.of(context).size.height * 0.6,
+                  height: MediaQuery.of(context).size.height,
                   aspectRatio: 1,
                   viewportFraction: 1.0,
                   enableInfiniteScroll: false,
