@@ -16,7 +16,7 @@ class ReelsPostListView extends StatelessWidget {
         itemBuilder: (context, index){
       PostVideo postVideo = postVideos[index];
 
-      return Column(
+      return Stack(
         children: [
           ReelsMediaSlider(videoMediaList: postVideo.videoMedia),
           Container(
