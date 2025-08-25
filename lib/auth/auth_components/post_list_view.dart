@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/components/post_created_by_details.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
-import '../../components/app_follow_button.dart';
 import '../../home/home_components/home_media_slider.dart';
 import '../../home/home_components/home_post_details_card.dart';
-import '../../user_profile/user_page_screen.dart';
 
 class PostListView extends StatelessWidget {
   final List<Posts> posts;
