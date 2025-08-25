@@ -8,7 +8,7 @@ class ReelsMediaSlider extends StatefulWidget {
 
   const ReelsMediaSlider({super.key, required this.videoMediaList, });
 
-  @override 
+  @override
   State<ReelsMediaSlider> createState() => _ReelsMediaSliderState();
 }
 
@@ -73,11 +73,26 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
           CarouselSlider(
               items: widget.videoMediaList.asMap().entries.map((entry) {
                 int index = entry.key;
-                final controller = _videoControllers[index]!;
-                return AspectRatio(
-                    aspectRatio: controller.value.aspectRatio,
-                    child: VideoPlayer(controller),
-                );
+
+                return Builder(builder: (BuildContext context){
+                  final controller = _videoControllers[index];
+                  if(!controller!.value.isInitialized){
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return Column(
+                    children: [
+                      Expanded(
+                          child: AspectRatio(
+                              aspectRatio: controller!.value.aspectRatio,
+                              child: VideoPlayer(controller)
+                          )
+                      ),
+                      VideoProgressIndicator(
+                          controller,
+                          allowScrubbing: true)
+                    ],
+                  );
+                });
               }).toList(),
 
               options: CarouselOptions(
