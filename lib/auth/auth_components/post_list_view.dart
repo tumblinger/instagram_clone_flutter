@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/components/post_created_by_details.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
 
@@ -43,32 +44,7 @@ class PostListView extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
-                                onTap: () => Navigator.push(
-                                    context, MaterialPageRoute(
-                                    builder: (context) => UserPageScreen(
-                                        currentScreenIndex: currentScreenIndex,
-                                        userId: post.userId,
-                                        userName: post.userName)
-                                )),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 28.0,
-                                      child: CircleAvatar(
-                                          backgroundImage: NetworkImage(post.avatar)),
-                                    ),
-
-                                    SizedBox(width: 12.0),
-
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white)),
-                                        const Text('Suggested for you', style: TextStyle(fontSize: 10.0, color: Colors.white))
-                                      ],)
-                                  ],),
-                              ),
+                              PostCreatedByDetails(post: post, currentScreenIndex: currentScreenIndex),
                               Row(children: [
                                 AppFollowButton(),
                                 SizedBox(width: 12.0),
