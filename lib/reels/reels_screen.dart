@@ -16,30 +16,32 @@ class ReelsScreen extends StatelessWidget {
           child: StreamBuilder<List<Posts>>(
               stream: postsService.getPosts(),
               builder: (context, snapshot){
-               
+                
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return const Scaffold(
                       body: Center(
                           child: CircularProgressIndicator()));
                 }
-           
+                
                 if(snapshot.hasError){
                   return const Center(child: Text('Error'));
                 }
-               
+                
                 if(!snapshot.hasData || snapshot.data!.isEmpty){
                   return const Center(child: Text('No posts yet'));
                 }
+
                 List<Posts> posts = snapshot.data!;
                 List<PostVideo> postVideos = posts.map((post){
                   return PostVideo(
                       posts: post,
-                      videoMedia: post.media.where((mediaItem) => mediaItem.type == MediaTypes.video).toList()
+                      videoMedia: post.media.where((mediaItem) => mediaItem.type == MediaTypes.video).toList() 
                   );
-                }).toList();
+                }).toList(); 
 
+                
                 return ReelsPostListView(
-                    postVideos: postVideos.where((postVideos) => postVideos.videoMedia.isNotEmpty).toList());
+                    postVideos: postVideos.where((postVideos) => postVideos.videoMedia.isNotEmpty).toList(), currentScreenIndex: 3,);
               })
       ));
   }
