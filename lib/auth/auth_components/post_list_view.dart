@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/components/post_created_by_details.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
-
 import '../../components/app_follow_button.dart';
 import '../../home/home_components/home_media_slider.dart';
 import '../../home/home_components/home_post_details_card.dart';
@@ -14,7 +13,7 @@ class PostListView extends StatelessWidget {
   final int? currentMediaIndex;
   final PostsService postsService;
 
-  const PostListView({ 
+  const PostListView({ // Constructor
     super.key,
     required this.posts,
     required this.currentScreenIndex,
@@ -37,22 +36,7 @@ class PostListView extends StatelessWidget {
                 Stack(
                     children: [
                       HomeMediaSlider(mediaList: post.media, currentMediaIndex: currentMediaIndex,),
-                      Container(
-                        color: Colors.black12,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              PostCreatedByDetails(post: post, currentScreenIndex: currentScreenIndex),
-                              Row(children: [
-                                AppFollowButton(),
-                                SizedBox(width: 12.0),
-                                Icon(Icons.more_horiz, color: Colors.white)
-                              ],)
-                            ],),
-                        ),
-                      ),
+                      PostCreatedByDetails(post: post, currentScreenIndex: currentScreenIndex)
                     ]),
 
                 HomePostDetailsCard(post: post, postService: postsService)
