@@ -1,44 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/create_post/posts.dart';
+import 'package:instagram_clone/create_post/posts_service.dart';
+import 'package:instagram_clone/home/home_components/home_post_details_card.dart';
 import 'package:instagram_clone/reels/reels_media_slider.dart';
-import '../components/app_follow_button.dart';
 import '../components/post_created_by_details.dart';
 
 class ReelsPostListView extends StatelessWidget {
   final List<PostVideo> postVideos;
   final int currentScreenIndex;
-  const ReelsPostListView({super.key, required this.postVideos, required this.currentScreenIndex});
+  ReelsPostListView({super.key, required this.postVideos, required this.currentScreenIndex});
+  final PostsService _postService = PostsService();
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: postVideos.length,
-        itemBuilder: (context, index){
+      itemBuilder: (context, index){
       PostVideo postVideo = postVideos[index];
+      Posts post = postVideo.posts;
 
       return Stack(
         children: [
           ReelsMediaSlider(videoMediaList: postVideo.videoMedia),
-          Container(
-            color: Colors.black12,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  PostCreatedByDetails(post: postVideo.posts, currentScreenIndex: currentScreenIndex),
-                  Row(children: [
-                    AppFollowButton(),
-                    SizedBox(width: 12.0),
-                    Icon(Icons.more_horiz, color: Colors.white)
-                  ],)
-                ],),
-            ),
-          ),
+          Column(
+            children: [
+              PostCreatedByDetails(post: postVideo.posts, currentScreenIndex: currentScreenIndex),
+              HomePostDetailsCard(post: post, postService: _postService)
+            ],
+          )
+
         ],
       );
-
     });
   }
 }
-
