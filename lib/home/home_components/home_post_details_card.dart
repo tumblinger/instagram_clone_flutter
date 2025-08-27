@@ -6,10 +6,18 @@ import 'package:intl/intl.dart';
 import '../../create_post/posts_service.dart';
 import '../../util/numbers.dart';
 
+enum  ColorStyle {dark, light}
+
 class HomePostDetailsCard extends StatelessWidget {
   final Posts post;
   final PostsService postService;
-  const HomePostDetailsCard({super.key, required this.post, required this.postService});
+  final ColorStyle? colorStyle;
+  const HomePostDetailsCard({
+    super.key, 
+    required this.post, 
+    required this.postService, 
+    this.colorStyle, 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -80,5 +88,3 @@ class HomePostDetailsStatistic extends StatelessWidget {
     );
   }
 }
-
-
