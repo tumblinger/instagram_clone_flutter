@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/create_post/posts.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
 import 'package:instagram_clone/home/home_components/home_post_details_card.dart';
+import 'package:instagram_clone/reels/reels.util.dart';
 import 'package:instagram_clone/reels/reels_media_slider.dart';
 import '../components/post_created_by_details.dart';
 
@@ -23,7 +24,7 @@ class ReelsPostListView extends StatelessWidget {
         children: [
           ReelsMediaSlider(videoMediaList: postVideo.videoMedia),
           SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: videoDisplayHeight(context),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -32,7 +33,6 @@ class ReelsPostListView extends StatelessWidget {
               ],
             ),
           )
-
         ],
       );
     });
