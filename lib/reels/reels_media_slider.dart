@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/home/media.dart';
+import 'package:instagram_clone/reels/reels.util.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelsMediaSlider extends StatefulWidget { 
@@ -89,7 +90,8 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
                       ),
                       VideoProgressIndicator(
                           controller,
-                          allowScrubbing: true)
+                          allowScrubbing: true,
+                          colors: VideoProgressColors(playedColor: Colors.black26),)
                     ],
                   );
                 });
@@ -97,7 +99,7 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
 
               options: CarouselOptions(
                   initialPage: _currentIndex,
-                  height: MediaQuery.of(context).size.height * 0.95,
+                  height: videoDisplayHeight(context),
                   aspectRatio: 1,
                   viewportFraction: 1.0,
                   enableInfiniteScroll: false,
