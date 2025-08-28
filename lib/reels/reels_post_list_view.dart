@@ -25,12 +25,15 @@ class ReelsPostListView extends StatelessWidget {
           ReelsMediaSlider(videoMediaList: postVideo.videoMedia),
           SizedBox(
             height: videoDisplayHeight(context),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                PostCreatedByDetails(post: postVideo.posts, currentScreenIndex: currentScreenIndex),
-                HomePostDetailsCard(post: post, postService: _postService)
-              ],
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PostCreatedByDetails(post: postVideo.posts, currentScreenIndex: currentScreenIndex),
+                  HomePostDetailsCard(post: post, postService: _postService, colorStyle: ColorStyle.light)
+                ],
+              ),
             ),
           )
         ],
