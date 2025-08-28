@@ -1,7 +1,7 @@
 # 📸 InstaClone — Instagram Clone Built with Flutter
 
 InstaClone is an educational project built to explore full-stack mobile app development using **Flutter** and **Firebase**. 
-It replicates the basic flow of Instagram — from user registration to viewing and managing a user profile.
+It replicates the basic flow of Instagram from user registration to viewing and managing a user profile.
 
 ---
 
@@ -11,7 +11,7 @@ It replicates the basic flow of Instagram — from user registration to viewing 
 - ✅ **OTP Email Verification**  
 - ✅ **User Profile Creation & Storage** (Cloud Firestore)
 - ✅ **User Avatar Auto-Generation**  
-- ✅ **State Management** with `Provider`
+- ✅ **State Management** with Provider
 - ✅ **SharedPreferences** for session tracking  
 - ✅ **Form Validation & Error Handling**
 - ✅ **Clean Code Architecture**
@@ -42,7 +42,7 @@ Post saving feature
 Push notification integration
 
 🎥 Demo
-Coming soon: short video or GIF demo of the app in action.
+Coming soon: short video / GIF demo of the app in action.
 
 ---
 
