@@ -11,12 +11,13 @@ enum  ColorStyle {dark, light}
 class HomePostDetailsCard extends StatelessWidget {
   final Posts post;
   final PostsService postService;
-  final ColorStyle colorStyle = ColorStyle.dark;
+  final ColorStyle colorStyle;
 
-  const HomePostDetailsCard({
+   const HomePostDetailsCard({
     super.key,
     required this.post,
     required this.postService,
+    this.colorStyle = ColorStyle.dark,
   });
 
   @override
