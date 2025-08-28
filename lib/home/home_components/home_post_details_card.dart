@@ -11,16 +11,17 @@ enum  ColorStyle {dark, light}
 class HomePostDetailsCard extends StatelessWidget {
   final Posts post;
   final PostsService postService;
-  final ColorStyle? colorStyle;
+  final ColorStyle colorStyle = ColorStyle.dark;
+
   const HomePostDetailsCard({
-    super.key, 
-    required this.post, 
-    required this.postService, 
-    this.colorStyle, 
+    super.key,
+    required this.post,
+    required this.postService,
   });
 
   @override
   Widget build(BuildContext context) {
+    final Color color = ColorStyle == ColorStyle.dark ? Colors.black : Colors.white;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
       child: Column(
@@ -31,19 +32,19 @@ class HomePostDetailsCard extends StatelessWidget {
            children: [
              Row(
                children: [
-                 HomePostDetailsStatistic(icon: Icons.favorite_outline, statValue: post.likes, onTap: () => postService.incrementLikes(post.id)),
+                 HomePostDetailsStatistic(icon: Icons.favorite_outline, statValue: post.likes, color: color, onTap: () => postService.incrementLikes(post.id)),
                  const SizedBox(width: 12.0),
-                 HomePostDetailsStatistic(icon: Icons.chat_bubble_outline, statValue: post.comments, onTap: () => {
+                 HomePostDetailsStatistic(icon: Icons.chat_bubble_outline, statValue: post.comments, color: color, onTap: () => {
                    showModalBottomSheet(
                        context: context,
                        isScrollControlled: true,
                        builder: (context) => CommentBottomSheet(posts: post))
                  }),
                  const SizedBox(width: 12.0),
-                 HomePostDetailsStatistic(icon: Icons.send_outlined, statValue: post.shares, onTap: () => postService.incrementShares(post.id)),
+                 HomePostDetailsStatistic(icon: Icons.send_outlined, statValue: post.shares, color: color, onTap: () => postService.incrementShares(post.id)),
                ],
              ),
-             Icon(Icons.bookmark_border_outlined)
+             Icon(Icons.bookmark_border_outlined, color: color)
            ],
          ),
 
@@ -54,15 +55,15 @@ class HomePostDetailsCard extends StatelessWidget {
               TextSpan(children: [
                 TextSpan(
                   text: '${post.userName} ',
-                  style: TextStyle(fontWeight: FontWeight.bold)
+                  style: TextStyle(fontWeight: FontWeight.bold, color: color)
             ),
-                TextSpan(text: post.caption)
+                TextSpan(text: post.caption, style: TextStyle(color: color))
           ])
           ),
 
           Text(
               DateFormat('MMM dd yyyy').format(post.createdAt),
-              style: TextStyle(fontSize: 10.0, color: Colors.grey)
+              style: TextStyle(fontSize: 10.0, color: colorStyle == ColorStyle.dark ? Colors.grey : Colors.white70)
           )
         ],
       ),
@@ -74,16 +75,17 @@ class HomePostDetailsStatistic extends StatelessWidget {
   final IconData icon;
   final int statValue;
   final VoidCallback? onTap;
+  final Color color;
 
-  const HomePostDetailsStatistic({super.key, required this.icon, required this.statValue, this.onTap});
+  const HomePostDetailsStatistic({super.key, required this.icon, required this.statValue, this.onTap, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Row(children: [
-          Icon(icon),
-          Text(shortNumber(statValue), style: TextStyle(fontSize: 10.0)),
+          Icon(icon, color: color),
+          Text(shortNumber(statValue), style: TextStyle(fontSize: 10.0, color: color)),
       ],),
     );
   }
