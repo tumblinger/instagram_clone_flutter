@@ -29,14 +29,30 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ],
       ),
       body: SafeArea(child:
-      Column(children: [
-        if(_userProfile == null)
-          Center( child: CircularProgressIndicator()),
-        if(_userProfile != null)
-        CircleAvatar(
-          backgroundImage: NetworkImage(_userProfile.avatar),
-        ),
-      ],)
+      Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        child: Column(children: [
+          if(_userProfile == null)
+            Center( child: CircularProgressIndicator()),
+          if(_userProfile != null)
+          Column(
+            children: [
+              SizedBox(
+                width: 100,
+                height: 100,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(_userProfile.avatar),
+                ),
+              ),
+              TextButton(
+                  onPressed: ()=> print('Change profile photo'),
+                  child: Text('Change profile photo')
+              )
+            ],
+          ),
+        ],),
+      )
       ),
         bottomNavigationBar:  AppBottomNavigationBar(currentIndex: 4)
     );
