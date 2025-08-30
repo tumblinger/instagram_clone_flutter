@@ -38,16 +38,30 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           if(_userProfile != null)
           Column(
             children: [
-              SizedBox(
-                width: 100,
-                height: 100,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(_userProfile.avatar),
+              // Profile avatar:
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(_userProfile.avatar),
+                      ),
+                    ),
+                    TextButton(
+                        onPressed: ()=> print('Change profile photo'),
+                        child: Text('Change profile photo', style: TextStyle(fontWeight: FontWeight.bold))
+                    )
+                  ],
                 ),
               ),
-              TextButton(
-                  onPressed: ()=> print('Change profile photo'),
-                  child: Text('Change profile photo')
+              // Profile Info inputs:
+              Column(
+                children: [
+                  Divider(height: 2, thickness: 1, color: Colors.black45,)
+                ],
               )
             ],
           ),
