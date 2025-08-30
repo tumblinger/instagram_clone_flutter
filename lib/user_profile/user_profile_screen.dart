@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/user_profile/user_profile_components/user_profile_text_field.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 import 'package:provider/provider.dart';
@@ -29,44 +30,63 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ],
       ),
       body: SafeArea(child:
-      Container(
-        color: Colors.white,
-        width: MediaQuery.of(context).size.width,
-        child: Column(children: [
-          if(_userProfile == null)
-            Center( child: CircularProgressIndicator()),
-          if(_userProfile != null)
-          Column(
-            children: [
-              // Profile avatar:
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(_userProfile.avatar),
+        SingleChildScrollView(
+          child: Container(
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width,
+          child: Column(children: [
+            if(_userProfile == null)
+              Center( child: CircularProgressIndicator()),
+            if(_userProfile != null)
+            Column(
+              children: [
+                // Profile avatar:
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(_userProfile.avatar),
+                        ),
                       ),
-                    ),
-                    TextButton(
-                        onPressed: ()=> print('Change profile photo'),
-                        child: Text('Change profile photo', style: TextStyle(fontWeight: FontWeight.bold))
-                    )
-                  ],
+                      TextButton(
+                          onPressed: ()=> print('Change profile photo'),
+                          child: Text('Change profile photo', style: TextStyle(fontWeight: FontWeight.bold))
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              // Profile Info inputs:
-              Column(
-                children: [
-                  Divider(height: 2, thickness: 1, color: Colors.black45,)
-                ],
-              )
-            ],
-          ),
-        ],),
-      )
+                Divider(height: 2, thickness: 1, color: Colors.black26,),
+                // Profile Info inputs:
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      UserProfileTextField(label: 'First Name',),
+                      UserProfileTextField(label: 'Last Name',),
+                      UserProfileTextField(label: 'Username',),
+                      UserProfileTextField(label: 'Website',),
+                      UserProfileTextField(label: 'Bio',),
+                      
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Text('Private Information', style: TextStyle(fontWeight: FontWeight.bold),),
+                      ),
+                      UserProfileTextField(label: 'Email',),
+                      UserProfileTextField(label: 'Phone',),
+                      UserProfileTextField(label: 'Gender',),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ],),
+                ),
+        )
       ),
         bottomNavigationBar:  AppBottomNavigationBar(currentIndex: 4)
     );
