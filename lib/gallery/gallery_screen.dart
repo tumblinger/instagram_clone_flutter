@@ -40,7 +40,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
     });
 
     try{
-      //1 -get list of found users, 2-update screen according to found users:
       final userProfilesResult = await userProfileService.getUsersByUserNameSearch(searchText);
 
       setState(() {
