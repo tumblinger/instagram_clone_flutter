@@ -14,7 +14,7 @@ class UserProfileTextField extends StatelessWidget {
         SizedBox(
           width: 100,
             child: Text(label)),
-        Expanded(child: TextField())
+        Expanded(child: TextField(controller: controller))
       ],
     );
   }
