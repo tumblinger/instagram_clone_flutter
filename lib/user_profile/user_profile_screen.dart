@@ -14,6 +14,7 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  late UserProfileModel? _userProfile;
 
   // TextField controllers:
   final  TextEditingController _firstNameController = TextEditingController();
@@ -26,8 +27,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final  TextEditingController _genderController = TextEditingController();
 
   @override
+  void initState() {
+    final UserProfileModel? userProfile = context.read<MyAuthProvider>().userProfile;
+    _userProfile = userProfile;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final UserProfileModel? userProfile = context.watch<MyAuthProvider>().userProfile;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,9 +53,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: Column(children: [
-            if(userProfile == null)
+            if(_userProfile == null)
               Center( child: CircularProgressIndicator()),
-            if(userProfile != null)
+            if(_userProfile != null)
             Column(
               children: [
                 // Profile avatar:
@@ -60,7 +67,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         width: 100,
                         height: 100,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(userProfile.avatar),
+                          backgroundImage: NetworkImage(_userProfile!.avatar),
                         ),
                       ),
                       TextButton(
