@@ -18,7 +18,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   // TextField controllers:
   final  TextEditingController _firstNameController = TextEditingController();
-  final  TextEditingController _lastNameController = TextEditingController();
   final  TextEditingController _userNameController = TextEditingController();
   final  TextEditingController _websiteController = TextEditingController();
   final  TextEditingController _bioController = TextEditingController();
@@ -29,7 +28,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     final UserProfileModel? userProfile = context.read<MyAuthProvider>().userProfile;
-    _userProfile = userProfile;
+    if(userProfile != null) {
+      _userProfile = userProfile;
+      _firstNameController.text = userProfile.firstName ?? '';
+      _userNameController.text = userProfile.userName ?? '';
+      _websiteController.text = userProfile.website ?? '';
+      _bioController.text = userProfile.bio ?? '';
+      _emailController.text = userProfile.email ?? '';
+      _phoneController.text = userProfile.phoneNumber ?? '';
+      // _genderController.text = userProfile.gender ?? '';
+    }
     super.initState();
   }
 
@@ -85,7 +93,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       UserProfileTextField(label: 'First Name', controller: _firstNameController,),
-                      UserProfileTextField(label: 'Last Name', controller: _lastNameController,),
                       UserProfileTextField(label: 'Username', controller: _userNameController,),
                       UserProfileTextField(label: 'Website', controller: _websiteController,),
                       UserProfileTextField(label: 'Bio', controller: _bioController,),
