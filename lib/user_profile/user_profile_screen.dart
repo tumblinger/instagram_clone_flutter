@@ -14,19 +14,20 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+
+  // TextField controllers:
+  final  TextEditingController _firstNameController = TextEditingController();
+  final  TextEditingController _lastNameController = TextEditingController();
+  final  TextEditingController _userNameController = TextEditingController();
+  final  TextEditingController _websiteController = TextEditingController();
+  final  TextEditingController _bioController = TextEditingController();
+  final  TextEditingController _emailController = TextEditingController();
+  final  TextEditingController _phoneController = TextEditingController();
+  final  TextEditingController _genderController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final UserProfileModel? _userProfile = context.watch<MyAuthProvider>().userProfile;
-
-    // TextField controllers:
-    final  TextEditingController _firstNameController = TextEditingController();
-    final  TextEditingController _lastNameController = TextEditingController();
-    final  TextEditingController _userNameController = TextEditingController();
-    final  TextEditingController _websiteController = TextEditingController();
-    final  TextEditingController _bioController = TextEditingController();
-    final  TextEditingController _emailController = TextEditingController();
-    final  TextEditingController _phoneController = TextEditingController();
-    final  TextEditingController _genderController = TextEditingController();
+    final UserProfileModel? userProfile = context.watch<MyAuthProvider>().userProfile;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,9 +46,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: Column(children: [
-            if(_userProfile == null)
+            if(userProfile == null)
               Center( child: CircularProgressIndicator()),
-            if(_userProfile != null)
+            if(userProfile != null)
             Column(
               children: [
                 // Profile avatar:
@@ -59,7 +60,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         width: 100,
                         height: 100,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(_userProfile.avatar),
+                          backgroundImage: NetworkImage(userProfile.avatar),
                         ),
                       ),
                       TextButton(
