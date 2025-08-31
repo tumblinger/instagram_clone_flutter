@@ -18,6 +18,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     final UserProfileModel? _userProfile = context.watch<MyAuthProvider>().userProfile;
 
+    // TextField controllers:
+    final  TextEditingController _firstNameController = TextEditingController();
+    final  TextEditingController _lastNameController = TextEditingController();
+    final  TextEditingController _userNameController = TextEditingController();
+    final  TextEditingController _websiteController = TextEditingController();
+    final  TextEditingController _bioController = TextEditingController();
+    final  TextEditingController _emailController = TextEditingController();
+    final  TextEditingController _phoneController = TextEditingController();
+    final  TextEditingController _genderController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         leading: TextButton(
@@ -66,19 +76,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      UserProfileTextField(label: 'First Name',),
-                      UserProfileTextField(label: 'Last Name',),
-                      UserProfileTextField(label: 'Username',),
-                      UserProfileTextField(label: 'Website',),
-                      UserProfileTextField(label: 'Bio',),
+                      UserProfileTextField(label: 'First Name', controller: _firstNameController,),
+                      UserProfileTextField(label: 'Last Name', controller: _lastNameController,),
+                      UserProfileTextField(label: 'Username', controller: _userNameController,),
+                      UserProfileTextField(label: 'Website', controller: _websiteController,),
+                      UserProfileTextField(label: 'Bio', controller: _bioController,),
                       
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        padding: const EdgeInsets.only(top: 40),
                         child: Text('Private Information', style: TextStyle(fontWeight: FontWeight.bold),),
                       ),
-                      UserProfileTextField(label: 'Email',),
-                      UserProfileTextField(label: 'Phone',),
-                      UserProfileTextField(label: 'Gender',),
+                      UserProfileTextField(label: 'Email', controller: _emailController,),
+                      UserProfileTextField(label: 'Phone', controller: _phoneController,),
+                      UserProfileTextField(label: 'Gender', controller: _genderController,),
                     ],
                   ),
                 )
