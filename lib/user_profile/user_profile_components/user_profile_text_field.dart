@@ -14,7 +14,7 @@ class UserProfileTextField extends StatelessWidget {
       children: [
         SizedBox(
           width: 100,
-            child: Text(label, style: TextStyle(color: enabled! ? Colors.black : Colors.black26),)),
+            child: Text(label, style: TextStyle(color: enabled! ? Colors.black : Colors.grey),)),
         Expanded(child: TextField(controller: controller, enabled: enabled,))
       ],
     );
