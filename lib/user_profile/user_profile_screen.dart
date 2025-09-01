@@ -31,10 +31,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if(userProfile != null) {
       _userProfile = userProfile;
       _firstNameController.text = userProfile.firstName ?? '';
-      _userNameController.text = userProfile.userName ?? '';
+      _userNameController.text = userProfile.userName;
       _websiteController.text = userProfile.website ?? '';
       _bioController.text = userProfile.bio ?? '';
-      _emailController.text = userProfile.email ?? '';
+      _emailController.text = userProfile.email;
       _phoneController.text = userProfile.phoneNumber ?? '';
       // _genderController.text = userProfile.gender ?? '';
     }
@@ -92,18 +92,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      UserProfileTextField(label: 'First Name', controller: _firstNameController,),
-                      UserProfileTextField(label: 'Username', controller: _userNameController,),
-                      UserProfileTextField(label: 'Website', controller: _websiteController,),
-                      UserProfileTextField(label: 'Bio', controller: _bioController,),
+                      UserProfileTextField(label: 'First Name', controller: _firstNameController, placeholder: 'Enter first name',),
+                      UserProfileTextField(label: 'Username', controller: _userNameController, placeholder: 'Enter username'),
+                      UserProfileTextField(label: 'Website', controller: _websiteController, placeholder: 'Enter website www.website.com'),
+                      UserProfileTextField(label: 'Bio', controller: _bioController, placeholder: 'Enter your bio'),
                       
                       Padding(
                         padding: const EdgeInsets.only(top: 40),
                         child: Text('Private Information', style: TextStyle(fontWeight: FontWeight.bold),),
                       ),
-                      UserProfileTextField(label: 'Email', controller: _emailController,),
-                      UserProfileTextField(label: 'Phone', controller: _phoneController,),
-                      UserProfileTextField(label: 'Gender', controller: _genderController,),
+                      UserProfileTextField(label: 'Email', controller: _emailController, enabled: false,),
+                      UserProfileTextField(label: 'Phone', controller: _phoneController, placeholder: 'Enter phone number'),
+                      UserProfileTextField(label: 'Gender', controller: _genderController, ),
                     ],
                   ),
                 )
