@@ -5,8 +5,9 @@ class UserProfileTextField extends StatelessWidget {
   final String label;
   final TextEditingController? controller;
   final bool? enabled;
+  final String? placeholder;
 
-  const UserProfileTextField({super.key, required this.label, this.controller, this.enabled = true});
+  const UserProfileTextField({super.key, required this.label, this.controller, this.enabled = true, this.placeholder});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,12 @@ class UserProfileTextField extends StatelessWidget {
         SizedBox(
           width: 100,
             child: Text(label, style: TextStyle(color: enabled! ? Colors.black : Colors.grey),)),
-        Expanded(child: TextField(controller: controller, enabled: enabled,))
+        Expanded(child: TextField(
+            controller: controller,
+            enabled: enabled,
+            decoration: InputDecoration(
+                hintText: placeholder,
+                hintStyle: TextStyle(color: Colors.grey))))
       ],
     );
   }
