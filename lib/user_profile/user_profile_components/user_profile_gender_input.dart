@@ -7,6 +7,12 @@ class UserProfileGenderInput extends StatelessWidget {
 
   const UserProfileGenderInput({super.key, this.selectedGender, this.onChanged});
 
+  void _handleGenderSelection(Gender? currentSelectedGender){
+      if(onChanged != null && currentSelectedGender != null){
+        onChanged!(currentSelectedGender);
+      }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,11 +22,7 @@ class UserProfileGenderInput extends StatelessWidget {
               leading: Radio<Gender>(
                 value: Gender.female,
                 groupValue: selectedGender,
-                onChanged: (Gender? currentSelectedGender) {
-                  if(onChanged != null && currentSelectedGender != null){
-                    onChanged!(currentSelectedGender);
-                  }
-                },
+                onChanged: _handleGenderSelection,
               ),
             ),
           ListTile(
@@ -28,11 +30,7 @@ class UserProfileGenderInput extends StatelessWidget {
             leading: Radio<Gender>(
               value: Gender.male,
               groupValue: selectedGender,
-              onChanged: (Gender? currentSelectedGender) {
-                if(onChanged != null && currentSelectedGender != null){
-                  onChanged!(currentSelectedGender);
-                }
-              },
+              onChanged: _handleGenderSelection,
             ),
           ),
          ],
