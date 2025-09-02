@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/user_profile/user_profile_components/user_profile_gender_input.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_text_field.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
@@ -104,6 +105,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       UserProfileTextField(label: 'Email', controller: _emailController, enabled: false,),
                       UserProfileTextField(label: 'Phone', controller: _phoneController, placeholder: 'Enter phone number'),
                       UserProfileTextField(label: 'Gender', controller: _genderController, ),
+                      UserProfileGenderInput(selectedGender: _userProfile!.gender, onChanged: (g) => print(g),),
+
+
                     ],
                   ),
                 )
