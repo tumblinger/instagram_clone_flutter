@@ -16,28 +16,42 @@ class UserProfileGenderInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-        children: [
-            Expanded(
-              child: ListTile(
-                title: Text('Female'),
-                leading: Radio<Gender>(
-                  value: Gender.female,
-                  groupValue: selectedGender,
-                  onChanged: _handleGenderSelection,
+      children: [
+        SizedBox(
+          width: 100,
+          child: Text('Gender',),
+        ),
+        Expanded(
+          child: Row(
+              children: [
+                  Expanded(
+                    child: ListTile(
+                      title: Text('Female'),
+                      horizontalTitleGap: 0,
+                      dense: true,
+                      leading: Radio<Gender>(
+                        value: Gender.female,
+                        groupValue: selectedGender,
+                        onChanged: _handleGenderSelection,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: ListTile(
+                    title: Text('Male'),
+                    horizontalTitleGap: 0,
+                    dense: true,
+                    leading: Radio<Gender>(
+                      value: Gender.male,
+                      groupValue: selectedGender,
+                      onChanged: _handleGenderSelection,
+                    ),
+                  ),
                 ),
-              ),
+               ],
             ),
-          Expanded(
-            child: ListTile(
-              title: Text('Male'),
-              leading: Radio<Gender>(
-                value: Gender.male,
-                groupValue: selectedGender,
-                onChanged: _handleGenderSelection,
-              ),
-            ),
-          ),
-         ],
-      );
+        ),
+      ],
+    );
   }
 }
