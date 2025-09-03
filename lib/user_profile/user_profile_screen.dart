@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_gender_input.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_text_field.dart';
+import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final  TextEditingController _bioController = TextEditingController();
   final  TextEditingController _emailController = TextEditingController();
   final  TextEditingController _phoneController = TextEditingController();
-  final  TextEditingController _genderController = TextEditingController();
+  Gender? _selectedGender;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       _bioController.text = userProfile.bio ?? '';
       _emailController.text = userProfile.email;
       _phoneController.text = userProfile.phoneNumber ?? '';
-      // _genderController.text = userProfile.gender ?? '';
+      _selectedGender = userProfile.gender;
     }
     super.initState();
   }
@@ -104,8 +105,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       UserProfileTextField(label: 'Email', controller: _emailController, enabled: false,),
                       UserProfileTextField(label: 'Phone', controller: _phoneController, placeholder: 'Enter phone number'),
-                      UserProfileGenderInput(selectedGender: _userProfile!.gender, onChanged: (g) => print(g),),
-
+                      UserProfileGenderInput(selectedGender: _selectedGender, onChanged: (gender) {
+                        setState(() {
+                          _selectedGender = gender;
+                        });
+                      }),
                     ],
                   ),
                 )
