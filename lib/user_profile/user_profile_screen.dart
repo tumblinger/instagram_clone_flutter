@@ -104,9 +104,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       UserProfileTextField(label: 'Email', controller: _emailController, enabled: false,),
                       UserProfileTextField(label: 'Phone', controller: _phoneController, placeholder: 'Enter phone number'),
-                      UserProfileTextField(label: 'Gender', controller: _genderController, ),
                       UserProfileGenderInput(selectedGender: _userProfile!.gender, onChanged: (g) => print(g),),
-
 
                     ],
                   ),
