@@ -116,7 +116,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ),
                       TextButton(
-                          onPressed: ()=> print('Change profile photo'),
+                            onPressed: _uploadProfilePhoto,
                           child: Text('Change profile photo', style: TextStyle(fontWeight: FontWeight.bold))
                       )
                     ],
