@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_gender_input.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_text_field.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
@@ -17,6 +20,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late UserProfileModel? _userProfile;
+  final ImagePicker _profileImagePicker = ImagePicker();
 
   // TextField controllers:
   final  TextEditingController _firstNameController = TextEditingController();
@@ -26,6 +30,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final  TextEditingController _emailController = TextEditingController();
   final  TextEditingController _phoneController = TextEditingController();
   Gender? _selectedGender;
+  File? _pickedProfileImageFile;
 
   @override
   void initState() {
@@ -42,6 +47,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
     super.initState();
   }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _userNameController.dispose();
+    _websiteController.dispose();
+    _bioController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+
+
+  Future<void> _uploadProfilePhoto() async{
+    try{
+      final XFile? pickedProfileImage = await _profileImagePicker.pickImage(source: ImageSource.gallery);
+      if(pickedProfileImage == null) return;
+
+      setState(() {
+        _pickedProfileImageFile = File(pickedProfileImage.path) ;
+      });
+
+      }
+     catch (error){
+      print(error);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
