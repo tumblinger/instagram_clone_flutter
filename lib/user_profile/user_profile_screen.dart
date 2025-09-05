@@ -21,6 +21,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late UserProfileModel? _userProfile;
   final ImagePicker _profileImagePicker = ImagePicker(); //tool to select Avatar Image
+  bool _updatingProfile = false;
 
   // TextField controllers:
   final  TextEditingController _firstNameController = TextEditingController();
@@ -76,6 +77,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
+  Future<void> _updateProfile() async {
+    setState(() {
+      _updatingProfile = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -87,7 +94,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         leadingWidth: 68,
         title: Text('User Profile', style:  TextStyle(fontSize: 16),),
         actions: [
-          TextButton(onPressed: () => print('done'), child: Text('Done', style: TextStyle(fontWeight: FontWeight.bold),))
+          TextButton(onPressed: _updateProfile, child: _updatingProfile ? CircularProgressIndicator(): Text('Done', style: TextStyle(fontWeight: FontWeight.bold),))
         ],
       ),
       body: SafeArea(child:
@@ -131,7 +138,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     children: [
                       UserProfileTextField(label: 'First Name', controller: _firstNameController, placeholder: 'Enter first name',),
                       UserProfileTextField(label: 'Username', controller: _userNameController, placeholder: 'Enter username'),
-                      UserProfileTextField(label: 'Website', controller: _websiteController, placeholder: 'Enter website www.website.com'),
+                      UserProfileTextField(label: 'Website', controller: _websiteController, placeholder: 'Enter website www.website.com', keyboardType: TextInputType.url),
                       UserProfileTextField(label: 'Bio', controller: _bioController, placeholder: 'Enter your bio'),
                       
                       Padding(
@@ -139,7 +146,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         child: Text('Private Information', style: TextStyle(fontWeight: FontWeight.bold),),
                       ),
                       UserProfileTextField(label: 'Email', controller: _emailController, enabled: false,),
-                      UserProfileTextField(label: 'Phone', controller: _phoneController, placeholder: 'Enter phone number'),
+                      UserProfileTextField(label: 'Phone', controller: _phoneController, placeholder: 'Enter phone number', keyboardType: TextInputType.phone,),
                       UserProfileGenderInput(selectedGender: _selectedGender, onChanged: (gender) {
                         setState(() {
                           _selectedGender = gender;
