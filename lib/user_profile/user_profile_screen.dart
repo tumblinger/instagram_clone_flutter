@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_gender_input.dart';
@@ -8,12 +7,10 @@ import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../components/app_bottom_navigation_bar.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
-
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
@@ -59,8 +56,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     super.dispose();
   }
 
-
-
   Future<void> _uploadProfilePhoto() async{
     try{
       final XFile? pickedProfileImage = await _profileImagePicker.pickImage(source: ImageSource.gallery);
@@ -75,8 +70,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       print(error);
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
