@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_gender_input.dart';
@@ -7,17 +8,19 @@ import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 import 'package:provider/provider.dart';
+
 import '../components/app_bottom_navigation_bar.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
+
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late UserProfileModel? _userProfile;
-  final ImagePicker _profileImagePicker = ImagePicker();
+  final ImagePicker _profileImagePicker = ImagePicker(); //tool to select Avatar Image
 
   // TextField controllers:
   final  TextEditingController _firstNameController = TextEditingController();
@@ -55,6 +58,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     _phoneController.dispose();
     super.dispose();
   }
+
+
 
   Future<void> _uploadProfilePhoto() async{
     try{
@@ -105,11 +110,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         width: 100,
                         height: 100,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(_userProfile!.avatar),
+                          backgroundImage: _pickedProfileImageFile != null
+                              ? FileImage(_pickedProfileImageFile!)
+                              : NetworkImage(_userProfile!.avatar),
                         ),
                       ),
                       TextButton(
-                            onPressed: _uploadProfilePhoto,
+                          onPressed: _uploadProfilePhoto,
                           child: Text('Change profile photo', style: TextStyle(fontWeight: FontWeight.bold))
                       )
                     ],
