@@ -23,7 +23,6 @@ class UserProfileService {
     return 'user_$shortHash';
   }
 
-  // Function to get User's profile:
   Future<UserProfileModel?> getUserProfile(String uid) async {
     final firestoreUserProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(uid).get();
     if(firestoreUserProfileDoc.exists) {
@@ -33,8 +32,7 @@ class UserProfileService {
   }
 
   Future<bool> createUserProfile(UserProfileModel userProfileData) async{
-    print('USER: $userProfileData');
-    print(userProfileData.toMap());
+
     try{
       await _firebaseFirestore
           .collection('user-profiles')
@@ -58,17 +56,29 @@ class UserProfileService {
       final querySnapshot = await _firebaseFirestore
           .collection('user-profiles')
           .orderBy('userName')
-          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText) //more than text
-          .where('userName', isLessThan: '${lowerCaseSearchText}z') // only what starts with text
+          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText) 
+          .where('userName', isLessThan: '${lowerCaseSearchText}z') 
           .get();
-      
-      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs;
+
+      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs; 
       List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList();
       return userProfiles;
+
     }
     catch (error){
+      print('🔥 Firestore error: $error');
       return [];
     }
   }
+  
+  Future<void> updateUserProfile(UserProfileModel userProfileToUpdate) async{
+    try{
+      await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update(userProfileToUpdate.toMap());
+    }
+    catch(e){
+      print(e);
+    }
+  }
+  
 }
 
