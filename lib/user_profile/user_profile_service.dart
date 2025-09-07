@@ -78,8 +78,8 @@ class UserProfileService {
       return true;
     }
     catch(e){
-      return false;
       print(e);
+      return false;
     }
   }
   
