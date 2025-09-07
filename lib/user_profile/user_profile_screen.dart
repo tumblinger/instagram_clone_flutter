@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/user_profile/user_profile_components/user_profile_gender_input.dart';
@@ -7,8 +7,8 @@ import 'package:instagram_clone/user_profile/user_profile_components/user_profil
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
+import 'package:instagram_clone/user_profile/user_profile_service.dart';
 import 'package:provider/provider.dart';
-
 import '../components/app_bottom_navigation_bar.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -19,11 +19,11 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  final UserProfileService _userProfileService = UserProfileService();
   late UserProfileModel? _userProfile;
   final ImagePicker _profileImagePicker = ImagePicker(); //tool to select Avatar Image
   bool _updatingProfile = false;
 
-  // TextField controllers:
   final  TextEditingController _firstNameController = TextEditingController();
   final  TextEditingController _userNameController = TextEditingController();
   final  TextEditingController _websiteController = TextEditingController();
@@ -60,8 +60,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     super.dispose();
   }
 
-
-
   Future<void> _uploadProfilePhoto() async{
     try{
       final XFile? pickedProfileImage = await _profileImagePicker.pickImage(source: ImageSource.gallery);
@@ -78,9 +76,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<void> _updateProfile() async {
+    if(_userProfile ==null){
+      return;
+    }
+    
     setState(() {
       _updatingProfile = true;
     });
+    
+    final userProfileToUpdate = _userProfile?.copyWith(
+      firstName: _firstNameController.text,
+      userName: _userNameController.text,
+      bio: _bioController.text,
+      website: _websiteController.text,
+      phoneNumber: _phoneController.text,
+      gender: _selectedGender,
+      updatedAt: DateTime.now()
+    );
+    await _userProfileService.updateUserProfile(userProfileToUpdate!);
   }
 
   @override
@@ -130,7 +143,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 Divider(height: 2, thickness: 1, color: Colors.black26,),
-                // Profile Info inputs:
+               
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
