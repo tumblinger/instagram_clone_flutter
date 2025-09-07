@@ -56,12 +56,12 @@ class UserProfileService {
       final querySnapshot = await _firebaseFirestore
           .collection('user-profiles')
           .orderBy('userName')
-          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText) 
+          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText)
           .where('userName', isLessThan: '${lowerCaseSearchText}z') 
           .get();
 
-      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs; 
-      List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList();
+      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs;
+      List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList(); 
       return userProfiles;
 
     }
@@ -71,11 +71,14 @@ class UserProfileService {
     }
   }
   
-  Future<void> updateUserProfile(UserProfileModel userProfileToUpdate) async{
+  Future<bool> updateUserProfile(UserProfileModel userProfileToUpdate) async{
     try{
       await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update(userProfileToUpdate.toMap());
+
+      return true;
     }
     catch(e){
+      return false;
       print(e);
     }
   }
