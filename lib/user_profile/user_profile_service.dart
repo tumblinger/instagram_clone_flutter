@@ -1,11 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
+import 'package:uuid/uuid.dart';
 
 class UserProfileService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance; 
+  final uuid = Uuid();
 
   // 0. Create a function
   String userIDGenerator(){
@@ -23,6 +28,7 @@ class UserProfileService {
     return 'user_$shortHash';
   }
 
+  // Function to get User's profile:
   Future<UserProfileModel?> getUserProfile(String uid) async {
     final firestoreUserProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(uid).get();
     if(firestoreUserProfileDoc.exists) {
@@ -66,7 +72,7 @@ class UserProfileService {
 
     }
     catch (error){
-      print('🔥 Firestore error: $error');
+      print('Firestore error: $error');
       return [];
     }
   }
@@ -80,6 +86,23 @@ class UserProfileService {
     catch(e){
       print(e);
       return false;
+    }
+  }
+
+  Future<String?> uploadUserAvatarToStorage(File newUserAvatarFile) async{
+    try{
+      final String newUserAvatarFileExt = newUserAvatarFile.path.split('.').last.toLowerCase();
+      final String newUserAvatarFileName = '${uuid.v4()}.$newUserAvatarFileExt';
+      final newUserAvatarFileRef = _firebaseStorage.ref().child('user-avatars').child(newUserAvatarFileName);
+
+      final TaskSnapshot newUserAvatarFileSnapshot = await newUserAvatarFileRef.putFile(newUserAvatarFile);
+      final String newUserAvatarUrl = await newUserAvatarFileSnapshot.ref.getDownloadURL();
+
+      return newUserAvatarUrl;
+
+    } catch(e){
+      print(e);
+      return null;
     }
   }
   
