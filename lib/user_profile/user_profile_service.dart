@@ -28,7 +28,6 @@ class UserProfileService {
     return 'user_$shortHash';
   }
 
-  // Function to get User's profile:
   Future<UserProfileModel?> getUserProfile(String uid) async {
     final firestoreUserProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(uid).get();
     if(firestoreUserProfileDoc.exists) {
@@ -62,11 +61,11 @@ class UserProfileService {
       final querySnapshot = await _firebaseFirestore
           .collection('user-profiles')
           .orderBy('userName')
-          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText)
+          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText) 
           .where('userName', isLessThan: '${lowerCaseSearchText}z') 
           .get();
 
-      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs;
+      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs; //getting docs
       List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList(); 
       return userProfiles;
 
@@ -77,10 +76,18 @@ class UserProfileService {
     }
   }
   
-  Future<bool> updateUserProfile(UserProfileModel userProfileToUpdate) async{
-    try{
-      await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update(userProfileToUpdate.toMap());
+  Future<bool> updateUserProfile(UserProfileModel userProfileToUpdate, File? newUserAvatarFile) async{
 
+    String userAvatar = userProfileToUpdate.avatar;
+
+    try{
+      if(newUserAvatarFile != null){
+        String? newUserAvatarUrl = await uploadUserAvatarToStorage(newUserAvatarFile);
+        if(newUserAvatarUrl != null){
+          userAvatar = newUserAvatarUrl;
+        }
+      }
+      await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update(userProfileToUpdate.toMap());
       return true;
     }
     catch(e){
