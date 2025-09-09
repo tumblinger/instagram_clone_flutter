@@ -87,7 +87,7 @@ class UserProfileService {
           userAvatar = newUserAvatarUrl;
         }
       }
-      await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update(userProfileToUpdate.toMap());
+      await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update({...userProfileToUpdate.toMap(),'avatar': userAvatar});
       return true;
     }
     catch(e){
