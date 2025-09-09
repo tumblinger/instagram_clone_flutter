@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,7 @@ import 'package:instagram_clone/user_profile/user_profile_model.dart';
 import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 import 'package:instagram_clone/user_profile/user_profile_service.dart';
 import 'package:provider/provider.dart';
+
 import '../components/app_bottom_navigation_bar.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -21,7 +23,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final UserProfileService _userProfileService = UserProfileService();
   late UserProfileModel? _userProfile;
-  final ImagePicker _profileImagePicker = ImagePicker(); //tool to select Avatar Image
+  final ImagePicker _profileImagePicker = ImagePicker(); 
   bool _updatingProfile = false;
 
   final  TextEditingController _firstNameController = TextEditingController();
@@ -60,6 +62,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     super.dispose();
   }
 
+
+
   Future<void> _uploadProfilePhoto() async{
     try{
       final XFile? pickedProfileImage = await _profileImagePicker.pickImage(source: ImageSource.gallery);
@@ -75,6 +79,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
+  //Функция сохранения профиля, запрос в Firebase -> async:
   Future<void> _updateProfile() async {
     if(_userProfile ==null){
       return;
@@ -93,7 +98,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       gender: _selectedGender,
       updatedAt: DateTime.now()
     );
-    await _userProfileService.updateUserProfile(userProfileToUpdate!);
+    await _userProfileService.updateUserProfile(userProfileToUpdate!, _pickedProfileImageFile);
   }
 
   @override
@@ -143,7 +148,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 Divider(height: 2, thickness: 1, color: Colors.black26,),
-               
+                // Profile Info inputs:
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
