@@ -77,6 +77,8 @@ class UserProfileModel {
       totalPosts: totalPosts ?? this.totalPosts ?? 0,
       totalFollowers: totalFollowers ?? this.totalFollowers ?? 0,
       totalFollowing: totalFollowing ?? this.totalFollowing ?? 0,
+      followers: followers ?? this.followers,
+      following: following ?? this.following,
       gender: gender ?? this.gender,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       createdAt: createdAt ?? this.createdAt,
