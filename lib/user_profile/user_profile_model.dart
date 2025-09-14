@@ -99,6 +99,8 @@ class UserProfileModel {
         totalPosts: firestoreUserProfileData['totalPosts'],
         totalFollowers: firestoreUserProfileData['totalFollowers'],
         totalFollowing: firestoreUserProfileData['totalFollowing'],
+        followers: firestoreUserProfileData['followers'] ?? [],
+        following: firestoreUserProfileData['following'] ?? [],
         firstName: firestoreUserProfileData['firstName'] ?? '',
         gender: firestoreUserProfileData['gender'],
         phoneNumber: firestoreUserProfileData['phoneNumber'],
