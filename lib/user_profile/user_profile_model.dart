@@ -127,6 +127,8 @@ class UserProfileModel {
       'totalPosts': totalPosts ?? 0,
       'totalFollowers': totalFollowers ?? 0,
       'totalFollowing': totalFollowing ?? 0,
+      'followers': followers ?? [],
+      'following': following ?? [],
       'firstName': firstName ?? '',
       'gender': gender?.toString(),
       'phoneNumber': phoneNumber,
