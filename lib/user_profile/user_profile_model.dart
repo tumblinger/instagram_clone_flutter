@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 import  'package:cloud_firestore/cloud_firestore.dart';
-
 import '../home/media.dart';
 
 class UserProfileModel {
@@ -15,12 +14,14 @@ class UserProfileModel {
   final int ? totalPosts;
   final int ? totalFollowers;
   final int ? totalFollowing;
+  final List<String> followers;
+  final List<String> following;
   final Gender ? gender;
-  final int ? phoneNumber;
+  final String ? phoneNumber;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  UserProfileModel({
+  UserProfileModel( {
 
     required this.uid,
     required this.email,
@@ -31,6 +32,8 @@ class UserProfileModel {
     this.firstName,
     this.totalPosts,
     this.totalFollowers,
+    this.followers = const [],
+    this.following = const [],
     this.totalFollowing,
     this.gender,
     this.phoneNumber,
@@ -46,7 +49,6 @@ class UserProfileModel {
         userName: firebaseUser.displayName!);
   }
 
-  //method to update the specific fields:
   UserProfileModel copyWith({
     String? email,
     String? avatar,
@@ -58,7 +60,7 @@ class UserProfileModel {
     int? totalFollowers,
     int? totalFollowing,
     Gender? gender,
-    int? phoneNumber,
+    String? phoneNumber,
     DateTime? createdAt,
     DateTime? updatedAt,
 }) {
@@ -136,7 +138,7 @@ class UserPostMedia {
   final int mediaIndex;
 
   UserPostMedia({
-    required this.mediaIndex, 
+    required this.mediaIndex,
     required this.userId,
     required this.media
 });
