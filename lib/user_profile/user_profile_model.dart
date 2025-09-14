@@ -59,6 +59,8 @@ class UserProfileModel {
     int? totalPosts,
     int? totalFollowers,
     int? totalFollowing,
+    List<String>? followers,
+    List<String>? following,
     Gender? gender,
     String? phoneNumber,
     DateTime? createdAt,
