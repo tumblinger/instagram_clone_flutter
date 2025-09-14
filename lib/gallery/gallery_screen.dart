@@ -99,7 +99,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     Expanded(
                         child: ListView.builder( //builds list only while scrolling
                           itemCount: _userProfiles.length,
-                          itemBuilder: (context, index){ //for each list's element
+                          itemBuilder: (context, index){
                             final userProfile = _userProfiles[index];
 
                             return InkWell(
