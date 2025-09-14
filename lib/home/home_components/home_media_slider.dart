@@ -28,16 +28,14 @@ class _HomeMediaSliderState extends State<HomeMediaSlider> {
     _playCurrentVideo();
   }
 
+  @override
+  void dispose(){
+    super.dispose();
+    _pauseAllVideos();
+  }
+
   bool mediaValueIsFileUrl(String value) => value.startsWith(localFileIdentifier);
   File localFile(String value) => File(value.replaceFirst(localFileIdentifier, ''));
-
-  @override
-  void dispose() {
-    for (final controller in _videoControllers) {
-      controller?.dispose();
-    }
-    super.dispose();
-  }
 
   void _initializeVideoController(){
     _videoControllers = widget.mediaList.map((media){
