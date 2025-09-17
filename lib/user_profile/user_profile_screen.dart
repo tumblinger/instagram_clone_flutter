@@ -26,6 +26,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final ImagePicker _profileImagePicker = ImagePicker(); 
   bool _updatingProfile = false;
 
+  // TextField controllers:
   final  TextEditingController _firstNameController = TextEditingController();
   final  TextEditingController _userNameController = TextEditingController();
   final  TextEditingController _websiteController = TextEditingController();
@@ -79,7 +80,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-  //Функция сохранения профиля, запрос в Firebase -> async:
   Future<void> _updateProfile() async {
     if(_userProfile ==null){
       return;
@@ -98,7 +98,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       gender: _selectedGender,
       updatedAt: DateTime.now()
     );
-    await _userProfileService.updateUserProfile(userProfileToUpdate!, _pickedProfileImageFile);
+
+    UserProfileModel? updatedUserProfile = await _userProfileService.updateUserProfile(userProfileToUpdate!, _pickedProfileImageFile);
+
+    if(updatedUserProfile != null){
+      MyAuthProvider myAuthProvider = MyAuthProvider();
+      myAuthProvider.setUserProfile(updatedUserProfile);
+    }
+
+    setState(() {
+      _updatingProfile = false;
+    });
   }
 
   @override
