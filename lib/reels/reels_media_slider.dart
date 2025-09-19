@@ -6,10 +6,12 @@ import 'package:video_player/video_player.dart';
 
 class ReelsMediaSlider extends StatefulWidget { 
   final List<Media> videoMediaList; 
+  final int? currentMediaIndex;
+  final double? height;
 
-  const ReelsMediaSlider({super.key, required this.videoMediaList, });
+  const ReelsMediaSlider({super.key, required this.videoMediaList, this.currentMediaIndex, this.height, });
 
-  @override
+  @override 
   State<ReelsMediaSlider> createState() => _ReelsMediaSliderState();
 }
 
@@ -21,7 +23,9 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.currentMediaIndex ?? 0;
     _initializeVideoController();
+    _playCurrentVideo();
   }
 
   Future<void> _initializeVideoController() async {
@@ -80,18 +84,19 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
                   if(!controller!.value.isInitialized){
                     return const Center(child: CircularProgressIndicator());
                   }
+
                   return Column(
                     children: [
                       Expanded(
                           child: AspectRatio(
-                              aspectRatio: controller!.value.aspectRatio,
+                              aspectRatio: controller.value.aspectRatio,
                               child: VideoPlayer(controller)
                           )
                       ),
                       VideoProgressIndicator(
-                          controller,
-                          allowScrubbing: true,
-                          colors: VideoProgressColors(playedColor: Colors.black26),)
+                        controller,
+                        allowScrubbing: true,
+                        colors: VideoProgressColors(playedColor: Colors.black54),)
                     ],
                   );
                 });
@@ -121,7 +126,7 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
                 return Container(
                   width: 6.0,
                   height: 6.0,
-                  margin: EdgeInsets.symmetric(horizontal: 3.0),
+                  margin: EdgeInsets.symmetric(horizontal: 2.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _currentIndex == entry.key ? Colors.blueAccent : Colors.blueGrey,
