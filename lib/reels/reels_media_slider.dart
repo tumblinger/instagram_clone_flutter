@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/home/media.dart';
 import 'package:instagram_clone/reels/reels.util.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class ReelsMediaSlider extends StatefulWidget { 
   final List<Media> videoMediaList; 
@@ -11,13 +12,14 @@ class ReelsMediaSlider extends StatefulWidget {
 
   const ReelsMediaSlider({super.key, required this.videoMediaList, this.currentMediaIndex, this.height, });
 
-  @override 
+  @override
   State<ReelsMediaSlider> createState() => _ReelsMediaSliderState();
 }
 
 class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
   int _currentIndex = 0;
   late List<VideoPlayerController?> _videoControllers;
+  final Key _videoVisibilityKey = UniqueKey();
   bool _isInitialized = false;
 
   @override
@@ -25,24 +27,29 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
     super.initState();
     _currentIndex = widget.currentMediaIndex ?? 0;
     _initializeVideoController();
-    _playCurrentVideo();
+    //_playCurrentVideo();
   }
 
   Future<void> _initializeVideoController() async {
-    _videoControllers = [];
+    _videoControllers = widget.videoMediaList.map((videoMedia) {
+      final c = VideoPlayerController.networkUrl(Uri.parse(videoMedia.value));
+      c.setLooping(true);
+      return c;
+    }).toList();
+   
+    await Future.wait(_videoControllers.map((c) => c!.initialize()));
+    if (!mounted) return;
+    setState(() {
+      _isInitialized = true;
+    });
+    _playCurrentVideo();
+  }
 
-    for(var videoMedia in widget.videoMediaList){
-      final controller = VideoPlayerController.networkUrl(Uri.parse(videoMedia.value)); 
-      await controller.initialize();
-      controller.setLooping(true);
-      _videoControllers.add(controller);
-    }
-
-    if(mounted) {
-      setState(() {
-        _isInitialized = true;
-      });
+  void _handleVideoVisibilityChange(VisibilityInfo info){
+    if(info.visibleFraction > 0.9){
       _playCurrentVideo();
+    } else {
+      _pauseAllVideos();
     }
   }
 
@@ -62,78 +69,99 @@ class _ReelsMediaSliderState extends State<ReelsMediaSlider> {
   @override
   void dispose() {
     for (final controller in _videoControllers) {
-      controller?.dispose(); 
+      controller?.dispose();
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(!_isInitialized || _videoControllers.length != widget.videoMediaList.length){
+    if (!_isInitialized || _videoControllers.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-    return Stack(
-      alignment: AlignmentDirectional.bottomCenter,
-        children: [
-          CarouselSlider(
-              items: widget.videoMediaList.asMap().entries.map((entry) {
-                int index = entry.key;
 
-                return Builder(builder: (BuildContext context){
-                  final controller = _videoControllers[index];
-                  if(!controller!.value.isInitialized){
-                    return const Center(child: CircularProgressIndicator());
-                  }
+    return VisibilityDetector(
+      key: _videoVisibilityKey,
+        onVisibilityChanged: _handleVideoVisibilityChange,
 
-                  return Column(
-                    children: [
-                      Expanded(
-                          child: AspectRatio(
-                              aspectRatio: controller.value.aspectRatio,
-                              child: VideoPlayer(controller)
-                          )
+        child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+          children: [
+            CarouselSlider(
+                items: widget.videoMediaList.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  Media media = entry.value;
+
+                  return Builder(builder: (BuildContext context){
+                    final controller = _videoControllers[index];
+                    if(!controller!.value.isInitialized){
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: videoDisplayHeight(context),
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: FittedBox(
+                              fit: BoxFit.cover, // or BoxFit.contain
+                              child: SizedBox(
+                                width: controller.value.size.width,
+                                height: controller.value.size.height,
+                                child: VideoPlayer(controller),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 8,
+                            right: 8,
+                            bottom: 8,
+                            child: VideoProgressIndicator(
+                              controller,
+                              allowScrubbing: true,
+                              colors: VideoProgressColors(playedColor: Colors.black54),
+                            ),
+                          ),
+                        ],
                       ),
-                      VideoProgressIndicator(
-                        controller,
-                        allowScrubbing: true,
-                        colors: VideoProgressColors(playedColor: Colors.black54),)
-                    ],
-                  );
-                });
-              }).toList(),
+                    );
 
-              options: CarouselOptions(
-                  initialPage: _currentIndex,
-                  height: videoDisplayHeight(context),
-                  aspectRatio: 1,
-                  viewportFraction: 1.0,
-                  enableInfiniteScroll: false,
-                  onPageChanged: (index, _){
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                    _pauseAllVideos();
-                    _playCurrentVideo();
-                  }
-              )),
-          if(widget.videoMediaList.length >1)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:
-              widget.videoMediaList.asMap().entries.map((entry){
-                return Container(
-                  width: 6.0,
-                  height: 6.0,
-                  margin: EdgeInsets.symmetric(horizontal: 2.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentIndex == entry.key ? Colors.blueAccent : Colors.blueGrey,
-                  ),);
-              }).toList(),
-            ),
-          )
-        ]);
+                  });
+                }).toList(),
+      
+                options: CarouselOptions(
+                    initialPage: _currentIndex,
+                    height: videoDisplayHeight(context),
+                    // aspectRatio: 1,
+                    viewportFraction: 1.0,
+                    enableInfiniteScroll: false,
+                    onPageChanged: (index, _) {
+                      if (_currentIndex == index) return;
+                      _pauseAllVideos();
+                      setState(() { _currentIndex = index; });
+                      _playCurrentVideo();
+                    }
+                )),
+            if(widget.videoMediaList.length >1)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:
+                widget.videoMediaList.asMap().entries.map((entry){
+                  return Container(
+                    width: 6.0,
+                    height: 6.0,
+                    margin: EdgeInsets.symmetric(horizontal: 2.0),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentIndex == entry.key ? Colors.blueAccent : Colors.blueGrey,
+                    ),);
+                }).toList(),
+              ),
+            )
+          ]),
+    );
   }
 }
