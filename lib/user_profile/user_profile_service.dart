@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 
 class UserProfileService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance; 
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance; //media
   final uuid = Uuid();
 
   // 0. Create a function
@@ -28,6 +28,7 @@ class UserProfileService {
     return 'user_$shortHash';
   }
 
+  // Function to get User's profile:
   Future<UserProfileModel?> getUserProfile(String uid) async {
     final firestoreUserProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(uid).get();
     if(firestoreUserProfileDoc.exists) {
@@ -54,19 +55,20 @@ class UserProfileService {
   Future<List<UserProfileModel>> getUsersByUserNameSearch(String searchText) async {
     if(searchText.isEmpty) return [];
 
-    //make it case-insensitive:
     final lowerCaseSearchText = searchText.toLowerCase();
 
     try{
       final querySnapshot = await _firebaseFirestore
           .collection('user-profiles')
           .orderBy('userName')
-          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText) 
+          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText)
           .where('userName', isLessThan: '${lowerCaseSearchText}z') 
           .get();
 
-      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs; //getting docs
-      List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList(); 
+      List<DocumentSnapshot> userProfileDocs = querySnapshot.docs; 
+      List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList();
+      
+      
       return userProfiles;
 
     }
@@ -76,7 +78,7 @@ class UserProfileService {
     }
   }
   
-  Future<bool> updateUserProfile(UserProfileModel userProfileToUpdate, File? newUserAvatarFile) async{
+  Future<UserProfileModel?> updateUserProfile(UserProfileModel userProfileToUpdate, File? newUserAvatarFile) async{
 
     String userAvatar = userProfileToUpdate.avatar;
 
@@ -87,12 +89,18 @@ class UserProfileService {
           userAvatar = newUserAvatarUrl;
         }
       }
-      await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update({...userProfileToUpdate.toMap(),'avatar': userAvatar});
-      return true;
+
+      Map<Object, Object?> userProfileToUpdateMap = {...userProfileToUpdate.toMap(),'avatar': userAvatar};
+
+      await _firebaseFirestore.collection('user-profiles').doc(userProfileToUpdate.uid).update(userProfileToUpdateMap);
+
+      UserProfileModel updatedUserProfile = userProfileToUpdate.copyWith(avatar: userAvatar);
+
+      return updatedUserProfile;
     }
     catch(e){
       print(e);
-      return false;
+      return null;
     }
   }
 
@@ -112,6 +120,21 @@ class UserProfileService {
       return null;
     }
   }
+
+  Future<void> toggleFollowStatus({
+    required String currentUserId,
+    required String followedUserId,
+    required bool isCurrentlyFollowing,
+  }) async {
+    try{
+      final currentUserRef = _firebaseFirestore.collection('user-profiles').doc(currentUserId);
+      final followedUserRef = _firebaseFirestore.collection('user-profiles').doc(followedUserId);
+    } catch(e){
+      print(e);
+    }
+  }
   
 }
+
+
 
