@@ -28,7 +28,6 @@ class UserProfileService {
     return 'user_$shortHash';
   }
 
-  // Function to get User's profile:
   Future<UserProfileModel?> getUserProfile(String uid) async {
     final firestoreUserProfileDoc = await _firebaseFirestore.collection('user-profiles').doc(uid).get();
     if(firestoreUserProfileDoc.exists) {
@@ -61,16 +60,14 @@ class UserProfileService {
       final querySnapshot = await _firebaseFirestore
           .collection('user-profiles')
           .orderBy('userName')
-          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText)
+          .where('userName', isGreaterThanOrEqualTo: lowerCaseSearchText) 
           .where('userName', isLessThan: '${lowerCaseSearchText}z') 
           .get();
 
       List<DocumentSnapshot> userProfileDocs = querySnapshot.docs; 
-      List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList();
-      
-      
-      return userProfiles;
+      List<UserProfileModel> userProfiles = userProfileDocs.map((userProfileDoc) => UserProfileModel.fromFirestore(userProfileDoc)).toList(); 
 
+      return userProfiles;
     }
     catch (error){
       print('Firestore error: $error');
@@ -129,11 +126,23 @@ class UserProfileService {
     try{
       final currentUserRef = _firebaseFirestore.collection('user-profiles').doc(currentUserId);
       final followedUserRef = _firebaseFirestore.collection('user-profiles').doc(followedUserId);
+      await _firebaseFirestore.runTransaction((transaction) async {
+        if(isCurrentlyFollowing){
+          transaction.update(currentUserRef,{
+            'following': FieldValue.arrayUnion([followedUserId]),
+            'totalFollowing': FieldValue.increment(1)
+          });
+          transaction.update(followedUserRef,{
+            'following': FieldValue.arrayUnion([followedUserId]),
+            'totalFollowing': FieldValue.increment(1)
+          });
+        }
+      });
     } catch(e){
       print(e);
     }
   }
-  
+
 }
 
 
