@@ -133,17 +133,28 @@ class UserProfileService {
             'totalFollowing': FieldValue.increment(1)
           });
           transaction.update(followedUserRef,{
-            'following': FieldValue.arrayUnion([followedUserId]),
-            'totalFollowing': FieldValue.increment(1)
+            'followers': FieldValue.arrayUnion([currentUserId]),
+            'totalFollowers': FieldValue.increment(1)
+          });
+        } else {
+          transaction.update(currentUserRef,{
+            'following': FieldValue.arrayRemove([followedUserId]),
+            'totalFollowing': FieldValue.increment(-1)
+          });
+          transaction.update(followedUserRef,{
+            'followers': FieldValue.arrayRemove([currentUserId]),
+            'totalFollowers': FieldValue.increment(-1)
           });
         }
       });
     } catch(e){
       print(e);
+      return ;
     }
   }
 
 }
+
 
 
 
