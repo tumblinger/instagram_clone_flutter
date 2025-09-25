@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/user_profile/user_profile_service.dart';
 
 class AppFollowButton extends StatelessWidget {
   final Color color;
-  const AppFollowButton({super.key, this.color = Colors.white});
+  final String currentUserId;
+  final String followedUserId;
+  final bool isCurrentlyFollowing;
+  AppFollowButton({super.key, this.color = Colors.white, required this.currentUserId, required this.followedUserId, required this.isCurrentlyFollowing});
+  final UserProfileService _userProfileService = UserProfileService();
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-        onPressed: (){},
+        onPressed: (){
+          _userProfileService.toggleFollowStatus(
+              currentUserId: currentUserId, 
+              followedUserId: followedUserId, 
+              isCurrentlyFollowing: isCurrentlyFollowing
+          );
+        },
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: color, width: 1),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
