@@ -4,7 +4,9 @@ import 'package:instagram_clone/components/app_follow_button.dart';
 import 'package:instagram_clone/create_post/posts_service.dart';
 import 'package:instagram_clone/user_profile/user_profile_enums.dart';
 import 'package:instagram_clone/user_profile/user_profile_model.dart';
+import 'package:instagram_clone/user_profile/user_profile_provider.dart';
 import 'package:instagram_clone/user_profile/user_profile_service.dart';
+import 'package:provider/provider.dart';
 import '../create_post/posts.dart';
 import '../components/gallery.media-thumbnail.dart';
 import '../home/media.dart';
@@ -25,19 +27,22 @@ class UserPageScreen extends StatefulWidget {
 }
 
 class _UserPageScreenState extends State<UserPageScreen> {
-  final UserProfileService userProfileService = UserProfileService();
-  final PostsService postsService = PostsService();
+  final UserProfileService userProfileService = UserProfileService(); 
+  final PostsService postsService = PostsService(); 
   bool _isLoadingUserProfile = true; 
-  UserProfileModel? _userProfile;   UserPostMediaTab activeTab = UserPostMediaTab.all;
+  UserProfileModel? _userProfile; 
+  UserProfileModel? _currentUserProfile;
+  UserPostMediaTab activeTab = UserPostMediaTab.all;
   List<UserPostMedia> tabUserPostMediaList = [];
 
   @override
-  void initState() {
+  void initState() { 
     _getUserProfile();
+    final UserProfileModel? userProfile = context.read<MyAuthProvider>().userProfile;
     super.initState();
   }
 
-  Future<void> _getUserProfile() async{ 
+  Future<void> _getUserProfile() async{
     try{
       UserProfileModel? userProfile = await userProfileService.getUserProfile(widget.userId);
       if(userProfile != null){
@@ -63,8 +68,11 @@ class _UserPageScreenState extends State<UserPageScreen> {
         title: Text(widget.userName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
           Padding(padding: EdgeInsets.only(right: 16),
-             child: AppFollowButton(color: Colors.black)),
-
+             child: AppFollowButton(
+                 currentUserId: _currentUserProfile.uid, 
+                 followedUserId: userId, 
+                 color: Colors.black, 
+                 isCurrentlyFollowing: _currentUserProfile.following.contains(uid))),
         ],
       ),
       body: SafeArea(
@@ -138,11 +146,14 @@ class _UserPageScreenState extends State<UserPageScreen> {
 
                        List<UserPostMedia> allUserPostMedia = posts.asMap().entries.expand((postEntry) => postEntry.value.media.asMap().entries.map((mediaEntry) => UserPostMedia(
                            userId: posts[postEntry.key].userId,
-                           media: mediaEntry.value)
+                           media: mediaEntry.value,
+                           mediaIndex: mediaEntry.key
+                           )
                        )).toList();
-                      
-                         if(allUserPostMedia.isEmpty){
-                           return Center(
+
+
+                       if(allUserPostMedia.isEmpty){
+                         return Center(
                            child: Text('No media found')
                          );
                        }
@@ -157,14 +168,14 @@ class _UserPageScreenState extends State<UserPageScreen> {
                          tabUserPostMediaList = allUserPostMedia.where((userPostMedia) => userPostMedia.media.type == MediaTypes.image).toList();
                        }
 
-                       return GridView.builder( 
+                       return GridView.builder( // отображаем медиа-файлы в сетке
                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                crossAxisCount: 3,
                                mainAxisSpacing: 2,
                                crossAxisSpacing: 2
                            ),
-                           itemCount: tabUserPostMediaList.length, 
-                           itemBuilder: (context, index){ 
+                           itemCount: tabUserPostMediaList.length, //сколько всего элементов отрисовать
+                           itemBuilder: (context, index){ //возвращает виджет на каждый элемент по индексу
                              UserPostMedia userPostMedia = tabUserPostMediaList[index];
                              return GalleryMediaThumbnail( currentScreenIndex:  widget.currentScreenIndex, userPostMedia: userPostMedia,);
                            });
@@ -250,7 +261,7 @@ class UserStatistics extends StatelessWidget {
 class TabButton extends StatelessWidget {
   final IconData icon;
   final bool active;
-  final VoidCallback onTap; 
+  final VoidCallback onTap; // тип setState() - это void Function
 
   const TabButton({
     super.key,
