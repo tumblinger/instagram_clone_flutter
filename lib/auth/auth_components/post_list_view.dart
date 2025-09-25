@@ -6,17 +6,21 @@ import '../../home/home_components/home_media_slider.dart';
 import '../../home/home_components/home_post_details_card.dart';
 
 class PostListView extends StatelessWidget {
+  final String currentUserId;
+  final List<String> currentUserFollowing;
   final List<Posts> posts;
   final int currentScreenIndex;
   final int? currentMediaIndex;
   final PostsService postsService;
 
-  const PostListView({ // Constructor
+  const PostListView({ 
     super.key,
     required this.posts,
     required this.currentScreenIndex,
     required this.postsService,
-    this.currentMediaIndex
+    this.currentMediaIndex,
+    required this.currentUserId,
+    required this.currentUserFollowing
   });
 
   @override
@@ -34,7 +38,12 @@ class PostListView extends StatelessWidget {
                 Stack(
                     children: [
                       HomeMediaSlider(mediaList: post.media, currentMediaIndex: currentMediaIndex,),
-                      PostCreatedByDetails(post: post, currentScreenIndex: currentScreenIndex)
+                      PostCreatedByDetails(
+                          post: post,
+                          currentScreenIndex: currentScreenIndex,
+                          currentUserFollowing: currentUserFollowing,
+                          currentUserId: currentUserId,
+                      )
                     ]),
 
                 HomePostDetailsCard(post: post, postService: postsService)
