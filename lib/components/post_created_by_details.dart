@@ -4,10 +4,18 @@ import '../user_profile/user_page_screen.dart';
 import 'app_follow_button.dart';
 
 class PostCreatedByDetails extends StatelessWidget {
+  final String currentUserId;
+  final List<String> currentUserFollowing;
   final Posts post;
   final int currentScreenIndex;
 
-  const PostCreatedByDetails({super.key, required this.post, required this.currentScreenIndex});
+  const PostCreatedByDetails({
+    super.key,
+    required this.post,
+    required this.currentScreenIndex,
+    required this.currentUserFollowing,
+    required this.currentUserId
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +28,36 @@ class PostCreatedByDetails extends StatelessWidget {
           children: [
             InkWell(
             onTap: () => Navigator.push(
-          context, MaterialPageRoute(
-          builder: (context) => UserPageScreen(
+            context, MaterialPageRoute(
+              builder: (context) => UserPageScreen(
               currentScreenIndex: currentScreenIndex,
               userId: post.userId,
               userName: post.userName)
-      )),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 28.0,
-            child: CircleAvatar(
-                backgroundImage: NetworkImage(post.avatar)),
-          ),
+                )),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 28.0,
+                      child: CircleAvatar(
+                          backgroundImage: NetworkImage(post.avatar)),
+                    ),
 
-          SizedBox(width: 12.0),
+                    SizedBox(width: 12.0),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white)),
-              const Text('Suggested for you', style: TextStyle(fontSize: 10.0, color: Colors.white))
-            ],)
-        ],),
-    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                         Text(post.userName, style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white)),
+                         Text('Suggested for you', style: TextStyle(fontSize: 10.0, color: Colors.white))
+             ],)
+            ],),
+           ),
             Row(children: [
-              AppFollowButton(),
+              AppFollowButton(
+                currentUserId: currentUserId,
+                followedUserId: post.userId,
+                isCurrentlyFollowing: currentUserFollowing.contains(currentUserId)
+              ),
               SizedBox(width: 12.0),
               Icon(Icons.more_horiz, color: Colors.white)
             ],)
