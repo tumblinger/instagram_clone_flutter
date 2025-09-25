@@ -8,7 +8,9 @@ import '../app_constants.dart';
 import '../components/app_bottom_navigation_bar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final String currentUserId;
+  final List<String> currentUserFollowing;
+  const HomeScreen({super.key, required this.currentUserId, required this.currentUserFollowing});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                 return PostListView(
                     posts: posts,
                     currentScreenIndex: currentScreenIndex,
-                    postsService: postsService
+                    postsService: postsService, currentUserId: currentUserId, currentUserFollowing: currentUserFollowing,
                 );
               })
       ),
