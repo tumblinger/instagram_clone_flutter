@@ -28,9 +28,9 @@ class UserPageScreen extends StatefulWidget {
 
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService(); 
-  final PostsService postsService = PostsService(); //initializing
+  final PostsService postsService = PostsService();
   bool _isLoadingUserProfile = true; 
-  UserProfileModel? _userProfile;
+  UserProfileModel? _userProfile; 
   UserProfileModel? _currentUserProfile;
   UserPostMediaTab activeTab = UserPostMediaTab.all;
   List<UserPostMedia> tabUserPostMediaList = [];
@@ -38,8 +38,15 @@ class _UserPageScreenState extends State<UserPageScreen> {
   @override
   void initState() {
     _getUserProfile();
-    final UserProfileModel? userProfile = context.read<MyAuthProvider>().userProfile;
+    _setCurrentUserProfile();
     super.initState();
+  }
+  
+  void _setCurrentUserProfile(){
+    final UserProfileModel? currentUserProfile = context.read<MyAuthProvider>().userProfile;
+    if(currentUserProfile != null){
+      _currentUserProfile = currentUserProfile;
+    }
   }
 
   Future<void> _getUserProfile() async{ 
@@ -53,7 +60,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
       }
     }
     catch(error){
-      rethrow;
+      rethrow; 
     }
   }
 
@@ -131,8 +138,8 @@ class _UserPageScreenState extends State<UserPageScreen> {
                  ),
 
                  Expanded(
-                   child: StreamBuilder<List<Posts>>( 
-                     stream: postsService.getPostsByUserId(_userProfile!.uid), 
+                   child: StreamBuilder<List<Posts>>(
+                     stream: postsService.getPostsByUserId(_userProfile!.uid),
                      builder: (context, snapshot) { 
                        if(snapshot.connectionState == ConnectionState.waiting){
                          return Center(child: CircularProgressIndicator());
@@ -142,7 +149,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
                            child: Text('No posts found'),
                          );
                        }
-                       final posts = snapshot.data!; 
+                       final posts = snapshot.data!;
 
                        List<UserPostMedia> allUserPostMedia = posts.asMap().entries.expand((postEntry) => postEntry.value.media.asMap().entries.map((mediaEntry) => UserPostMedia(
                            userId: posts[postEntry.key].userId,
@@ -261,7 +268,7 @@ class UserStatistics extends StatelessWidget {
 class TabButton extends StatelessWidget {
   final IconData icon;
   final bool active;
-  final VoidCallback onTap; 
+  final VoidCallback onTap;
 
   const TabButton({
     super.key,
