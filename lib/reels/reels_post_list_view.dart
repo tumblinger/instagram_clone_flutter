@@ -7,9 +7,11 @@ import 'package:instagram_clone/reels/reels_media_slider.dart';
 import '../components/post_created_by_details.dart';
 
 class ReelsPostListView extends StatelessWidget {
+  final String currentUserId;
+  final List<String> currentUserFollowing;
   final List<PostVideo> postVideos;
   final int currentScreenIndex;
-  ReelsPostListView({super.key, required this.postVideos, required this.currentScreenIndex});
+  ReelsPostListView({super.key, required this.postVideos, required this.currentScreenIndex, required this.currentUserId, required this.currentUserFollowing});
   final PostsService _postService = PostsService();
 
   @override
@@ -30,7 +32,7 @@ class ReelsPostListView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  PostCreatedByDetails(post: postVideo.posts, currentScreenIndex: currentScreenIndex),
+                  PostCreatedByDetails(post: postVideo.posts, currentScreenIndex: currentScreenIndex, currentUserFollowing: currentUserFollowing, currentUserId: currentUserId,),
                   HomePostDetailsCard(post: post, postService: _postService, colorStyle: ColorStyle.light)
                 ],
               ),
