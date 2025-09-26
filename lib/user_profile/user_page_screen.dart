@@ -28,21 +28,21 @@ class UserPageScreen extends StatefulWidget {
 
 class _UserPageScreenState extends State<UserPageScreen> {
   final UserProfileService userProfileService = UserProfileService(); 
-  final PostsService postsService = PostsService(); 
+  final PostsService postsService = PostsService(); //initializing
   bool _isLoadingUserProfile = true; 
-  UserProfileModel? _userProfile; 
+  UserProfileModel? _userProfile;
   UserProfileModel? _currentUserProfile;
   UserPostMediaTab activeTab = UserPostMediaTab.all;
   List<UserPostMedia> tabUserPostMediaList = [];
 
   @override
-  void initState() { 
+  void initState() {
     _getUserProfile();
     final UserProfileModel? userProfile = context.read<MyAuthProvider>().userProfile;
     super.initState();
   }
 
-  Future<void> _getUserProfile() async{
+  Future<void> _getUserProfile() async{ 
     try{
       UserProfileModel? userProfile = await userProfileService.getUserProfile(widget.userId);
       if(userProfile != null){
@@ -53,7 +53,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
       }
     }
     catch(error){
-      rethrow; 
+      rethrow;
     }
   }
 
@@ -69,10 +69,10 @@ class _UserPageScreenState extends State<UserPageScreen> {
         actions: [
           Padding(padding: EdgeInsets.only(right: 16),
              child: AppFollowButton(
-                 currentUserId: _currentUserProfile.uid, 
-                 followedUserId: userId, 
+                 currentUserId: _currentUserProfile!.uid,
+                 followedUserId: widget.userId,
                  color: Colors.black, 
-                 isCurrentlyFollowing: _currentUserProfile.following.contains(uid))),
+                 isCurrentlyFollowing: _currentUserProfile!.following.contains(_currentUserProfile!.uid))),
         ],
       ),
       body: SafeArea(
@@ -168,14 +168,14 @@ class _UserPageScreenState extends State<UserPageScreen> {
                          tabUserPostMediaList = allUserPostMedia.where((userPostMedia) => userPostMedia.media.type == MediaTypes.image).toList();
                        }
 
-                       return GridView.builder( // отображаем медиа-файлы в сетке
+                       return GridView.builder( 
                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                crossAxisCount: 3,
                                mainAxisSpacing: 2,
                                crossAxisSpacing: 2
                            ),
-                           itemCount: tabUserPostMediaList.length, //сколько всего элементов отрисовать
-                           itemBuilder: (context, index){ //возвращает виджет на каждый элемент по индексу
+                           itemCount: tabUserPostMediaList.length, 
+                           itemBuilder: (context, index){ 
                              UserPostMedia userPostMedia = tabUserPostMediaList[index];
                              return GalleryMediaThumbnail( currentScreenIndex:  widget.currentScreenIndex, userPostMedia: userPostMedia,);
                            });
@@ -261,7 +261,7 @@ class UserStatistics extends StatelessWidget {
 class TabButton extends StatelessWidget {
   final IconData icon;
   final bool active;
-  final VoidCallback onTap; // тип setState() - это void Function
+  final VoidCallback onTap; 
 
   const TabButton({
     super.key,
