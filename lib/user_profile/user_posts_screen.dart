@@ -6,11 +6,13 @@ import '../components/app_bottom_navigation_bar.dart';
 import '../create_post/posts.dart';
 
 class UserPostsScreen extends StatelessWidget {
+  final String currentUserId;
+  final List<String> currentUserFollowing;
   final String userId;
   final int currentScreenIndex;
   final  int? currentMediaIndex;
 
-  UserPostsScreen({super.key, required this.userId, required this.currentScreenIndex, this.currentMediaIndex});
+  UserPostsScreen({super.key, required this.userId, required this.currentScreenIndex, this.currentMediaIndex, required this.currentUserId, required this.currentUserFollowing});
 
   final PostsService postsService = PostsService();
 
@@ -41,7 +43,7 @@ class UserPostsScreen extends StatelessWidget {
                       posts: posts,
                       currentScreenIndex: currentScreenIndex,
                       postsService: postsService,
-                      currentMediaIndex: currentMediaIndex
+                      currentMediaIndex: currentMediaIndex, currentUserId: currentUserId, currentUserFollowing: currentUserFollowing
                   );
                 })
         ),
