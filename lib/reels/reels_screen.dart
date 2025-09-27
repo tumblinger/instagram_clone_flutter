@@ -26,7 +26,7 @@ class _ReelsScreenState extends State<ReelsScreen> {
     super.initState();
   }
 
-  void getUserProfile() async{
+  Future<void> getUserProfile() async{
     try{
        UserProfileModel? currentUserProfile = await userProfileService.getUserProfile(authService.currentFirebaseUser!.uid);
        if(currentUserProfile != null){
